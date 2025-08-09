@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "title": "Conversation Started Walkthrough",
+  "story": [
+    {
+      "id": "intro",
+      "type": "text",
+      "content": "We begin with the `conversation_started` event and the `ConversationStartedSkill` skill."
+    },
+    {
+      "id": "cs-open",
+      "type": "effect",
+      "subjectId": "cs-skill",
+      "action": "reveal",
+      "payload": { "line": 1 }
+    },
+    {
+      "id": "cs-highlight-greeting",
+      "type": "effect",
+      "subjectId": "cs-skill",
+      "action": "scrollTo",
+      "payload": { "line": 20 }
+    },
+    {
+      "id": "switch-skill",
+      "type": "text",
+      "content": "Mode switches route to Gen1/Gen2 inbound/outbound skills via `SwitchConversationStartedSkill` and `SwitchReplyOutboundSkill`."
+    },
+    {
+      "id": "switch-open",
+      "type": "effect",
+      "subjectId": "switch-skill",
+      "action": "reveal",
+      "payload": { "line": 1 }
+    },
+    {
+      "id": "gen1-inbound",
+      "type": "text",
+      "content": "Gen1 inbound: sets fast prompt and calls CommonConversationStartedSkill in two steps."
+    },
+    {
+      "id": "gen1-open",
+      "type": "effect",
+      "subjectId": "gen1-in",
+      "action": "reveal",
+      "payload": { "line": 1 }
+    },
+    {
+      "id": "gen2-outbound",
+      "type": "text",
+      "content": "Gen2 outbound: outbound delay, follow-up timer, greet via _gen2SendCommandSkill, then update prompt and call common steps."
+    },
+    {
+      "id": "gen2-open",
+      "type": "effect",
+      "subjectId": "gen2-out",
+      "action": "reveal",
+      "payload": { "line": 1 }
+    }
+  ],
+  "subjects": [
+    {
+      "id": "cs-skill",
+      "type": "code",
+      "language": "handlebars",
+      "path": "project/ConvoAgent/CAMainFlow/ConversationStartedSkill.guidance"
+    },
+    {
+      "id": "switch-skill",
+      "type": "code",
+      "language": "handlebars",
+      "path": "project/ConvoAgent/CAMainFlow/SwitchConversationStartedSkill.guidance"
+    },
+    {
+      "id": "gen1-in",
+      "type": "code",
+      "language": "handlebars",
+      "path": "project/ConvoAgent/CAMainFlow/Gen1ConversationStartedInboundSkill.guidance"
+    },
+    {
+      "id": "gen1-out",
+      "type": "code",
+      "language": "handlebars",
+      "path": "project/ConvoAgent/CAMainFlow/Gen1ConversationStartedOutboundSkill.guidance"
+    },
+    {
+      "id": "gen2-in",
+      "type": "code",
+      "language": "handlebars",
+      "path": "project/ConvoAgent/CAMainFlow/Gen2ConversationStartedInboundSkill.guidance"
+    },
+    {
+      "id": "gen2-out",
+      "type": "code",
+      "language": "handlebars",
+      "path": "project/ConvoAgent/CAMainFlow/Gen2ConversationStartedOutboundSkill.guidance"
+    },
+    {
+      "id": "switch-reply-out",
+      "type": "code",
+      "language": "handlebars",
+      "path": "project/ConvoAgent/CAMainFlow/SwitchReplyOutboundSkill.guidance"
+    }
+  ]
+}
+
+
