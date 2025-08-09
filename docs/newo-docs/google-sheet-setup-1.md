@@ -1,6 +1,6 @@
 # Outbound Google Sheet Setup
 
-Ensure you have set up a [Client Session Logs Google Sheet](https://docs.newo.ai/docs/google-sheet-setup) for your agent. Once successfully linked and [inbound functionality](https://docs.newo.ai/docs/inbound-call-logs-testing) works (i.e., call data populates in the "Sessions" tab of the Google Sheet), you're ready for the next step.
+Ensure you have set up a [Client Session Logs Google Sheet](google-sheet-setup.md) for your agent. Once successfully linked and [inbound functionality](inbound-call-logs-testing.md) works (i.e., call data populates in the "Sessions" tab of the Google Sheet), you're ready for the next step.
 
 Call instructions tell the agent what to do and say during a call. These instructions are added to the Newo.ai Platform’s AKB. Here’s how:
 

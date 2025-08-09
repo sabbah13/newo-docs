@@ -4,7 +4,7 @@ Receive Telephone Calls (Vapi)
 
 [![Newo](https://files.readme.io/895bdeef8322f081f6d0f4507a17e414930dfddfddf1de452f458dc00698ca84-small-svgviewer-png-output_9.png)](/)
 
-[Home](/)[Documentation](/docs)[API Reference](/reference)
+[Home](/)[Documentation](index.md)[API Reference](/reference)
 
 * * *
 
@@ -35,7 +35,7 @@ If you don't want to create a new agent, use your existing agent from the Embedd
 *   Create a Flow
 *   Add a User
 *   Create a Skill
-*   Add Code to the Skill Script (Copy the Skill Script from the [Embedded Instructions](https://docs.newo.ai/docs/embedded-instructions) tutorial)
+*   Add Code to the Skill Script (Copy the Skill Script from the [Embedded Instructions](embedded-instructions.md) tutorial)
 
 ### 
 
@@ -43,7 +43,7 @@ Vapi Integration
 
 [](#vapi-integration)
 
-For details on creating a Vapi connector, go [here](https://docs.newo.ai/docs/vapi-integration).
+For details on creating a Vapi connector, go [here](vapi-integration.md).
 
 ### 
 

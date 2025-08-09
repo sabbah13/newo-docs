@@ -4,7 +4,7 @@ In the previous example, we used RAG to shift the context within our Skill Scrip
 
 **Goal:** Remove workflow instructions from the Skill Script and retrieve them from the AKB.
 
-Let's use the same agent setup as with the "[Retrieve Context from AKB](https://docs.newo.ai/docs/akb-context)" example. However, replace the Skill Script with the below:
+Let's use the same agent setup as with the "[Retrieve Context from AKB](akb-context.md)" example. However, replace the Skill Script with the below:
 
 ```
 {{#system~}}

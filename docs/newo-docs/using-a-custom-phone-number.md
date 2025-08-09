@@ -4,7 +4,7 @@ Using a Custom Phone Number
 
 [![Newo](https://files.readme.io/895bdeef8322f081f6d0f4507a17e414930dfddfddf1de452f458dc00698ca84-small-svgviewer-png-output_9.png)](/)
 
-[Home](/)[Documentation](/docs)[API Reference](/reference)
+[Home](/)[Documentation](index.md)[API Reference](/reference)
 
 * * *
 
@@ -44,7 +44,7 @@ Twilio Console Details
 
 [](#twilio-console-details)
 
-In order to get the Account SID and Auth Token, follow [this guide](https://docs.newo.ai/docs/buying-a-twilio-number#/).
+In order to get the Account SID and Auth Token, follow [this guide](buying-a-twilio-number.md#/).
 
 ### 
 

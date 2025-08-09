@@ -1,6 +1,6 @@
 # SendCommand
 
-Sends a command to a connector. A full list of commandIdn's can be found [here](https://docs.newo.ai/docs/command-identifier-list). See the examples below for the arbitrary arguments applicable to each commandIdn.
+Sends a command to a connector. A full list of commandIdn's can be found [here](command-identifier-list.md). See the examples below for the arbitrary arguments applicable to each commandIdn.
 
 ```
 SendCommand(
@@ -31,7 +31,7 @@ In the example below, the connector will call the number +16507000000. If the us
 *   **phoneNumber:** The phone number that will be called when the SendCommand action is activated.
 *   **greetingPhrase:** A greeting phrase the agent will say once the call has been answered.
 
-See "[Make Telephone Calls (Vapi)](https://docs.newo.ai/docs/make-telephone-calls-vapi)" for a full walk-through example.
+See "[Make Telephone Calls (Vapi)](make-telephone-calls-vapi.md)" for a full walk-through example.
 
 In the examples below, timers are set up using various arguments. Programmable timers support "set\_timer" or "set\_repeatable\_timer." Both commands can use the "fireAt" and "interval" parameters.
 

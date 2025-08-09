@@ -11,7 +11,7 @@ By moving context information to an external database, we can search, extract, a
 
 **Goal:** Remove context information from the Skill Script and retrieve it from AKB.
 
-Let's use the same agent setup as with the "[Embedded Instructions](https://docs.newo.ai/docs/embedded-instructions)" example. However, replace the Skill Script with the below:
+Let's use the same agent setup as with the "[Embedded Instructions](embedded-instructions.md)" example. However, replace the Skill Script with the below:
 
 ```
 {{#system~}}

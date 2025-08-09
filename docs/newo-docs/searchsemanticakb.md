@@ -30,7 +30,7 @@ If persona IDs are explicitly provided from arguments, they will be used. Else, 
 
 Let's try a fun example by creating an agent that is capable of providing details on three different dog breeds. Of course, this can be adjusted to provide any sort of large information set. We will use embedded instructions with the context in the AKB. You can easily shift the instructions to the AKB as well if you are working with more complex instructions based on the intent of a user.
 
-Create a new agent and flow by going through the steps outlined in the "[Hello World](https://docs.newo.ai/docs/hello-world)" example. Ensure you create a new Sandbox chat connector and add it to your agent's Sandbox chat event.
+Create a new agent and flow by going through the steps outlined in the "[Hello World](hello-world.md)" example. Ensure you create a new Sandbox chat connector and add it to your agent's Sandbox chat event.
 
 Create a new skill and copy the following information into the Skill Script:
 

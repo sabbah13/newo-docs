@@ -4,7 +4,7 @@ SendSystemEvent
 
 [![Newo](https://files.readme.io/895bdeef8322f081f6d0f4507a17e414930dfddfddf1de452f458dc00698ca84-small-svgviewer-png-output_9.png)](/)
 
-[Home](/)[Documentation](/docs)[API Reference](/reference)
+[Home](/)[Documentation](index.md)[API Reference](/reference)
 
 * * *
 
@@ -42,7 +42,7 @@ Where:
 [](#where)
 
 *   **eventIdn:** Any custom eventIdn.
-*   **actorIds:** List of actors to send this event to. Use action [GetActors](https://docs.newo.ai/docs/getactors) to get the list of actors. If this parameter is not set, the current actor is used.
+*   **actorIds:** List of actors to send this event to. Use action [GetActors](getactors.md) to get the list of actors. If this parameter is not set, the current actor is used.
 *   **global:** If "true," the event is sent as global. In this case, the "actorIds" parameter is ignored.
 *   **\*\*arguments:** Arbitrary arguments sent along with the message.
 

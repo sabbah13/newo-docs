@@ -4,7 +4,7 @@ Make Telephone Calls (Vapi)
 
 [![Newo](https://files.readme.io/895bdeef8322f081f6d0f4507a17e414930dfddfddf1de452f458dc00698ca84-small-svgviewer-png-output_9.png)](/)
 
-[Home](/)[Documentation](/docs)[API Reference](/reference)
+[Home](/)[Documentation](index.md)[API Reference](/reference)
 
 * * *
 
@@ -28,7 +28,7 @@ For this use case, the agent needs to be given the ability to make calls to a us
 
 **Goal:** Integrate Vapi and allow an agent to call a user.
 
-Let's use the same agent and flow from the [previous example](https://docs.newo.ai/docs/receive-telephone-calls-twilio-copy). A new Skill and event need to be created. Delete all existing events from the previous example, as we will be using different event connectors.
+Let's use the same agent and flow from the [previous example](receive-telephone-calls-twilio-copy.md). A new Skill and event need to be created. Delete all existing events from the previous example, as we will be using different event connectors.
 
 ### 
 
@@ -36,7 +36,7 @@ Vapi Integration
 
 [](#vapi-integration)
 
-For details on creating a Vapi connector, go [here](https://docs.newo.ai/docs/vapi-integration).
+For details on creating a Vapi connector, go [here](vapi-integration.md).
 
 ### 
 

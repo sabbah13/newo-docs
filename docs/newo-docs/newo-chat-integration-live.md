@@ -4,7 +4,7 @@ Newo Chat Integration (Live Agent)
 
 [![Newo](https://files.readme.io/895bdeef8322f081f6d0f4507a17e414930dfddfddf1de452f458dc00698ca84-small-svgviewer-png-output_9.png)](/)
 
-[Home](/)[Documentation](/docs)[API Reference](/reference)
+[Home](/)[Documentation](index.md)[API Reference](/reference)
 
 * * *
 
@@ -24,7 +24,7 @@ Pages
 
 # Newo Chat Integration (Live Agent)
 
-Unlike the Talking Head integration, which also includes a text-only option, the Newo Chat integration is only text. This integration enables a Digital Employee to communicate through web chat. The below steps highlight the process for **publishing the Newo Chat** on a website. If you're looking to demo an Agent on a website, go [here](https://docs.newo.ai/docs/newo-chat-integration-demo).
+Unlike the Talking Head integration, which also includes a text-only option, the Newo Chat integration is only text. This integration enables a Digital Employee to communicate through web chat. The below steps highlight the process for **publishing the Newo Chat** on a website. If you're looking to demo an Agent on a website, go [here](newo-chat-integration-demo.md).
 
 ## 
 
@@ -73,7 +73,7 @@ In most cases, you will have created an agent using the Agent Creator. As a resu
 
 *   `Icon Position X`: You can use this setting to shift the icon by a certain number of pixels on the X-axis (horizontally) relative to the bottom-right corner of the screen.
 *   `Icon Position Y`: You can use this setting to shift the icon by a certain number of pixels on the Y-axis (vertically) relative to the bottom-right corner of the screen.
-*   `Show-case Status`: Ensure this is disabled. This setting should only be enabled when [demoing the agent](https://docs.newo.ai/docs/newo-chat-integration-demo) on a website.
+*   `Show-case Status`: Ensure this is disabled. This setting should only be enabled when [demoing the agent](newo-chat-integration-demo.md) on a website.
 *   `Widget Script`: Generated automatically after running the connector. You will use this script to add the Newo Chat to your website.
 
 Ensure you click **Save** after making any changes to the above settings.

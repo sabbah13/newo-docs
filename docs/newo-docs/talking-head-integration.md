@@ -2,7 +2,7 @@
 
 You’ve likely seen a chatbot on a website before (usually located at the bottom-right corner). The Talking Head integration is a step ahead in that you are able to have either a text-only web chat or enable a talking head for a more humanized conversation with a Digital Employee.
 
-When communicating with the Talking Head, you can type your messages or click the microphone icon to speak to your Newo Digital Employee. The Talking Head integration uses the OpenAI API to convert your speech to text. For this to work, you need an OpenAI API key to use the Talking Head integration. Not sure where to find that? Here’s a [quick guide](https://docs.newo.ai/docs/openai-api-keys). Once you have the API key, follow the steps below within the Newo platform:
+When communicating with the Talking Head, you can type your messages or click the microphone icon to speak to your Newo Digital Employee. The Talking Head integration uses the OpenAI API to convert your speech to text. For this to work, you need an OpenAI API key to use the Talking Head integration. Not sure where to find that? Here’s a [quick guide](openai-api-keys.md). Once you have the API key, follow the steps below within the Newo platform:
 
 1.  Navigate to the Integrations page from the left-side panel.
 2.  Click the **gear** icon on the "Talking Head" item.
