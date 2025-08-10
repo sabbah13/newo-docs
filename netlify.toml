@@ -4,7 +4,7 @@
   command = "cd website && npm ci && npm run build"
   
   # Directory to deploy (relative to root)
-  publish = "build"
+  publish = "website/build"
   
   # Node.js version
   environment = { NODE_VERSION = "18" }
