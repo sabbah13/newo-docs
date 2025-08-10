@@ -3,3 +3,17 @@
 .navbar__title{font-weight:700}
 .hero__title{font-weight:800}
 code{font-size:.9em}
+
+/* Ensure Mermaid diagrams maintain consistent colors across themes */
+.mermaid {
+  background-color: transparent !important;
+}
+
+/* Force dark text in nodes for both light and dark themes */
+html[data-theme='dark'] .mermaid text,
+html[data-theme='dark'] .mermaid .label,
+html[data-theme='dark'] .mermaid tspan {
+  fill: #000000 !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+}

@@ -27,10 +27,18 @@ graph TB
     TestAgent[TestAgent<br/>Dev Support] -.-> ConvoAgent
     SuperAgentProject[SuperAgentProject<br/>Metadata] -.-> GeneralManagerAgent
     
-    style ConvoAgent fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
-    style TaskManager fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    style Workers fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-    style ExternalSystems fill:#f1f8e9,stroke:#388e3c,stroke-width:2px
+    style ConvoAgent fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,color:#000000
+    style TaskManager fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000000
+    style Workers fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000000
+    style ExternalSystems fill:#f1f8e9,stroke:#388e3c,stroke-width:2px,color:#000000
+    style Customer fill:#ffffff,stroke:#1976d2,stroke-width:2px,color:#000000
+    style GeneralManagerAgent fill:#ffffff,stroke:#1976d2,stroke-width:2px,color:#000000
+    style ApifyWorker fill:#ffffff,stroke:#1976d2,stroke-width:1px,color:#000000
+    style SmsWorker fill:#ffffff,stroke:#1976d2,stroke-width:1px,color:#000000
+    style MagicWorker fill:#ffffff,stroke:#1976d2,stroke-width:1px,color:#000000
+    style MultiLocationAgent fill:#ffffff,stroke:#1976d2,stroke-width:1px,color:#000000
+    style TestAgent fill:#ffffff,stroke:#1976d2,stroke-width:1px,color:#000000
+    style SuperAgentProject fill:#ffffff,stroke:#1976d2,stroke-width:1px,color:#000000
 ```
 
 ## Customer Interaction Flow

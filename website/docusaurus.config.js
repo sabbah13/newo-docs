@@ -164,6 +164,46 @@ const config = {
       textColor: '#1976d2',
       isCloseable: true,
     },
+    
+    mermaid: {
+      theme: {
+        light: 'base',
+        dark: 'base'
+      },
+      options: {
+        themeVariables: {
+          // Use the same colors for both light and dark modes
+          primaryColor: '#e3f2fd',
+          primaryTextColor: '#1976d2',
+          primaryBorderColor: '#1976d2',
+          lineColor: '#1976d2',
+          secondaryColor: '#f3e5f5',
+          tertiaryColor: '#fff3e0',
+          background: 'transparent',
+          mainBkg: '#e3f2fd',
+          secondBkg: '#f3e5f5',
+          tertiaryBkg: '#fff3e0',
+          // Text colors
+          textColor: '#1976d2',
+          darkTextColor: '#1976d2',
+          // Node colors
+          nodeBkg: '#e3f2fd',
+          nodeBorder: '#1976d2',
+          // Arrow colors
+          arrowheadColor: '#1976d2',
+          // Sequence diagram colors
+          actorBkg: '#e3f2fd',
+          actorBorder: '#1976d2',
+          actorTextColor: '#1976d2',
+          activationBkg: '#f3e5f5',
+          activationBorderColor: '#7b1fa2',
+          // Note colors
+          noteBkg: '#fff3e0',
+          noteBorderColor: '#f57c00',
+          noteTextColor: '#1976d2'
+        }
+      }
+    },
   },
 };
 
