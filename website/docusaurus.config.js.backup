@@ -29,7 +29,7 @@ const config = {
       ({
         docs: {
           path: './docs-new',
-          routeBasePath: '/docs',
+          routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars-new.js'),
           includeCurrentVersion: true,
           editUrl: 'https://github.com/newo-ai/superagent-docs/edit/main/',
@@ -57,22 +57,22 @@ const config = {
           label: '📚 Documentation',
         },
         {
-          to: '/docs/executive-summary',
+          to: '/executive-summary',
           label: '📋 Overview',
           position: 'left'
         },
         {
-          to: '/docs/system-architecture',
+          to: '/system-architecture',
           label: '🏗️ Architecture',
           position: 'left'
         },
         {
-          to: '/docs/actions-api',
+          to: '/actions-api',
           label: '🔧 API Reference',
           position: 'left'
         },
         {
-          to: '/docs/business-applications',
+          to: '/business-applications',
           label: '💼 Business',
           position: 'left'
         },
@@ -90,27 +90,27 @@ const config = {
         {
           title: 'Core Documentation',
           items: [
-            { label: '📋 Executive Summary', to: '/docs/executive-summary' },
-            { label: '🏗️ System Architecture', to: '/docs/system-architecture' },
-            { label: '🤖 Agent Analysis', to: '/docs/agent-analysis' },
-            { label: '🔄 Event System', to: '/docs/event-system' },
+            { label: '📋 Executive Summary', to: '/executive-summary' },
+            { label: '🏗️ System Architecture', to: '/system-architecture' },
+            { label: '🤖 Agent Analysis', to: '/agent-analysis' },
+            { label: '🔄 Event System', to: '/event-system' },
           ],
         },
         {
           title: 'Development',
           items: [
-            { label: '👨‍💻 Development Guide', to: '/docs/development-guide' },
-            { label: '🔧 Integration Guide', to: '/docs/integration-guide' },
-            { label: '🔧 Actions API', to: '/docs/actions-api' },
-            { label: '📖 System Reference', to: '/docs/system-reference' },
+            { label: '👨‍💻 Development Guide', to: '/development-guide' },
+            { label: '🔧 Integration Guide', to: '/integration-guide' },
+            { label: '🔧 Actions API', to: '/actions-api' },
+            { label: '📖 System Reference', to: '/system-reference' },
           ],
         },
         {
           title: 'Business & Support',
           items: [
-            { label: '💼 Business Applications', to: '/docs/business-applications' },
-            { label: '🔗 Integration Setup', to: '/docs/integration-setup' },
-            { label: '🐛 Troubleshooting', to: '/docs/troubleshooting' },
+            { label: '💼 Business Applications', to: '/business-applications' },
+            { label: '🔗 Integration Setup', to: '/integration-setup' },
+            { label: '🐛 Troubleshooting', to: '/troubleshooting' },
           ],
         },
         {
