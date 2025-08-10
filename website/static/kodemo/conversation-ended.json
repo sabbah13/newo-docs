@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "title": "Conversation Ended & Follow-up",
+  "story": "<h2>Conversation End</h2><p data-effect-id=\"end\" data-effect-subject=\"ended\" data-effect-version=\"v1\">Handles finalization and computes follow-up logic.</p><p data-effect-id=\"cb\" data-effect-subject=\"callback-check\" data-effect-version=\"v1\">Determines whether a callback should be scheduled with time windows/reasons.</p><p data-effect-id=\"fu\" data-effect-subject=\"followup\" data-effect-version=\"v1\">Orchestrates follow-up messaging/calling based on timers and state.</p>",
+  "subjects": {
+    "ended": {
+      "type": "code",
+      "name": "ConversationEndedSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{StartNotInterruptibleBlock()}}\n\n{{Set(name=\"user_id\", value=GetUser(field=\"id\"))}}\n\n{{_utilsSetFollowUpTimerSkill(interval=\"-1\", personaId=user_id)}}\n{{_utilsSendSystemLogSkill(\n    message=\"Follow-up timer was disabled due to `conversation_ended` event.\"\n)}}\n\n{{!-- TODO: Move to session ended? --}}\n{{SetState(name=\"user_reply_buffer\", value=\" \")}}\n{{SetState(name=\"fast_prompt\", value=\" \")}}\n{{SetPersonaAttribute(id=user_id, field=\"current_integration_idn\", value=\" \")}}\n\n{{Set(name=\"conversation_ended_time_pt\", value=GetDatetime(format=\"time\", timezone=\"America/Los_Angeles\"))}}\n\n{{!-- FOR HITL --}}\n{{SetPersonaAttribute(id=user_id, field=\"conversation_conversation_ended_time_pt\", value=conversation_ended_time_pt)}}\n\n{{Set(name=\"integration_idn\", value=GetTriggeredAct(fields=[\"integrationIdn\"]))}}\n{{Set(name=\"connector_idn\", value=GetTriggeredAct(fields=[\"connectorIdn\"]))}}\n\n{{!-- Exit if not VAPI or NEWO Voice service --}}\n{{#if integration_idn != \"vapi\"}}\n    {{#if integration_idn != \"newo_voice\"}}\n        {{Return()}}\n    {{/if}}\n{{/if}}\n{{Set(name=\"phone_number\", value=GetActor(field=\"externalId\"))}}\n{{!-- For VAPI and NEWO Voice services --}}\n{{SetPersonaAttribute(id=user_id, field=\"last_convo_actor_id\", value=\" \")}}\n{{Set(name=\"reason\", value=GetTriggeredAct(fields=[\"reason\"]))}}\n{{Set(name=\"recording_url\", value=GetTriggeredAct(fields=\"recordingUrl\"))}}\n\n{{#if not IsEmpty(text=recording_url)}}\n    {{SetPersonaAttribute(id=user_id, field=\"recording_urls\", value=AppendItemsArrayJSON(array=GetPersonaAttribute(id=user_id, field=\"recording_urls\"), items=AsStringJSON(val=recording_url)))}}\n{{/if}}\n\n{{#if _utilsGetConversationChannelSkill(integrationIdn=GetActor(field=\"integrationIdn\")) == \"phone\"}}\n    {{Set(name=\"conversation_started_time_pt\", value=GetPersonaAttribute(id=user_id, field=\"conversation_session_started_time_pt\"))}}\n\n    {{SetPersonaAttribute(id=user_id, field=\"last_conversation_ended_reason\", value=reason)}}\n\n    {{Set(name=\"message\", value=\"The call ended, but the reason is unknown.\")}}\n\n    {{#if reason == \"assistant-forwarded-call\"}}\n        {{Set(name=\"message\", value=\"The call ended because the agent forwarded the call.\")}}\n    {{/if}}\n\n    {{#if reason == \"assistant-ended-call\"}}\n        {{Set(name=\"message\", value=\"The call ended because the agent terminated it.\")}}\n    {{/if}}\n\n    {{#if reason == \"customer-ended-call\"}}\n        {{Set(name=\"message\", value=\"The call ended because the user terminated it.\")}}\n    {{/if}}\n    {{Set(name=\"should_call_back\", value=_checkIfAgentShouldCallBackSkill(conversationStartedTime=conversation_started_time_pt, conversationEndedTime=conversation_ended_time_pt, callEndReason=reason, userId=user_id))}}\n    {{#if should_call_back == \"True\"}}\n        {{SetPersonaAttribute(id=user_id, field=\"convoagent_called_back_once_in_session\", value=\"True\")}}\n        {{_callbackAfterCallAbort(integrationIdn=integration_idn, connectorIdn=connector_idn, phoneNumber=phone_number)}}\n    {{/if}}\n    {{_utilsSendSystemLogSkill(message=message)}}\n\n    {{_generateGreetingPhrasesSkill(reason=reason, userId=user_id)}}\n{{/if}}\n\n{{SetPersonaAttribute(id=user_id, field=\"last_call_ended_datetime_utc\", value=GetDatetime(format=\"datetime\", timezone=\"UTC\"))}}\n\n{{StopNotInterruptibleBlock()}}\n"
+        }
+      }
+    },
+    "callback-check": {
+      "type": "code",
+      "name": "_checkIfAgentShouldCallBackSkill.jinja",
+      "versions": {
+        "v1": {
+          "value": "{% if callEndReason == \"assistant-forwarded-call\" %}\n    {{Return()}}\n{% endif %}\n{% set already_called_back = GetPersonaAttribute(id=userId, field=\"convoagent_called_back_once_in_session\") %}\n{% if already_called_back == \"True\" %}\n    {{Return()}}\n{% endif %}\n{% set time_started = datetime.datetime.strptime(conversationStartedTime, \"%H:%M:%S.%f\") %}\n{% set time_ended = datetime.datetime.strptime(conversationEndedTime, \"%H:%M:%S.%f\") %}\n{% set duration = time_ended - time_started %}\n{% set timedelta = duration.total_seconds() %}\n{% if timedelta < 30 %}\n    {{Return(val=\"True\")}}\n{% endif %}\n\n{% set memory_before_call_ended = _getMemorySkill(userId=userId, count=30) %}\n\n{{system}}\nBased on the aborted phone call transcription, decide if the call was aborted intentionally by the party.\n\n<Transcription>\n{{memory_before_call_ended}}\n</Transcription>\n{{end}}\n{% set reasoning = json.loads(Gen(temperature=0.1,jsonSchema='{\"type\":\"object\",\"properties\": {\"intentional\": {\"type\": \"boolean\",\"description\": \"set to true if the conversation looks ended\"}}, \"required\": [\"intentional\"]}', validateSchema=\"True\", thinkingBudget=500)) %}\n\n{% if reasoning.intentional %}\n    {{Return()}}\n{% else %}\n    {{Return(val=\"True\")}}\n{% endif %}\n"
+        }
+      }
+    },
+    "followup": {
+      "type": "code",
+      "name": "FollowUpSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{Set(name=\"user_id\", value=GetUser(field=\"id\"))}}\n{{Set(name=\"last_convo_actor\", value=GetPersonaAttribute(id=user_id, field=\"last_convo_actor_id\"))}}\n\n{{!-- Exit if the conversation is no longer active --}}\n{{#if IsEmpty(text=last_convo_actor)}}\n  {{Return()}}\n{{/if }}\n\n{{Set(name=\"integration_idn\", value=GetActor(field=\"integrationIdn\", id=last_convo_actor))}}\n\n{{#if integration_idn == \"api\"}}\n    {{Set(name=\"api_event\", value=\"True\")}}\n{{else}}\n    {{Set(name=\"api_event\", value=\"False\")}}\n{{/if}}\n\n{{#if integration_idn == \"newo_voice\"}}\n    {{#if GetCustomerAttribute(field=\"project_attributes_setting_voice_integration_service_voice_mode\") == \"voice-to-voice\"}}\n        {{_gen2SendCommandSkill(\n            command=\"Your goal is to continue the conversation and gently ask the user whether he is still there or not. For example, you can ask 'Are you still here?'\",\n            userId=user_id\n        )}}\n        {{Return()}}\n    {{/if}}\n{{/if}}\n\n{{Set(name=\"missing_required_user_fields\", value=GetPersonaAttribute(field=\"missing_required_user_fields\", id=user_id))}}\n\n{{#if not IsSimilar(val1=missing_required_user_fields, val2=\" \", threshold=0.7)}}\n    {{_userMessageFastReplySkill(\n        baseInstruction=Concat(\"Your goal is to continue the conversation and gently ask the user to provide a missing information. Ask to provide a missing information in one sentence. Do not use lists. Currently the following information is missing: \", \"\n        \", missing_required_user_fields),\n        apiEvent=api_event,\n        userId=user_id\n    )}}\n{{else}}\n    {{_userMessageFastReplySkill(\n        baseInstruction=\"Your goal is to continue the conversation and gently ask the user whether he is still there or not. For example, you can ask 'Are you still here?'\",\n        apiEvent=api_event,\n        userId=user_id\n    )}}\n{{/if }}\n"
+        }
+      }
+    },
+    "set-followup": {
+      "type": "code",
+      "name": "_utilsSetFollowUpTimerSkill.jinja",
+      "versions": {
+        "v1": {
+          "value": "{# If `interval == -1`, it means that timer is disabled #}\n{% if interval == \"-1\" %}\n    {% set enabled = \"False\" %}\n{% else %}\n    {% set enabled = \"True\" %}\n{% endif %}\n\n{# If `interval` is not set, specify default value depending on conversation channel #}\n{% if not interval.strip() %}\n    {% set conversation_channel = _utilsGetConversationChannelSkill(integrationIdn=_utilsGetCurrentIntegrationIdnSkill(userId=personaId)) %}\n    {% if conversation_channel == \"phone\" %}\n        {% set interval = \"25\" %}\n    {% else %}\n        {% set interval = \"75\" %}\n    {% endif %}\n{% endif %}\n\n{{SendCommand(\n    commandIdn=\"set_timer\",\n    integrationIdn=\"program_timer\",\n    connectorIdn=\"message_followup\",\n    eventIdn=\"follow_up_message\",\n    timerName=\"follow_up_timer\",\n    personaId=personaId,\n    interval=interval,\n    enabled=enabled\n)}}\n\n{{Return(val=interval)}}\n"
+        }
+      }
+    }
+  },
+  "subjectIndex": [
+    "ended",
+    "callback-check",
+    "followup",
+    "set-followup"
+  ],
+  "languages": {
+    "default": "handlebars"
+  }
+}

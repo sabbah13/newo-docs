@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "title": "Reply Routing & Outbound Greeting",
+  "story": "<h2>Reply Routing</h2><p data-effect-id=\"router\" data-effect-subject=\"switch-reply-out\" data-effect-version=\"v1\">Outbound vs inbound replies are routed here.</p><p data-effect-id=\"greet\" data-effect-subject=\"greet-out\" data-effect-version=\"v1\">Outbound greeting timing and follow-up timer setup.</p><p data-effect-id=\"real\" data-effect-subject=\"real-user\" data-effect-version=\"v1\">Real user messages are normalized and forwarded into the generation pipeline.</p>",
+  "subjects": {
+    "switch-reply-out": {
+      "type": "code",
+      "name": "SwitchReplyOutboundSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{Set(name=\"mode\", value=GetCustomerAttribute(field=\"project_attributes_setting_voice_integration_service_voice_mode\"))}}\n\n{{#if mode == \"voice-to-voice\"}}\n    {{SetState(name=\"conversation_started_newo_voice_skill\", value=\"Gen2ConversationStartedOutboundSkill\")}}\n{{/if}}\n\n{{#if mode == \"transcriber\"}}\n    {{SetState(name=\"conversation_started_newo_voice_skill\", value=\"Gen1ConversationStartedOutboundSkill\")}}\n\n    {{SetState(name=\"phone_reply_skill\", value=\"GreetUserOutboundSkill\")}}\n{{/if}}\n"
+        }
+      }
+    },
+    "greet-out": {
+      "type": "code",
+      "name": "GreetUserOutboundSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{StartNotInterruptibleBlock()}}\n\n{{Set(name=\"user_id\", value=GetUser(field=\"id\"))}}\n{{SendMessage(message=GetPersonaAttribute(id=user_id, field=\"greeting_phrase\"))}}\n{{SetState(name=\"phone_reply_skill\", value=\"UserPhoneReplySkill\")}}\n\n{{Set(name=\"interval\", value=GetCustomerAttribute(field=\"project_attributes_setting_follow_up_timer_voice_interval_conversation_started_outbound\"))}}\n{{Set(name=\"applied_interval\", value=_utilsSetFollowUpTimerSkill(interval=interval, personaId=user_id))}}\n{{_utilsSendSystemLogSkill(\n    message=Concat(\"Follow-up timer was set to \", applied_interval, \" due to `conversation_started` event.\")\n)}}\n\n{{StopNotInterruptibleBlock()}}\n"
+        }
+      }
+    },
+    "real-user": {
+      "type": "code",
+      "name": "RealUserMessageSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{Set(name=\"sms_memory\", value=GetTriggeredAct(fields=[\"sms_memory\"]))}}\n\n{{Set(name=\"user_id\", value=GetUser(field=\"id\"))}}\n\n{{Set(name=\"real_message_actor_id\", value=_getRealMessageActorIdSkill(userId=user_id))}}\n\n{{!-- TODO: Refactor when `GetMemory` aliasing will be implemented --}}\n{{Set(name=\"user_actor_name\", value=GetActor(field=\"name\"))}}\n\n{{Set(name=\"message\", value=Concat(\"I've just received the message from \", user_actor_name, \" with the following content: \", sms_memory))}}\n\n{{SendMessage(message=message, actorIds=real_message_actor_id)}}\n\n{{!-- Must be consistent with `UserSMSReplySkill` --}}\n{{#system~}}\nYou've just received the following SMS message from the user:\n{{sms_memory}}\n\nLet the user know about that without mentioning the content.\n{{~/system}}\n\n{{_userMessageFastReplySkill(\n  callAnalyzeConversationSkill=\"True\",\n  callManageTaskSkill=\"True\",\n  userId=user_id\n)}}\n"
+        }
+      }
+    },
+    "phone-reply": {
+      "type": "code",
+      "name": "UserPhoneReplySkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{StartNotInterruptibleBlock()}}\n{{SetState(name=\"user_reply_buffer\", value=Stringify(Concat(GetState(name=\"user_reply_buffer\"), \" \", GetTriggeredAct(fields=\"text\"))))}}\n{{StopNotInterruptibleBlock()}}\n\n{{Set(name=\"user_id\", value=GetUser(field=\"id\"))}}\n{{SetPersonaAttribute(id=user_id, field=\"last_convo_actor_id\", value=GetActor(field=\"id\"))}}\n\n{{_userMessageFastReplySkill(\n  callAnalyzeConversationSkill=\"True\",\n  callManageTaskSkill=\"True\",\n  setFollowUpTimer=\"True\",\n  userId=user_id\n)}}\n"
+        }
+      }
+    },
+    "sms-reply": {
+      "type": "code",
+      "name": "UserSMSReplySkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{Set(name=\"external_id\", value=GetActor(field=\"externalId\"))}}\n\n{{!-- Do not process SMS messages from \"common phone number\" --}}\n{{Set(name=\"common_phone_numbers\", value=GetCustomerAttribute(field=\"project_attributes_setting_common_phone_numbers\"))}}\n{{#if not IsEmpty(text=common_phone_numbers)}}\n    {{Set(name=\"phone_index\", value=GetIndexesOfItemsArrayJSON(array=common_phone_numbers,filterPath=Concat(\"$[?(@=='\", external_id, \"')]\")))}}\n    {{#if not IsEmpty(text=phone_index)}}\n        {{Return()}}\n    {{/if}}\n{{/if}}\n\n{{Set(name=\"user_id\", value=GetUser(field=\"id\"))}}\n\n{{!-- Create Actors with the same phone number for all phone-related Integrations --}}\n{{_utilsCreatePhoneActorsSkill(userId=user_id, phoneNumber=external_id)}}\n\n{{!-- Forward SMS message and exit in case of active temporal session (VAPI or NEWO Voice service phone call from common phone number) --}}\n{{Set(name=\"temporal_session_is_active\", value=GetPersonaAttribute(id=user_id, field=\"temporal_session_is_active\"))}}\n{{#if temporal_session_is_active == \"True\"}}\n    {{Set(name=\"temporal_convo_actor_id\", value=GetPersonaAttribute(id=user_id, field=\"temporal_convo_actor_id\"))}}\n    {{SendSystemEvent(\n        eventIdn=\"real_user_message\",\n        actorIds=temporal_convo_actor_id,\n        sms_memory=GetTriggeredAct(fields=[\"text\"])\n    )}}\n    {{Return()}}\n{{/if}}\n\n{{!-- TODO: Handle \"detected phone numbers\" for SMS and VAPI or NEWO Voice service independently --}}\n{{!-- Define user's phone number in background in case of unset `detected_phone_number_with_country_code` --}}\n{{Set(name=\"detected_phone_number_with_country_code\", value=_utilsPersonaAttributeGetWithDefaultsSkill(id=user_id, field=\"detected_phone_number_with_country_code\"))}}\n{{#if IsSimilar(val1=detected_phone_number_with_country_code, val2=\"null\", threshold=0.8)}}\n    {{Set(name=\"detected_phone_number_with_country_code\", value=external_id)}}\n    {{SendSystemEvent(\n        eventIdn=\"define_user_phone_number\",\n        user_id=user_id,\n        user_phone_number_with_country_code=detected_phone_number_with_country_code\n    )}}\n{{/if}}\n\n{{Set(name=\"actor_id\", value=_utilsGetOrSetLastConvoActorId(userId=user_id))}}\n\n{{!-- TODO: Handle `last_convo_actor_id` properly --}}\n{{#if actor_id == GetActor(field=\"id\")}}\n    {{StartNotInterruptibleBlock()}}\n    {{SetState(name=\"user_reply_buffer\", value=Stringify(Concat(GetState(name=\"user_reply_buffer\"), \" \", GetTriggeredAct(fields=\"text\"))))}}\n    {{StopNotInterruptibleBlock()}}\n    {{_userMessageFastReplySkill(\n        callAnalyzeConversationSkill=\"True\",\n        callManageTaskSkill=\"True\",\n        userId=user_id\n    )}}\n{{else}}\n    {{!-- Must be consistent with `RealUserMessageSkill` --}}\n{{#system~}}\nYou've just received the following SMS message from the user:\n{{GetTriggeredAct(fields=[\"text\"])}}\n\nLet the user know about that without mentioning the content.\n{{~/system}}\n\n{{#if _utilsGetCurrentIntegrationIdnSkill(userId=user_id) == \"newo_voice\"}}\n    {{#if GetCustomerAttribute(field=\"project_attributes_setting_voice_integration_service_voice_mode\") == \"voice-to-voice\"}}\n        {{_gen2SendCommandSkill(command=GetCurrentPrompt(), userId=user_id)}}\n        {{Return()}}\n    {{/if}}\n{{/if}}\n    {{_userMessageFastReplySkill(\n        baseInstruction=GetCurrentPrompt(),\n        callAnalyzeConversationSkill=\"True\",\n        callManageTaskSkill=\"True\",\n        userId=user_id\n    )}}\n{{/if}}\n"
+        }
+      }
+    },
+    "chat-reply": {
+      "type": "code",
+      "name": "UserNewoChatReplySkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{StartNotInterruptibleBlock()}}\n{{SetState(name=\"user_reply_buffer\", value=Stringify(Concat(GetState(name=\"user_reply_buffer\"), \" \", GetTriggeredAct(fields=\"text\"))))}}\n{{StopNotInterruptibleBlock()}}\n\n{{Set(name=\"user_id\", value=GetUser(field=\"id\"))}}\n{{_utilsGetOrSetLastConvoActorId(userId=user_id)}}\n\n{{_userMessageFastReplySkill(\n  callAnalyzeConversationSkill=\"True\",\n  callManageTaskSkill=\"True\",\n  setFollowUpTimer=\"True\",\n  userId=user_id\n)}}\n"
+        }
+      }
+    }
+  },
+  "subjectIndex": [
+    "switch-reply-out",
+    "greet-out",
+    "real-user",
+    "phone-reply",
+    "sms-reply",
+    "chat-reply"
+  ],
+  "languages": {
+    "default": "handlebars"
+  }
+}

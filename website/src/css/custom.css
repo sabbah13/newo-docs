@@ -1,0 +1,5 @@
+.doc-cta-buttons{display:flex;gap:.75rem;flex-wrap:wrap;margin:1rem 0}
+:root{--ifm-color-primary:#1d4ed8;--ifm-color-primary-dark:#1a43bf;--ifm-color-primary-darker:#173aa7;--ifm-color-primary-darkest:#122f87;--ifm-color-primary-light:#3b82f6;--ifm-color-primary-lighter:#60a5fa;--ifm-color-primary-lightest:#93c5fd}
+.navbar__title{font-weight:700}
+.hero__title{font-weight:800}
+code{font-size:.9em}

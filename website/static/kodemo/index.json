@@ -1,0 +1,22 @@
+[
+  {
+    "id": "conversation-started",
+    "title": "Conversation Started Walkthrough",
+    "path": "/kodemo/conversation-started.json"
+  },
+  {
+    "id": "conversation-ended",
+    "title": "Conversation Ended & Follow-up",
+    "path": "/kodemo/conversation-ended.json"
+  },
+  {
+    "id": "reply-routing",
+    "title": "Reply Routing & Outbound Greeting",
+    "path": "/kodemo/reply-routing.json"
+  },
+  {
+    "id": "session-and-state",
+    "title": "Session, State & Attributes",
+    "path": "/kodemo/session-and-state.json"
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "name": "newo-superagent-docs",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "docusaurus start",
+    "start:3030": "docusaurus start --host 0.0.0.0 --port 3030",
+    "prebuild": "node ./scripts/generateKodemo.js",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve",
+    "serve:3030": "docusaurus serve --host 0.0.0.0 --port 3030",
+    "clear": "docusaurus clear",
+    "deploy": "docusaurus deploy"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^3.8.1",
+    "@docusaurus/preset-classic": "^3.8.1",
+    "@docusaurus/theme-classic": "^3.8.1",
+    "@docusaurus/theme-mermaid": "^3.8.1",
+    "@kodemo/player": "^0.3.4",
+    "clsx": "^2.1.0",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
+
+

@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "title": "Session, State & Attributes",
+  "story": "<h2>Session & State</h2><p data-effect-id=\"state\" data-effect-subject=\"reset\" data-effect-version=\"v1\">Resets and initializes state at conversation boundaries.</p><p data-effect-id=\"chan\" data-effect-subject=\"get-channel\" data-effect-version=\"v1\">Derives the conversation channel to route behavior.</p><p data-effect-id=\"defaults\" data-effect-subject=\"persona-defaults\" data-effect-version=\"v1\">Utility accessors for persona attributes with defaults.</p><p data-effect-id=\"meta\" data-effect-subject=\"update-meta\" data-effect-version=\"v1\">Metadata updates (actor ids, timestamps, analytics).</p>",
+  "subjects": {
+    "reset": {
+      "type": "code",
+      "name": "_utilsResetSessionStateSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{SetState(name=\"conversation_last_no_task_prompt\", value=\" \")}}\n{{SetState(name=\"thoughts_last_no_task_prompt\", value=\" \")}}\n{{SetState(name=\"thoughts\", value=\" \")}}\n{{SetState(name=\"greeting_phrase\", value=\" \")}}\n{{SetPersonaAttribute(id=userId, field=\"conversation_new_session\", value=\"True\")}}\n{{SetPersonaAttribute(id=userId, field=\"thoughts_new_session\", value=\"True\")}}\n{{SetPersonaAttribute(id=userId, field=\"convoagent_thoughts\", value=\" \")}}\n\n{{! Some persona attributes should be reset on the session started event}}\n{{SetPersonaAttribute(id=userId, field=\"last_convo_actor_id\", value=actorId, id=userId)}}\n{{SetPersonaAttribute(id=userId, field=\"report_sent\", value=\" \")}}\n\n{{_utilsGetCurrentIntegrationIdnSkill(userId=userId)}}\n\n{{! FOR HITL}}\n\n{{SetPersonaAttribute(id=userId, field=\"conversation_session_started_time_pt\", value=GetDatetime(format=\"time\", timezone=\"America/Los_Angeles\"))}}\n"
+        }
+      }
+    },
+    "get-channel": {
+      "type": "code",
+      "name": "_utilsGetConversationChannelSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{#if integrationIdn == \"vapi\"}}\n    {{Return(val=\"phone\")}}\n{{/if}}\n\n{{#if integrationIdn == \"newo_voice\"}}\n    {{!-- TODO: potentially, return `voice` or some other values depending on conditions --}}\n    {{Return(val=\"phone\")}}\n{{/if}}\n\n{{Return(val=\"chat\")}}\n"
+        }
+      }
+    },
+    "persona-defaults": {
+      "type": "code",
+      "name": "_utilsPersonaAttributeGetWithDefaultsSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{!-- Returns Persona Attribute by provided `field` if it's not empty. Otherwise, returns `defaultValue` --}}\n\n{{Set(name=\"attribute_value\", value=GetPersonaAttribute(id=id, field=field))}}\n\n{{#if not IsEmpty(text=attribute_value)}}\n    {{Return(val=attribute_value)}}\n{{/if}}\n\n{{Return(val=defaultValue)}}\n"
+        }
+      }
+    },
+    "update-meta": {
+      "type": "code",
+      "name": "UpdateConversationMetaSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{!-- TODO: Rework getting conversation meta - currently, it lags behind one conversational turn --}}\n\n{{!-- TODO: Unify such blocks in all places - currently, similar code is being duplicated in a lot of places --}}\n\n{{#if IsEmpty(text=userId)}}\n  {{Set(name=\"userId\", value=GetUser(field=\"id\"))}}\n{{/if}}\n\n{{Set(name=\"time_zone\", value=_getTimeZoneSkill(userId=userId))}}\n{{Set(name=\"current_date\", value=GetDatetime(format=\"date\", timezone=time_zone))}}\n{{Set(name=\"current_time\", value=GetDatetime(format=\"time\", timezone=time_zone, weekday=False))}}\n{{Set(name=\"current_date_week_day\", value=GetDatetime(format=\"date\", timezone=time_zone, weekday=True))}}\n{{Set(name=\"current_week_day\", value=Stringify(current_date_week_day.replace(Concat(current_date, \", \"), \" \")))}}\n\n{{Set(name=\"am_hours\", value=[\"00\", \"01\", \"02\", \"03\", \"04\", \"05\", \"06\", \"07\", \"08\", \"09\", \"10\", \"11\"])}}\n{{Set(name=\"pm_hours\", value=[\"12\", \"13\", \"14\", \"15\", \"16\", \"17\", \"18\", \"19\", \"20\", \"21\", \"22\", \"23\", \"00\"])}}\n\n{{Set(name=\"current_hour_list\", value=current_time.split(\":\"))}}\n{{Set(name=\"current_time_list_string\", value=Stringify(current_hour_list))}}\n{{Set(name=\"current_time_list_string\", value=current_time_list_string.replace(\"'\", '\"'))}}\n{{Set(name=\"current_hour\", value=Stringify(GetItemsArrayByIndexesJSON(array=current_time_list_string, indexes=0)))}}\n{{Set(name=\"current_minute\", value=Stringify(GetItemsArrayByIndexesJSON(array=current_time_list_string, indexes=1)))}}\n{{Set(name=\"current_second\", value=Stringify(GetItemsArrayByIndexesJSON(array=current_time_list_string, indexes=2)))}}\n{{Set(name=\"am_prefix_should_be_set\", value=am_hours.count(current_hour))}}\n{{Set(name=\"pm_prefix_should_be_set\", value=pm_hours.count(current_hour))}}\n\n{{!-- Define postfix --}}\n{{Set(name=\"postfix\", value=\"AM\")}}\n{{#if pm_prefix_should_be_set != 0}}\n    {{Set(name=\"postfix\", value=\"PM\")}}\n{{/if}}\n{{#if am_prefix_should_be_set != 0}}\n    {{Set(name=\"postfix\", value=\"AM\")}}\n{{/if}}\n\n{{!-- Convert hours to AM/PM format --}}\n{{Set(name=\"twelve_current_hour\", value=current_hour)}}\n{{#if pm_prefix_should_be_set != 0}}\n  {{#if current_hour == \"12\" }}\n    {{Set(name=\"twelve_current_hour\", value=\"12\")}}\n  {{else}}\n    {{Set(name=\"twelve_current_hour\", value=Stringify(pm_hours.index(current_hour)))}}\n  {{/if}}\n{{/if}}\n\n{{Set(name=\"conversation_channel\", value=_utilsGetConversationChannelSkill(integrationIdn=_utilsGetCurrentIntegrationIdnSkill(userId=userId)))}}\n{{Set(name=\"working_hours_status\", value=_getWorkingHoursStatus(userId=userId))}}\n\n{{#system~}}\nconversation.timezone: {{time_zone}}\nconversation.channel: {{conversation_channel}}\nconversation.day_of_week: {{current_week_day}}\nconversation.time: {{current_hour}}:{{current_minute}}:{{current_second}} ({{twelve_current_hour}}:{{current_minute}} {{postfix}})\nconversation.date: {{current_date}}\n\n{{working_hours_status}}\n{{~/system}}\n\n{{SetPersonaAttribute(id=userId, field=\"conversation_meta\", value=GetCurrentPrompt())}}\n"
+        }
+      }
+    },
+    "start-session": {
+      "type": "code",
+      "name": "_startNewSessionSkill.hbs",
+      "versions": {
+        "v1": {
+          "value": "{{StartNotInterruptibleBlock()}}\n\n{{#if GetPersonaAttribute(id=userId, field=\"previous_session_ended\") == \"False\"}}\n    {{Return()}}\n{{/if}}\n\n{{SendCommand(\n    commandIdn=\"add_phone_to_pool\",\n    integrationIdn=\"twilio_messenger\",\n    connectorIdn=\"sms_connector\"\n)}}\n\n{{SetPersonaAttribute(id=userId, field=\"previous_session_ended\", value=\"False\")}}\n{{Set(name=\"actor_id\", value=GetActor(field=\"id\"))}}\n\n{{UpdateConversationMetaSkill(userId=userId)}}\n\n{{!-- Reset session state --}}\n{{_utilsResetSessionStateSkill(userId=userId, actorId=actor_id, currentDateTime=currentDateTime)}}\n\n{{!-- TODO: Remove when `GetMemory` aliasing will be available --}}\n{{#if IsEmpty(text=GetPersonaAttribute(id=userId, field=\"name_was_extracted\"))}}\n    {{UpdateUser(name=\"name\", value=\"User\")}}\n{{/if}}\n\n{{! Building user's information (getting data up to date) }}\n{{Set(name=\"is_outbound_call\", value=_utilsPersonaAttributeGetWithDefaultsSkill(id=userId, field=\"outbound_call\", defaultValue=\"False\"))}}\n{{_buildUserInformationSkill(userId=userId, isOutboundCall=is_outbound_call)}}\n\n{{_utilsSendSystemLogSkill(message=\"New session started.\")}}\n\n{{!--\n{{Set(name=\"persona_name\", value=GetActor(field=\"name\"))}}\n{{Set(name=\"business_phone\", value=GetCustomerAttribute(field=\"project_business_public_phone\"))}}\n{{Set(name=\"business_name\", value=GetCustomerAttribute(field=\"project_business_name\"))}}\n--}}\n\n{{SetPersonaAttribute(id=userId, field=\"integrationIdn\", value=integrationIdn)}}\n{{SetPersonaAttribute(id=userId, field=\"connectorIdn\", value=GetTriggeredAct(fields=[\"connectorIdn\"]))}}\n{{SetPersonaAttribute(id=userId, field=\"actorId\", value=GetActor(field=\"id\"))}}\n{{SetPersonaAttribute(id=userId, field=\"externalActorId\", value=GetActor(field=\"externalId\"))}}\n\n{{SetPersonaAttribute(id=userId, field=\"convoagent_thoughts\", value=GetCustomerAttribute(field=\"project_attributes_setting_initial_thoughts\"))}}\n\n{{!-- TODO: Add additional parameters (metadata) --}}\n{{SendSystemEvent(eventIdn=\"session_started\")}}\n{{SendCommand(\n    commandIdn=\"session_started\",\n    integrationIdn=\"api\",\n    connectorIdn=\"webhook\",\n    actorId=actor_id\n)}}\n\n{{Set(name=\"set_intercom_actor\", value=\"False\")}}\n\n{{#if GetCustomerAttribute(field=\"project_attributes_setting_booking_type\") == \"intercom\"}}\n    {{Set(name=\"set_intercom_actor\", value=\"True\")}}\n{{/if}}\n\n{{#if GetCustomerAttribute(field=\"project_attributes_setting_booking_check_availability_type\") == \"intercom\"}}\n    {{Set(name=\"set_intercom_actor\", value=\"True\")}}\n{{/if}}\n\n{{#if set_intercom_actor == \"True\"}}\n    {{Set(name=\"external_id\", value=GetActor(field=\"externalId\"))}}\n    {{#if IsEmpty(text=GetPersonaAttribute(id=userId, field=\"intercom_actor\"))}}\n        {{SendCommand(\n            commandIdn=\"get_or_create_actor\",\n            integrationIdn=\"customer_intercom\",\n            connectorIdn=\"connection\",\n            externalId=external_id,\n            customEventIntegrationIdn=\"customer_intercom\",\n            customEventConnectorIdn=\"connection\",\n            userPersonaId=userId\n        )}}\n    {{/if}}\n    {{#if IsEmpty(text=GetPersonaAttribute(id=userId, field=\"intercom_client_actor_id\"))}}\n        {{SetPersonaAttribute(id=userId, field=\"intercom_client_actor_id\", value=CreateActor(integrationIdn=\"api\", connectorIdn=\"connection\", externalId=external_id, personaId=userId))}}\n    {{/if}}\n\n{{/if}}\n\n{{!--\n{{Set(name=\"report_enabled\", value=GetCustomerAttribute(field=\"project_attributes_setting_session_started_report_enabled\"))}}\n\n{{#If IsEmpty(text=report_enabled)}}\n    {{Set(name=report_enabled, value=\"False\")}}\n{{/if}}\n--}}\n\n{{!--\n{{#if report_enabled == \"True\"}}\n--}}\n{{!-- TODO: Discuss later - it is better to use only webhook as a more flexible approach --}}\n{{!-- TODO: Add newlines to SMS content --}}\n\n{{!-- TODO: Define phone number for sending reports, uncomment --}}\n{{!--\n    {{SendCommand(\n        commandIdn=\"send_message\",\n        integrationIdn=\"twilio_messenger\",\n        connectorIdn=\"sms_connector\",\n        text=Concat(\n            \"NEWO.AI: User started a new session. \",\n            \"Business Name: '\",\n            business_name,\n            \"'. \",\n            \"Actor Integration IDN: '\",\n            actorIntegrationIdn,\n            \"'. \",\n            \"Persona Name: '\",\n            persona_name,\n            \"'.\"\n        ),\n        phone_number=business_phone\n    )}}\n\n{{/if}}\n--}}\n\n{{StopNotInterruptibleBlock()}}\n"
+        }
+      }
+    }
+  },
+  "subjectIndex": [
+    "reset",
+    "get-channel",
+    "persona-defaults",
+    "update-meta",
+    "start-session"
+  ],
+  "languages": {
+    "default": "handlebars"
+  }
+}
