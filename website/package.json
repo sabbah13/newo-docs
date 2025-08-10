@@ -5,7 +5,6 @@
   "scripts": {
     "start": "docusaurus start",
     "start:3030": "docusaurus start --host 0.0.0.0 --port 3030",
-    "prebuild": "node ./scripts/generateKodemo.js",
     "build": "docusaurus build",
     "serve": "docusaurus serve",
     "serve:3030": "docusaurus serve --host 0.0.0.0 --port 3030",
