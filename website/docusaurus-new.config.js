@@ -4,7 +4,7 @@
 const config = {
   title: 'Newo SuperAgent Documentation',
   tagline: 'Digital Employee platform with sophisticated multi-agent orchestration',
-  favicon: 'img/favicon.ico',
+  favicon: 'favicon.ico',
   url: 'https://newo-superagent-docs.netlify.app',
   baseUrl: '/',
   organizationName: 'newo',
