@@ -1,6 +1,6 @@
 # Netlify configuration for Newo SuperAgent Documentation
 [build]
-  # Build command
+  # Build command - run from website directory
   command = "cd website && npm ci && npm run build"
   
   # Directory to deploy (relative to root)

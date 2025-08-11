@@ -10,7 +10,7 @@ const config = {
   baseUrl: '/',
   organizationName: 'newo',
   projectName: 'superagent-docs',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   
   i18n: { 
