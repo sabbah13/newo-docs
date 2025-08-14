@@ -78,9 +78,9 @@ graph TB
 
 ### 🤖 AI-Powered Data Extraction
 Leverages multiple OpenAI models for optimal results:
-- **GPT-4O**: General-purpose reasoning and text processing
-- **GPT-4O Search Preview**: Enhanced web search capabilities
-- **GPT-4O Structured Output**: JSON schema-compliant responses
+- **GPT-4o**: General-purpose reasoning and text processing
+- **GPT-4o Search Preview**: Enhanced web search capabilities
+- **GPT-4o Structured Output**: JSON schema-compliant responses
 - **O1 & O3 Models**: Advanced reasoning for complex validation tasks
 
 ### 🌐 Multi-Modal Scraping

@@ -82,9 +82,9 @@ mindmap
       
     AI Orchestration
       Multi-Model Strategy
-        GPT-4O Standard
-        GPT-4O Search
-        GPT-4O Structured
+        GPT-4o Standard
+        GPT-4o Search
+        GPT-4o Structured
         O1 Validation
         O3 Advanced Reasoning
       Dynamic Prompting
@@ -154,7 +154,7 @@ graph TB
     end
     
     subgraph "AI Processing Layer"
-        GPT4O[GPT-4O Models]
+        GPT4O[GPT-4o Models]
         O1[O1 Model]
         O3[O3 Model]
         MS[Model Selector]
@@ -320,15 +320,15 @@ graph TB
         TASK --> ANALYSIS{Task Analysis}
         
         ANALYSIS --> SCHEMA{Requires JSON<br/>Schema Output?}
-        SCHEMA -->|Yes| STRUCTURED[GPT-4O<br/>Structured Output]
+        SCHEMA -->|Yes| STRUCTURED[GPT-4o<br/>Structured Output]
         
         SCHEMA -->|No| SEARCH{Needs Web<br/>Search Enhancement?}
-        SEARCH -->|Yes| PREVIEW[GPT-4O<br/>Search Preview]
+        SEARCH -->|Yes| PREVIEW[GPT-4o<br/>Search Preview]
         
         SEARCH -->|No| COMPLEXITY{Complex<br/>Reasoning Required?}
         COMPLEXITY -->|High| O3MODEL[O3 Model<br/>Advanced Analysis]
         COMPLEXITY -->|Medium| O1MODEL[O1 Model<br/>Validation Logic]
-        COMPLEXITY -->|Standard| GPT4O[GPT-4O<br/>General Purpose]
+        COMPLEXITY -->|Standard| GPT4O[GPT-4o<br/>General Purpose]
         
         STRUCTURED --> PROCESSING[Answer Processing]
         PREVIEW --> PROCESSING
@@ -347,9 +347,9 @@ graph TB
     end
     
     subgraph "Model Characteristics"
-        C1[GPT-4O: Speed + Versatility]
-        C2[GPT-4O Search: Real-time Data]
-        C3[GPT-4O Structured: Schema Compliance]
+        C1[GPT-4o: Speed + Versatility]
+        C2[GPT-4o Search: Real-time Data]
+        C3[GPT-4o Structured: Schema Compliance]
         C4[O1: Complex Validation]
         C5[O3: Advanced Reasoning]
     end

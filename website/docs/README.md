@@ -30,6 +30,13 @@ The Newo SuperAgent is a production-ready **Digital Employee platform** built on
 - **[Skill Execution and Logic](./skill-execution)** - Code tracing and execution models
 - **[Interaction Diagrams](./interaction-diagrams)** - Visual system architecture
 
+### 🤖 Agent Creator
+- **[Agent Creator Overview](./agent-creator-overview)** - Intelligent AI agent onboarding and configuration system
+- **[Agent Creator Architecture](./agent-creator-architecture)** - Technical architecture and component interactions
+- **[Agent Creator Flows](./agent-creator-flows)** - Specialized flows and skills for automated onboarding
+- **[Agent Creator Diagrams](./agent-creator-diagrams)** - System diagrams and visual architecture
+- **[Agent Creator Development](./agent-creator-development)** - Development guide and customization options
+
 ### 🛠️ Development & Integration
 - **[Practical Development Guide](./development-guide)** - Hands-on development instructions
 - **[Integration and Extension Guide](./integration-guide)** - Extending and customizing the system
@@ -51,9 +58,10 @@ The Newo SuperAgent is a production-ready **Digital Employee platform** built on
 
 ### For Business Users
 1. Begin with **[Executive Summary](./executive-summary)** for overview
-2. Explore **[Business Applications](./business-applications)** for use cases
-3. Review **[Integration Setup](./integration-setup)** for deployment
-4. Consult **[Troubleshooting](./troubleshooting)** for support
+2. Explore **[Agent Creator Overview](./agent-creator-overview)** for AI agent automation
+3. Review **[Business Applications](./business-applications)** for use cases
+4. Study **[Integration Setup](./integration-setup)** for deployment
+5. Consult **[Troubleshooting](./troubleshooting)** for support
 
 ### For System Integrators
 1. Study **[Integration Guide](./integration-guide)** for extension patterns
@@ -81,10 +89,17 @@ The Newo SuperAgent is a production-ready **Digital Employee platform** built on
 - **Security and compliance** features built-in
 - **Performance optimization** with sub-second response times
 
+### Agent Creator System
+- **Intelligent AI agent onboarding** with 5-stage automated process
+- **Multi-modal data extraction** from websites and Google Maps
+- **Advanced AI orchestration** using GPT-4o, O1, and O3 models
+- **Template-based architecture** with Jinja2 dynamic prompt generation
+
 ## 💡 What Makes This Documentation Special
 
 - **Official Newo Integration** - Uses authoritative Newo terminology and concepts
 - **Complete Actions Reference** - Every Newo Action documented with examples
+- **Agent Creator System** - Comprehensive guide to intelligent AI agent onboarding and automation
 - **Real-World Focus** - Business applications, ROI analysis, practical implementation
 - **Production-Ready** - Covers troubleshooting, monitoring, integration best practices
 - **Visual Learning** - 50+ Mermaid diagrams showing system architecture and flows
@@ -95,6 +110,7 @@ Ready to dive in? Choose your path:
 
 - **🏃‍♂️ Quick Overview**: [Executive Summary](./executive-summary)
 - **🏗️ Technical Deep Dive**: [System Architecture](./system-architecture)  
+- **🤖 Agent Creation**: [Agent Creator Overview](./agent-creator-overview)
 - **💼 Business Focus**: [Business Applications](./business-applications)
 - **🛠️ Start Building**: [Development Guide](./development-guide)
 

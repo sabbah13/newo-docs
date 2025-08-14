@@ -294,16 +294,16 @@ graph TB
 **Model**: OpenAI O3  
 **Use Case**: Complex reasoning and advanced analysis tasks
 
-#### _gen_answer_gpt4o - Standard GPT-4O Processing
-**Model**: OpenAI GPT-4O  
+#### _gen_answer_gpt4o - Standard GPT-4o Processing
+**Model**: OpenAI GPT-4o  
 **Use Case**: General-purpose text processing and reasoning
 
 #### _gen_answer_gpt4o_search_preview - Enhanced Web Search
-**Model**: OpenAI GPT-4O Search Preview  
+**Model**: OpenAI GPT-4o Search Preview  
 **Use Case**: Web-enhanced queries requiring real-time data
 
 #### _gen_answer_gpt4o_structured_output - Schema-Compliant Output
-**Model**: OpenAI GPT-4O Structured Output  
+**Model**: OpenAI GPT-4o Structured Output  
 **Use Case**: JSON schema-compliant responses for structured data
 
 ### Data Validation & Processing Skills

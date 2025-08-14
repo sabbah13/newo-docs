@@ -38,9 +38,9 @@ graph TB
     end
     
     subgraph "AI Processing Layer"
-        GPT4O[GPT-4O]
-        GPT4OS[GPT-4O Search]
-        GPT4OSO[GPT-4O Structured]
+        GPT4O[GPT-4o]
+        GPT4OS[GPT-4o Search]
+        GPT4OSO[GPT-4o Structured]
         O1[O1 Model]
         O3[O3 Model]
     end
@@ -163,9 +163,9 @@ graph TB
     
     subgraph "AI Answer Generation"
         GAD[_gen_answer_default<br/>O3 Model]
-        GA4[_gen_answer_gpt4o<br/>GPT-4O]  
-        GASP[_gen_answer_gpt4o_search_preview<br/>GPT-4O Search]
-        GASO[_gen_answer_gpt4o_structured_output<br/>GPT-4O Structured]
+        GA4[_gen_answer_gpt4o<br/>GPT-4o]  
+        GASP[_gen_answer_gpt4o_search_preview<br/>GPT-4o Search]
+        GASO[_gen_answer_gpt4o_structured_output<br/>GPT-4o Structured]
     end
     
     subgraph "Validation & Processing"
@@ -309,9 +309,9 @@ The system employs **5 different AI models** with specific use cases:
 
 | Model | Use Case | Optimization | Skills Using |
 |-------|----------|--------------|-------------|
-| **GPT-4O** | General reasoning, text processing | Speed & versatility | 90% of skills |
-| **GPT-4O Search Preview** | Web-enhanced queries | Real-time data access | AskQuestion |
-| **GPT-4O Structured Output** | JSON schema compliance | Data consistency | _gen_answer_gpt4o_structured_output |
+| **GPT-4o** | General reasoning, text processing | Speed & versatility | 90% of skills |
+| **GPT-4o Search Preview** | Web-enhanced queries | Real-time data access | AskQuestion |
+| **GPT-4o Structured Output** | JSON schema compliance | Data consistency | _gen_answer_gpt4o_structured_output |
 | **O1** | Complex validation & reasoning | Accuracy & logic | _check_answer |
 | **O3** | Advanced reasoning tasks | Deep analysis | _gen_answer_default |
 
@@ -323,10 +323,10 @@ graph TB
         TASK[Incoming Task]
         
         TASK --> SCHEMA{JSON Schema<br/>Required?}
-        SCHEMA -->|Yes| STRUCTURED[GPT-4O Structured Output]
+        SCHEMA -->|Yes| STRUCTURED[GPT-4o Structured Output]
         
         SCHEMA -->|No| SEARCH{Web Search<br/>Required?}
-        SEARCH -->|Yes| PREVIEW[GPT-4O Search Preview]
+        SEARCH -->|Yes| PREVIEW[GPT-4o Search Preview]
         
         SEARCH -->|No| COMPLEX{Complex<br/>Validation?}
         COMPLEX -->|Yes| O1MODEL[O1 Model]
@@ -334,7 +334,7 @@ graph TB
         COMPLEX -->|No| ADVANCED{Advanced<br/>Reasoning?}
         ADVANCED -->|Yes| O3MODEL[O3 Model]
         
-        ADVANCED -->|No| DEFAULT[GPT-4O Standard]
+        ADVANCED -->|No| DEFAULT[GPT-4o Standard]
     end
     
     subgraph "Processing Pipeline"
