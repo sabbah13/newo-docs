@@ -29,9 +29,9 @@ const config = {
       'classic',
       ({
         docs: {
-          path: './docs-new',
+          path: './docs',
           routeBasePath: '/',
-          sidebarPath: require.resolve('./sidebars-new.js'),
+          sidebarPath: require.resolve('./sidebars.js'),
           includeCurrentVersion: true,
           editUrl: 'https://github.com/newo-ai/superagent-docs/edit/main/',
         },
