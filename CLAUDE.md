@@ -14,10 +14,13 @@ The codebase contains:
 
 ## Key Commands
 
-### Development
+### Direct npm Commands (if needed)
 ```bash
+# Navigate to website directory
+cd website
+
 # Install dependencies
-cd website && npm install
+npm install
 
 # Start development server
 npm start                    # Standard port 3000
@@ -34,28 +37,38 @@ npm run serve:3030          # Alternative port 3030
 npm run clear
 ```
 
-### Makefile Automation
+### Recommended Makefile Workflow (Clean & Modern)
 ```bash
-# Development workflows
-make dev                    # Start development server
-make build                  # Build production site
-make serve                  # Serve built documentation
-make clean                  # Clean build artifacts
+# 📚 Development Commands
+make dev                    # Install deps + start dev server (localhost:3000)
+make dev-alt               # Start dev server on port 3030
+make install               # Install dependencies only
 
-# Testing and validation
-make test-build            # Complete build test
-make validate-docs         # Structure validation
-make lint                  # Markdown linting (if markdownlint installed)
+# 🏗️ Build & Test Commands  
+make build                 # Build production site
+make serve                 # Build + serve locally for testing
+make test                  # Build + validate output
+make clean                 # Clean build artifacts and cache
 
-# Deployment
-make build-production      # Production build with npm ci
-make deploy-netlify        # Deploy to Netlify (if CLI installed)
-make deploy-preview        # Create Netlify preview deployment
+# 🚀 Deployment Commands
+make build-prod           # Production build with npm ci
+make deploy-preview       # Deploy preview to Netlify (non-interactive)
+make deploy-prod          # Deploy to Netlify production (non-interactive)
 
-# Project information
-make status                # Show project status and statistics
-make info                  # Show system and dependency information
-make help                  # Show all available commands
+# 🔧 Utility Commands
+make status               # Show comprehensive project status  
+make validate             # Validate documentation structure
+make lint                 # Lint markdown files (optional)
+
+# 🎯 Quick Workflows
+make quick-dev            # Clean + start development
+make quick-build          # Clean + build + serve
+make quick-deploy         # Clean + deploy preview
+
+# 🔧 Setup Commands
+make setup-netlify        # Install Netlify CLI + setup instructions
+make setup-project        # Complete project setup + validation
+make help                 # Show all available commands with descriptions
 ```
 
 ## Architecture Overview
@@ -141,45 +154,137 @@ The sidebar includes:
 
 ## Development Workflow
 
-### Adding New Documentation
-1. Create Markdown files in `website/docs/` or `website/docs/actions/`
-2. Update `website/sidebars.js` to include in navigation
-3. Use proper YAML frontmatter with `slug`, `sidebar_position`, `title`, `description`
-4. Test locally with `npm start`
-5. Build and validate with `make test-build`
+### Quick Start (Recommended)
+1. **Setup**: `make setup-project` - Complete project setup with validation
+2. **Develop**: `make dev` - Start development server with hot reloading  
+3. **Test**: `make test` - Build and validate before deployment
+4. **Deploy Preview**: `make deploy-preview` - Test deployment on Netlify
+5. **Production**: `make deploy-prod` - Deploy to production when ready
 
-### Modifying Agent Code
-- Agent implementations are reference material only
-- Focus on documentation rather than agent modification
+### Local Development Process
+1. **Start Development**: 
+   ```bash
+   make dev                 # Installs deps + starts server on localhost:3000
+   # OR
+   make dev-alt            # Alternative port 3030
+   ```
+
+2. **Edit Documentation**:
+   - Create/edit Markdown files in `website/docs/` or `website/docs/actions/`
+   - Update `website/sidebars.js` for navigation changes
+   - Use proper YAML frontmatter: `slug`, `sidebar_position`, `title`, `description`
+   - Changes auto-reload in browser during development
+
+3. **Test Locally**:
+   ```bash
+   make test               # Build + validate output
+   make serve              # Build + serve for final testing
+   ```
+
+### Deployment Process
+1. **Preview Deployment**: `make deploy-preview` - Non-interactive Netlify preview with URL display
+2. **Production Deployment**: `make deploy-prod` - Non-interactive Netlify production with URL display
+3. **Status Check**: `make status` - Verify deployment status and site info
+
+### Live Site
+- **Production**: https://newo-docs-new.netlify.app
+- **Preview Testing**: Each preview gets unique URL shown after deployment
+
+### Working with Agent Code (Reference Only)
+- Agent implementations in `project/` directory are **reference material**
+- Focus on **documentation** rather than agent modification
 - Use agent code to understand system architecture for documentation updates
+- All agent-related content should be documented, not modified
 
-### Backup and Recovery
-- **Automated backups**: Configuration backups created with timestamped filenames
-- **Organized storage**: `backups/old-configs/` and `backups/old-docs/` directories
-- **Recovery process**: Manual restoration from backup files
+### Project Management
+- **Status Monitoring**: `make status` - Comprehensive project status
+- **Structure Validation**: `make validate` - Check documentation structure
+- **Cleanup**: `make clean` - Clean build artifacts and cache
+- **Troubleshooting**: Check Node.js/npm versions, Netlify CLI setup
 
 ## Build and Deployment
 
-### Local Development
-- Development server with hot reloading on port 3000 (or 3030)
-- Build validation and testing capabilities
-- Comprehensive status reporting
+### Local Development Environment
+- **Development Server**: Hot reloading on port 3000 (default) or 3030 (alternative)
+- **Auto-Installation**: Dependencies automatically installed via `make dev`
+- **Build Validation**: Integrated testing with `make test`
+- **Status Monitoring**: Comprehensive reporting with `make status`
 
-### Production Deployment
-- **Netlify integration**: Automatic deployment from `website/build/` directory
-- **Security headers**: X-Frame-Options, XSS protection, content type validation
-- **Performance optimization**: Asset caching, compression, CDN distribution
-- **Branch deployments**: Support for preview deployments and branch-specific builds
+### Deployment Pipeline
+- **Non-Interactive**: All deployment commands work without user prompts
+- **Production Build**: Uses `npm ci` for consistent dependency installation
+- **Netlify Integration**: Direct deployment via CLI in non-interactive mode
+- **Preview Testing**: `make deploy-preview` for testing before production
+- **Status Verification**: Built-in deployment status checking
 
-### Quality Assurance
-- **Link validation**: Link checker integration (if installed)
-- **Markdown linting**: Markdownlint integration for consistency
-- **Build testing**: Complete build process validation
-- **Structure validation**: Documentation hierarchy verification
+### Production Deployment Process
+1. **Automated Build**: `make build-prod` - Production build with npm ci
+2. **Preview First**: `make deploy-preview` - Test deployment and get preview URL
+3. **Production Deploy**: `make deploy-prod` - Deploy to production when ready
+4. **Status Check**: `make status` - Verify deployment and site configuration
+
+### Quality Assurance & Validation
+- **Build Testing**: Automatic validation with file count and size reporting
+- **Structure Validation**: Documentation hierarchy and config file checking
+- **Lint Integration**: Optional markdown linting with markdownlint-cli
+- **Dependency Verification**: Node.js, npm, and Netlify CLI status checking
+
+### Netlify Configuration
+- **Security Headers**: X-Frame-Options, XSS protection, content type validation
+- **Performance Optimization**: Asset caching (1 year), compression, CDN distribution
+- **Build Settings**: Configured for `website/build/` output directory
+- **Branch Deployments**: Support for preview deployments and branch-specific builds
+- **Node.js Version**: Pinned to Node.js 18 for consistency
+
+## Setup Instructions
+
+### First Time Setup
+1. **Install Prerequisites**:
+   ```bash
+   # Ensure Node.js 18+ and npm are installed
+   node --version  # Should show v18.x.x or higher
+   npm --version   # Should show 9.x.x or higher
+   ```
+
+2. **Project Setup**:
+   ```bash
+   make setup-project    # Complete setup with validation
+   ```
+
+3. **Netlify Setup** (for deployment):
+   ```bash
+   make setup-netlify    # Install CLI and get setup instructions
+   netlify login         # Authenticate with Netlify
+   netlify init          # Connect to existing site
+   # OR
+   netlify sites:create  # Create new site
+   ```
+
+### Daily Development Workflow
+```bash
+# Start development (most common)
+make dev                  # Install deps + dev server on localhost:3000
+
+# Test your changes
+make test                 # Build + validate
+
+# Deploy for testing
+make deploy-preview       # Get preview URL to share
+
+# Deploy to production (when ready)
+make deploy-prod         # Deploy to production
+```
+
+### Troubleshooting
+- **Dependencies**: Run `make install` if there are package issues
+- **Build Issues**: Run `make clean` then rebuild
+- **Netlify Issues**: Check `make status` for CLI setup
+- **Port Conflicts**: Use `make dev-alt` for port 3030
 
 ## Key Integrations
 
+- **Docusaurus 3.8+**: Modern documentation framework with React
 - **Mermaid**: Architectural diagram rendering with custom theming
 - **Kodemo**: Interactive code examples and tutorials
-- **Netlify**: Production deployment and CDN
-- **React**: Custom components for enhanced functionality
+- **Netlify**: Production deployment and CDN with security headers
+- **Node.js 18**: Long-term support version for stability

@@ -1,10 +1,13 @@
 # Netlify configuration for Newo SuperAgent Documentation
 [build]
-  # Build command - run from website directory
-  command = "cd website && npm ci && npm run build"
+  # Build command - npm commands run from website directory
+  command = "npm ci && npm run build"
   
-  # Directory to deploy (relative to root)
-  publish = "website/build"
+  # Directory to deploy (relative to website directory)
+  publish = "build"
+  
+  # Base directory for build context
+  base = "website"
   
   # Node.js version
   environment = { NODE_VERSION = "18" }
@@ -41,13 +44,13 @@
 
 # Branch-specific build settings
 [context.production]
-  command = "cd website && npm ci && npm run build"
+  command = "npm ci && npm run build"
 
 [context.branch-deploy]
-  command = "cd website && npm ci && npm run build"
+  command = "npm ci && npm run build"
 
 [context.deploy-preview]
-  command = "cd website && npm ci && npm run build"
+  command = "npm ci && npm run build"
 
 # Environment variables (set these in Netlify UI)
 # NODE_VERSION = "18"
