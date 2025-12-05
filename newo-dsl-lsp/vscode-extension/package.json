@@ -1,0 +1,127 @@
+{
+  "name": "newo-dsl",
+  "displayName": "Newo DSL",
+  "description": "Language support for Newo DSL templates (.jinja, .guidance)",
+  "version": "0.1.0",
+  "publisher": "newo",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/newo/newo-dsl-lsp"
+  },
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onLanguage:newo-jinja",
+    "onLanguage:newo-guidance",
+    "workspaceContains:**/*.jinja",
+    "workspaceContains:**/*.guidance"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "newo-jinja",
+        "aliases": [
+          "Newo Jinja",
+          "newo-jinja"
+        ],
+        "extensions": [
+          ".jinja"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/jinja-icon.svg",
+          "dark": "./icons/jinja-icon.svg"
+        }
+      },
+      {
+        "id": "newo-guidance",
+        "aliases": [
+          "Newo Guidance",
+          "newo-guidance"
+        ],
+        "extensions": [
+          ".guidance"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/guidance-icon.svg",
+          "dark": "./icons/guidance-icon.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "newo-jinja",
+        "scopeName": "source.newo-jinja",
+        "path": "./syntaxes/newo-jinja.tmLanguage.json"
+      },
+      {
+        "language": "newo-guidance",
+        "scopeName": "source.newo-guidance",
+        "path": "./syntaxes/newo-guidance.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Newo DSL",
+      "properties": {
+        "newo-dsl.schemasPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to DSL schemas directory"
+        },
+        "newo-dsl.enableDiagnostics": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable diagnostic reporting"
+        },
+        "newo-dsl.enableCompletions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable code completions"
+        },
+        "newo-dsl.enableHover": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable hover information"
+        }
+      }
+    },
+    "snippets": [
+      {
+        "language": "newo-jinja",
+        "path": "./snippets/newo-jinja.json"
+      },
+      {
+        "language": "newo-guidance",
+        "path": "./snippets/newo-guidance.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "publish:vsce": "vsce publish",
+    "publish:ovsx": "ovsx publish",
+    "publish:all": "npm run package && vsce publish && ovsx publish"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  }
+}

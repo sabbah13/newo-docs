@@ -12,15 +12,17 @@ Retrieves detailed information about a specific communication channel actor by I
 
 ```newo
 GetActor(
-  id: str
+  field: str = None,
+  id: str = None
 )
 ```
 
 ## Parameters
 
-### Required Parameters
+### Optional Parameters
 
-- **`id`** (string): Unique identifier of the actor to retrieve
+- **`field`** (string): Specific field to retrieve (e.g., "id", "integrationIdn", "connectorIdn", "externalId", "name")
+- **`id`** (string): Specific actor ID to query. If not provided, returns info about the current actor
 
 ## Return Values
 

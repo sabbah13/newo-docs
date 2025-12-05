@@ -1,0 +1,32 @@
+# Source files (compiled to dist/)
+src/**
+tsconfig.json
+
+# Keep icons directory (don't ignore it)
+!icons/**
+
+# Development files
+.vscode/**
+.gitignore
+
+# Node modules (vscode-languageclient will be bundled)
+node_modules/**
+
+# Parent directory files
+../**
+
+# Build artifacts
+*.map
+*.ts
+!*.d.ts
+
+# Test files
+test/**
+**/*.test.js
+
+# Documentation
+CHANGELOG.md
+CONTRIBUTING.md
+
+# Git
+.git/**

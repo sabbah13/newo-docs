@@ -1,0 +1,101 @@
+{
+  "System Block": {
+    "prefix": "system",
+    "body": [
+      "{{#system~}}",
+      "$0",
+      "{{~/system}}"
+    ],
+    "description": "System prompt block"
+  },
+  "User Block": {
+    "prefix": "user",
+    "body": [
+      "{{#user~}}",
+      "$0",
+      "{{~/user}}"
+    ],
+    "description": "User message block"
+  },
+  "Assistant Block": {
+    "prefix": "assistant",
+    "body": [
+      "{{#assistant~}}",
+      "$0",
+      "{{~/assistant}}"
+    ],
+    "description": "Assistant response block"
+  },
+  "If Block": {
+    "prefix": "if",
+    "body": [
+      "{{#if ${1:condition}}}",
+      "\t$0",
+      "{{/if}}"
+    ],
+    "description": "Conditional block"
+  },
+  "If Else Block": {
+    "prefix": "ifelse",
+    "body": [
+      "{{#if ${1:condition}}}",
+      "\t$2",
+      "{{else}}",
+      "\t$0",
+      "{{/if}}"
+    ],
+    "description": "Conditional block with else"
+  },
+  "Each Loop": {
+    "prefix": "each",
+    "body": [
+      "{{#each ${1:items}}}",
+      "\t$0",
+      "{{/each}}"
+    ],
+    "description": "Each loop block"
+  },
+  "Set Variable": {
+    "prefix": "set",
+    "body": [
+      "{{Set(name=\"${1:variable}\", value=${2:value})}}"
+    ],
+    "description": "Set variable"
+  },
+  "Return": {
+    "prefix": "return",
+    "body": [
+      "{{Return(val=${1:GetCurrentPrompt()})}}"
+    ],
+    "description": "Return from skill"
+  },
+  "Conversation Meta": {
+    "prefix": "convometa",
+    "body": [
+      "{{Set(name=\"time_zone\", value=utils_get_time_zone(user_id=user_id))}}",
+      "{{Set(name=\"current_date\", value=GetDatetime(format=\"date\", timezone=time_zone))}}",
+      "",
+      "{{#system~}}",
+      "<ConversationMeta>",
+      "conversation.timezone: {{time_zone}}",
+      "conversation.date: {{current_date}}",
+      "</ConversationMeta>",
+      "{{~/system}}"
+    ],
+    "description": "Conversation metadata block"
+  },
+  "Skill Call": {
+    "prefix": "skill",
+    "body": [
+      "{{${1:_skillName}(${2:parameters})}}"
+    ],
+    "description": "Call a skill"
+  },
+  "Variable Reference": {
+    "prefix": "var",
+    "body": [
+      "{{${1:variable}}}"
+    ],
+    "description": "Variable reference"
+  }
+}

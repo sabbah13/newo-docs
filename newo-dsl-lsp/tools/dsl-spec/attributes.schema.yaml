@@ -1,0 +1,1268 @@
+version: '1.0'
+description: Newo DSL Attributes Schema - Auto-generated
+generated_at: '2025-12-04T05:09:29.999Z'
+total_count: 314
+by_category:
+  business: 25
+  attributes: 176
+  integration: 8
+  agent: 17
+  private: 45
+  custom: 43
+attributes:
+  - name: project_business_name
+    id: 5bee03d0-f97d-4206-b3ef-5f3263aab802
+    category: business
+    type: string
+  - name: project_business_country
+    id: 78ae4269-f8d9-4279-b66b-e649aac806fa
+    category: business
+    type: string
+  - name: project_business_address
+    id: 4540b4dc-3f54-4195-92fd-25c5dfc14052
+    category: business
+    type: string
+  - name: project_business_public_phone
+    id: b206b025-a70d-4588-b4cb-550873c4fe82
+    category: business
+    type: string
+  - name: project_business_story
+    id: 8092084f-defe-45b3-85a0-b185f1b1ff82
+    category: business
+    type: string
+  - name: project_business_website_url
+    id: b03ac988-ed8d-4bfb-b84c-2a9dff9dddf7
+    category: business
+    type: string
+  - name: project_business_working_hours
+    id: 96413eb3-e3c6-4985-b82d-8c99d756d87b
+    category: business
+    type: string
+  - name: project_business_time_zone
+    id: cd35024b-f023-46be-9e48-a82eebbb057a
+    category: business
+    type: string
+  - name: project_attributes_payment_methods
+    id: 93077b10-e118-4940-856a-e450b8365803
+    category: attributes
+    type: string
+  - name: project_business_top_owner_name
+    id: 591b3b1d-3e27-408c-a05f-e86eec7a2b13
+    category: business
+    type: string
+  - name: project_business_top_owner_phone
+    id: bfb14622-13a7-4d09-90a2-303c574a27b0
+    category: business
+    type: string
+  - name: project_business_top_owner_email
+    id: 15435273-d674-4ba9-97aa-2af984f1f042
+    category: business
+    type: string
+  - name: project_attributes_setting_common_phone_numbers
+    id: 420d0b0c-79f8-4a39-8a7d-e6a88bb5928b
+    category: attributes
+    type: string
+  - name: project_attributes_info_crm
+    id: 88363e6b-d55a-477c-981a-871fb52e01f9
+    category: attributes
+    type: string
+  - name: project_business_expected_number_of_calls_month_location
+    id: 8252d192-649b-4241-befb-38ee9c38027c
+    category: business
+    type: string
+  - name: project_business_industry
+    id: 41a5031d-9d64-40c5-9bc5-1f226bc9dd08
+    category: business
+    type: string
+  - name: project_attributes_restaurant_catering_email
+    id: 5f3469eb-976c-46e7-bfb4-e293a1ac75c3
+    category: attributes
+    type: string
+  - name: project_business_language_primary
+    id: 0249824c-2659-4491-9f69-1a27fb255e88
+    category: business
+    type: string
+  - name: project_business_language_additional
+    id: 85f4f2bf-7587-4404-a655-eda828af4913
+    category: business
+    type: string
+  - name: project_attributes_restaurant_googlemaps_reservation_url
+    id: 4a8dcb15-3a81-46b3-ba13-dd1f039fee02
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_large_group_reservation_email
+    id: ffa01aee-e314-473c-a309-cff1d6d37e40
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_order_email
+    id: 9584d1f1-6b15-4768-a7a1-f9a3b0249901
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_private_dining_email
+    id: af6f8b97-1d6f-4c49-aedf-311be7943bff
+    category: attributes
+    type: string
+  - name: calcom_override_agent_attributes
+    id: c60e2528-9953-4ddb-bd55-156489bb769f
+    category: integration
+    type: string
+  - name: calcom_api_token
+    id: 021a5b66-8cea-43ca-a2b7-06f2d4683af6
+    category: integration
+    type: string
+  - name: calcom_booking_window
+    id: ac78a8cc-649b-42d1-9a29-e7ae1da5ad21
+    category: integration
+    type: string
+  - name: calcom_base_url
+    id: 15799bfc-8c21-4af8-b86d-1c59e2adb45d
+    category: integration
+    type: string
+  - name: calcom_mode
+    id: cd91e7f6-9de0-450b-ae78-ba05d20c1ff9
+    category: integration
+    type: string
+  - name: calcom_slot_api_version
+    id: e66d08f9-398e-46ed-a7aa-ec2859c7f44e
+    category: integration
+    type: string
+  - name: calcom_booking_api_version
+    id: 57b6fbec-7cee-4719-9fe9-db6c8d58229b
+    category: integration
+    type: string
+  - name: calcom_event_api_version
+    id: ab34786c-eeb8-40fd-9cb9-578c7aea65ed
+    category: integration
+    type: string
+  - name: project_representative_agent_name
+    id: 0ee7c55c-640b-48b4-ae4b-48f94aeb9060
+    category: agent
+    type: string
+  - name: project_representative_agent_title
+    id: 90159346-dd6c-45c9-a71f-46d82ae83e7a
+    category: agent
+    type: string
+  - name: project_representative_agent_style
+    id: a686805c-c70b-4aca-88dd-7589c7e5a069
+    category: agent
+    type: string
+  - name: project_attributes_setting_voice_integration_service_voice_to_voice_provider_genai_voice
+    id: 50aaa844-f5c9-4bea-8d16-5ea8d9fbc955
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_integration_service_voice_to_voice_provider_openai_voice
+    id: d7ecd5fe-ca07-4e22-8172-23dd764186d3
+    category: attributes
+    type: string
+  - name: project_representative_agent_voice_phone_number
+    id: 0ea10aee-3ed2-4452-adc3-6ddc94354e65
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_disclaimer_phrase
+    id: 645c0960-a091-4f01-ade5-28bd9edb611c
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_greeting_phrase
+    id: e0f32b31-2999-41b4-a29c-f548b2e9da36
+    category: agent
+    type: string
+  - name: project_representative_agent_chat_greeting_phrase
+    id: bdc0dc4a-3d33-4fac-86b0-9dca5022ed00
+    category: agent
+    type: string
+  - name: project_representative_agent_gender
+    id: d5f1d930-554e-41df-9558-6361d6774b2e
+    category: agent
+    type: string
+  - name: project_attributes_setting_voice_integration_service_bypass_phone_number
+    id: 3111a37e-1788-45ae-bcfa-b4f3fb785a69
+    category: attributes
+    type: string
+  - name: project_attributes_products_and_services
+    id: 6c09e675-c0f9-4243-8f50-3231aefec006
+    category: attributes
+    type: string
+  - name: project_attributes_products_and_services_not_offering
+    id: a48b5729-5f02-4a5a-bdbf-79f76ac8a483
+    category: attributes
+    type: string
+  - name: project_attributes_current_specials
+    id: 959f886c-7d8c-4b50-8fb2-fd2556db77b7
+    category: attributes
+    type: string
+  - name: project_attributes_faq
+    id: e3e325ea-47f9-4ada-add7-a0bcb01fa8a6
+    category: attributes
+    type: string
+  - name: project_attributes_terms_and_conditions
+    id: 53cbd95e-a58b-45f3-bdf2-b6bc7268c17a
+    category: attributes
+    type: string
+  - name: project_attributes_rag_knowledge_base_text
+    id: 83ba91e4-fa66-48c9-949b-379840ab2416
+    category: attributes
+    type: string
+  - name: project_attributes_rag_knowledge_base_websites
+    id: f1960aa5-e179-43f3-8a70-998a38dd6983
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_menu
+    id: aed8f25f-6806-4ae1-8919-d37dfa3fac88
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_regular_events_schedule
+    id: a26126ca-f2c7-4519-874e-a1fec6c0e099
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_signature_dishes
+    id: ea14260d-8729-4469-8094-b6e435ac1c98
+    category: attributes
+    type: string
+  - name: project_attributes_setting_calendar_event_integration
+    id: 8d97e7fc-e362-4763-9508-c1edd4656b36
+    category: attributes
+    type: string
+  - name: project_attributes_setting_email_send_information_enabled
+    id: d27fbb0b-d361-46e9-a286-4cb0c87e9e19
+    category: attributes
+    type: string
+  - name: project_attributes_setting_email_send_information_allowed_content
+    id: 4a25c9b2-01cd-443d-ba25-0ac2ea8b900d
+    category: attributes
+    type: string
+  - name: project_attributes_setting_email_send_information_allowed_content_items
+    id: 85abd1fd-08fb-4b44-9bef-62317e63b9c3
+    category: attributes
+    type: string
+  - name: project_attributes_setting_sms_send_information_enabled
+    id: 66db11e6-7368-457f-822f-e1f6a952aa18
+    category: attributes
+    type: string
+  - name: project_attributes_setting_sms_send_information_allowed_content
+    id: 17c84c08-2123-42b4-8330-41990fddfdea
+    category: attributes
+    type: string
+  - name: project_attributes_setting_sms_send_information_allowed_content_items
+    id: 28df8043-1d71-4c31-a98c-9807acb0f212
+    category: attributes
+    type: string
+  - name: project_business_manager_email
+    id: 1357fd8d-39a4-4325-9ae0-191eec60df19
+    category: business
+    type: string
+  - name: project_attributes_setting_transfer_call_enabled
+    id: 3960dc3d-1c41-4f44-8109-f64b0c53a78e
+    category: attributes
+    type: string
+  - name: project_business_non_working_hour_escalation_phone
+    id: cbacd3be-eb0b-4def-af35-94f4b367c4ee
+    category: business
+    type: string
+  - name: project_business_working_hour_escalation_phone
+    id: 37654c93-f55a-4925-b38b-11a7e10bdf4d
+    category: business
+    type: string
+  - name: project_attributes_setting_transfer_call_criteria
+    id: a53f1f76-6543-476e-858c-fffe5196d1af
+    category: attributes
+    type: string
+  - name: project_attributes_setting_transfer_call_phone_numbers
+    id: a2b1dfd8-c34e-41e7-ad30-59480c24d0d0
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_sms_enabled
+    id: a50a78ee-29d4-49ff-bf05-a14e41c822b3
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_sms_content
+    id: 3cf640d0-8e8d-4993-94c2-7d6c61b1689f
+    category: attributes
+    type: string
+  - name: project_attributes_setting_instant_callback_on_abort_enabled
+    id: 19020b28-1569-43a8-b197-4701f59c6484
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_catering_questions
+    id: fc50a90d-32fa-4473-bc7d-dc80e3326c81
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_large_group_reservation_minimum_party_size
+    id: a2951883-60c7-400d-a240-27b7dbfc1ff9
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_large_group_reservation_questions
+    id: 914a0247-7a9c-4dbc-b5bc-f32a62d0da46
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_order_url
+    id: e8dde63c-e84a-4d14-82d4-b7ff9257c62a
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_private_dining_questions
+    id: e5c0f63c-b3c8-47f5-9469-e1ef6edf4a8c
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_regular_reservation_via_link_guidance_instruction
+    id: 925d6cf5-e950-436f-946c-9de1d1e748fb
+    category: attributes
+    type: string
+  - name: project_attributes_setting_asr_average_lead_value
+    id: 7167fa13-bfba-40bf-85b2-6462b9d95d0f
+    category: attributes
+    type: string
+  - name: project_attributes_setting_asr_conversion_ratio
+    id: 0820b7a5-4fd5-4f02-92ff-f5cd09bb2519
+    category: attributes
+    type: string
+  - name: project_attributes_setting_asr_redirection_type_working_hours
+    id: 6d734f18-292e-484f-939d-2f6bcaa537ed
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_report_enabled
+    id: 9e3305d6-4706-4baa-9146-da06a886c7e9
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_report_content
+    id: 53bc94bc-9d81-4b0c-b4e7-e189beb28c26
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_report_criteria_template
+    id: 12f3432d-e6d0-4ad0-8f11-c638a2c51cd4
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_report_include_transcript
+    id: 8e42bd03-d647-4b79-9f56-3777073d0d47
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_report_include_utm_tags
+    id: 4d58be1f-5de8-47e2-b852-de20aed5e03d
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_bill_average_order
+    id: 390f55e5-21ee-42a9-8165-bbd4a2d2d154
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_bill_average_per_person_catering
+    id: 734cc5e0-f106-46b1-9932-9a86ee02e037
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_bill_average_per_person_large_group_reservation
+    id: 4c926b4d-b1d9-4d86-9222-492d68bc17fb
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_bill_average_per_person_private_dining
+    id: 0ba022a8-72d3-4f4f-a2d9-76fd3f09f9c4
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_bill_average_per_person_regular_reservation
+    id: 91250cb1-fb3e-487e-9ad8-2118b5e12eca
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_bill_minimum_catering
+    id: 7e73c004-8bec-4f00-a1c6-637a59d857e1
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_bill_minimum_large_group_reservation
+    id: 41d37f50-ab09-47e5-8c2c-9147f1feb271
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_bill_minimum_private_dining
+    id: dad336ca-6618-4802-bc12-766e44136efb
+    category: attributes
+    type: string
+  - name: project_attributes_private_dynamic_ami_template
+    id: 9b14474a-7c12-4167-ab31-2577ab2e0a68
+    category: private
+    type: string
+  - name: project_attributes_private_sa_version
+    id: 6cad1f7e-8a22-4dce-9f22-f5481be41419
+    category: private
+    type: string
+  - name: project_attributes_free_notes
+    id: 5b350cec-a2cd-4bbc-b7d6-1c9aa3a3758a
+    category: attributes
+    type: string
+  - name: project_attributes_private_dynamic_ami_compiled
+    id: 94a87041-7879-4f3c-a2e7-b1f5a8198a32
+    category: private
+    type: string
+  - name: project_attributes_setting_asr_recognition
+    id: 8e3efc34-7505-46cf-bb10-4220953adb76
+    category: attributes
+    type: string
+  - name: project_attributes_private_account_initialized_first_time
+    id: 30a34047-c597-4920-9280-978a1ea1ae3a
+    category: private
+    type: string
+  - name: project_attributes_private_feature_flag_multi_location
+    id: 0ce9fa40-4302-495c-9804-358773413dc1
+    category: private
+    type: string
+  - name: project_attributes_setting_meeting_duration
+    id: 30a589be-8702-4260-9a71-a4832b012f5b
+    category: attributes
+    type: string
+  - name: project_attributes_setting_meeting_setup_phrase
+    id: 9f02fcab-6404-4648-878d-3f96bd54e1b7
+    category: attributes
+    type: string
+  - name: project_attributes_setting_meeting_check_availability_working_hours_status
+    id: bfb88610-6c23-408a-9ca0-f31c69f5c650
+    category: attributes
+    type: string
+  - name: project_business_average_prices
+    id: 51675a94-7ae1-4015-9cad-0061a8acb04d
+    category: business
+    type: string
+  - name: project_attributes_setting_booking_cancellation_enabled
+    id: 94149f0e-3650-4f5d-a342-7092e8b70e39
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_cancellation_type
+    id: 75b68f4b-c758-417b-b24b-64203a37a643
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_cancellation_url
+    id: 17024c3d-bdfb-4042-a2db-81f28b240ae2
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_enabled
+    id: 2ee17cf7-7b01-41d1-b99b-a1ae34fb0388
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_url
+    id: 84eb315a-d209-4dda-a35c-a347dcbfc5e9
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_processing_type
+    id: a4ca329a-c143-4541-970e-81679d2f8688
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_request_http_method
+    id: 868248ee-26f6-47ff-948b-e5e58b11262d
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_request_headers
+    id: 0c079661-751d-4603-b837-24a3280e0e2f
+    category: attributes
+    type: string
+  - name: project_attributes_private_dynamic_booking_check_availability_payload_schema_compiled
+    id: d509af6b-43ab-4214-a572-ce3a1722d22d
+    category: private
+    type: string
+  - name: project_attributes_setting_booking_check_availability_payload_schema_template
+    id: eca52f7c-cf27-4f7b-931a-ab3c78119d5f
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_type
+    id: aae8ccdf-e2de-4c20-903f-687823bfd19e
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_validation_schema_template
+    id: 01777d79-dbee-4dcd-8400-27ee557a3810
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_window
+    id: 72b798ae-c1a9-4c31-84cc-8144421ceaa3
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_working_hours_status
+    id: b2f0d775-1182-43ed-90f7-a51ba75227ba
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_payload_schema_template
+    id: 70b369c8-b793-4a84-b8ac-ccb1f7d60386
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_success_notification_on_email_enabled
+    id: 7373a08a-c4b7-4631-adce-ea85a2d3e8f9
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_email
+    id: 88454fae-e172-4b50-aab4-39c676e9104b
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_enabled
+    id: 18cec2a2-49c7-4f33-8dd1-b5c782323631
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_fallback_processing_type
+    id: 9a19ec01-23fd-4416-a422-e37c156ac06d
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_url
+    id: c2e1ad50-8a40-408e-8614-720c02de5ee8
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_check_availability_max_days_in_advance
+    id: 35e31263-a261-409f-bc60-dd99dca89a5e
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_meta_fields_schema_template
+    id: 72c64441-4b13-4fa4-93fb-a0caafb407cc
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_phrase_template_on_booking_submitting
+    id: 9452b04b-fbd5-4146-87bd-4dc406083ffb
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_phrase_template_on_booking_success
+    id: 3b81e39a-ad20-4513-bb76-0249f351173a
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_request_headers
+    id: 9eec9e90-6510-4716-b164-07bee5d03e19
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_success_notification_on_sms_enabled
+    id: 4287a7ad-b6c1-403c-b3ed-be1437748f06
+    category: attributes
+    type: string
+  - name: project_attributes_setting_booking_type
+    id: 75288ea0-78d9-47e9-91ec-4f9a52610cd8
+    category: attributes
+    type: string
+  - name: project_attributes_static_additional_business_context
+    id: 3da57a39-166e-463b-b881-b95545167524
+    category: attributes
+    type: string
+  - name: project_business_locations
+    id: ce3d8e69-f919-4cde-990b-ca835c56ca59
+    category: business
+    type: string
+  - name: project_business_name_phonetic
+    id: dbc0ecac-67e3-43a4-b3b0-17ef00d4abd9
+    category: business
+    type: string
+  - name: project_business_type
+    id: a48e1285-1d63-4762-a753-c97ae14f1a7f
+    category: business
+    type: string
+  - name: project_attributes_setting_calculation_context
+    id: 56436491-ec3e-48c9-bbf3-f63efaa7ea64
+    category: attributes
+    type: string
+  - name: project_attributes_setting_calculation_rules
+    id: 91528d6d-a57b-49ac-a0ca-d91ce120048f
+    category: attributes
+    type: string
+  - name: project_attributes_setting_calendar_injection_is_enabled
+    id: 36a1c775-92c1-4042-9089-4c797a8f065a
+    category: attributes
+    type: string
+  - name: project_attributes_setting_chat_split_messages
+    id: b53512cd-5829-4d35-9fee-a5f477425cc7
+    category: attributes
+    type: string
+  - name: project_attributes_setting_check_spam_or_voicemail
+    id: 17ea73a9-7ea8-467a-81b4-ed524d8a9f86
+    category: attributes
+    type: string
+  - name: project_attributes_setting_additional_global_conversation_instruction
+    id: d0e14430-c14b-4fff-a6a2-d7aece3000a2
+    category: attributes
+    type: string
+  - name: project_attributes_setting_additional_limitations_and_restrictions
+    id: a84ac292-585e-4473-9347-8b3b6ddb834b
+    category: attributes
+    type: string
+  - name: project_attributes_setting_define_conversation_is_during_working_hours_enabled
+    id: d7473404-754f-4028-b9f8-7ea9c34906c2
+    category: attributes
+    type: string
+  - name: project_attributes_setting_connect_with_the_manager_in_case_of_unhandled_issues
+    id: 0c566201-0567-49a2-a654-d3cc78d990b4
+    category: attributes
+    type: string
+  - name: project_attributes_setting_evaluate_ongoing_conversation_quality
+    id: 4cde7da4-d14c-4d96-a16f-9ed6be8bb46a
+    category: attributes
+    type: string
+  - name: project_attributes_setting_external_reply_type
+    id: 8471358f-5d15-4385-b561-19f867e3fbc1
+    category: attributes
+    type: string
+  - name: project_attributes_setting_follow_up_timer_chat_interval_base
+    id: c510df7f-4872-456d-b8d0-7ddb589bbc46
+    category: attributes
+    type: string
+  - name: project_attributes_setting_follow_up_timer_common_interval_long_operations
+    id: 42d01d7f-af53-4b47-9fbe-9d9fd3f23fbc
+    category: attributes
+    type: string
+  - name: project_attributes_setting_follow_up_timer_voice_interval_agent_speech_ended
+    id: f6935b7f-be67-484a-ab20-6658f8cdde71
+    category: attributes
+    type: string
+  - name: project_attributes_setting_follow_up_timer_voice_interval_agent_speech_started
+    id: 42b35681-0fb0-4eb4-bd45-48929b48b1a9
+    category: attributes
+    type: string
+  - name: project_attributes_setting_follow_up_timer_voice_interval_conversation_started_inbound
+    id: 0f4949fb-949d-40b3-a189-31a1ad2c19a2
+    category: attributes
+    type: string
+  - name: project_attributes_setting_follow_up_timer_voice_interval_conversation_started_outbound
+    id: 29df44e2-54e6-4fd3-912a-ed32f898dbb6
+    category: attributes
+    type: string
+  - name: project_attributes_setting_follow_up_timer_voice_interval_user_speech_ended
+    id: 5a411605-779b-42c5-96e2-e593e1695001
+    category: attributes
+    type: string
+  - name: project_attributes_setting_follow_up_timer_voice_interval_user_speech_started
+    id: 25ad655c-d09d-4956-917a-572a9202b592
+    category: attributes
+    type: string
+  - name: project_attributes_setting_initial_thoughts
+    id: c67e83ed-ab8f-416d-af79-8c23029ee9af
+    category: attributes
+    type: string
+  - name: project_attributes_setting_number_of_past_interactions_to_observe
+    id: 2b051ad5-ddd2-4c94-a9ba-2eb25cb21dbd
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_reset_persona_attributes
+    id: 7e984146-abb9-4e79-9217-75cd71d8293c
+    category: attributes
+    type: string
+  - name: project_attributes_setting_conversation_session_timeout_finished_chat
+    id: 7c28de2f-4efd-4254-93eb-03da9a3b2083
+    category: attributes
+    type: string
+  - name: project_attributes_setting_conversation_session_timeout_finished_voice
+    id: 6a607f3e-692e-4826-a473-af8e68327ba9
+    category: attributes
+    type: string
+  - name: project_attributes_setting_conversation_session_timeout_unfinished_chat
+    id: 8120f004-f728-4c84-8ab8-4ca75273701c
+    category: attributes
+    type: string
+  - name: project_attributes_setting_conversation_session_timeout_unfinished_voice
+    id: 098a7c01-255b-4feb-af94-b4eb01a2b626
+    category: attributes
+    type: string
+  - name: project_attributes_setting_timezone_reasoning_enabled
+    id: 07db1e0a-305c-4794-8c30-95e7e94fb001
+    category: attributes
+    type: string
+  - name: project_attributes_settings_newo_tools
+    id: 5f84e058-5ef8-4862-9112-fb5e72d51446
+    category: attributes
+    type: string
+  - name: customer_email
+    id: a2a4bd18-3cd0-4642-848f-05d0801408f8
+    category: custom
+    type: string
+  - name: customer_first_name
+    id: ae1966d5-e417-49e6-b077-0404015e2b68
+    category: custom
+    type: string
+  - name: customer_last_name
+    id: 362de9bb-259e-444c-8802-186ac92168ea
+    category: custom
+    type: string
+  - name: customer_phone
+    id: 9cdcec61-36c9-48a6-8d2c-b5be45cc3733
+    category: custom
+    type: string
+  - name: project_attributes_setting_data_injection_max_summary_tokens
+    id: 84470aaa-5050-4a80-bd41-bae3fc0c5b51
+    category: attributes
+    type: string
+  - name: project_attributes_setting_data_injection_needs_summary
+    id: 8ef01cf1-963d-4af4-b717-ab14ce5aa8fa
+    category: attributes
+    type: string
+  - name: project_attributes_private_data_injection_payload
+    id: 604bb2f6-8b44-48f7-a29c-2064639f80d6
+    category: private
+    type: string
+  - name: project_attributes_private_data_injection_retrieved_data
+    id: 11dd34f7-11ea-4c44-b504-8ca30bbba6db
+    category: private
+    type: string
+  - name: project_attributes_private_data_injection_is_timer_running
+    id: 3a10a17d-1dc5-476d-8d8b-3dc8612de386
+    category: private
+    type: string
+  - name: project_attributes_setting_data_injection_update_period
+    id: 7b33b188-b164-4e5b-ab30-01b71721907b
+    category: attributes
+    type: string
+  - name: project_attributes_setting_data_injection_is_enabled
+    id: eb8f1a9f-5ee0-4cca-91cb-19fe8a4e5854
+    category: attributes
+    type: string
+  - name: project_attributes_private_dynamic_business_locations_indexes
+    id: d4297637-956c-429a-8656-c0e7465dfea9
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_business_locations_object
+    id: 80956a4d-845d-4e32-8c1b-9ecf7dd6b094
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_products_and_services
+    id: f8bab005-2512-4539-9e77-d8332da931ae
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_prompt_calendar
+    id: 96a58065-fb7d-47fb-9246-c5b050aafa4b
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_rag_knowledge_base_text_structured
+    id: 87da8c5b-0c24-4617-a24c-28d2a60a6e28
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_rag_knowledge_base_websites_text_structured
+    id: 4dbfd6de-4874-4834-a676-90cd295cdcc3
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_rag_knowledge_base_websites_text
+    id: 136b8078-ced3-4b57-abf6-2eaaabcc42de
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_session_ended_report_content_json
+    id: 568d1af4-a0b0-45bf-bc1d-653e2cc980af
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_schedule_working_days_hours_exceptions
+    id: 4291b155-ad93-43a3-b1b6-77de9f979aed
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_schedule_non_working_days
+    id: ac7230b8-09a0-4c8b-b974-2f7adb091d6e
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_schedule_working_hours_object
+    id: c4478ab9-11e3-43de-8966-d0782fc00b11
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_schedule_working_days
+    id: 3d4f8c43-46d6-43af-a9b8-4bc317d54670
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_schedule_working_hours
+    id: 222c9df8-ea6b-43f5-bf3f-eef1862ec8dc
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_agent_persona
+    id: d5e6ddca-279d-4b7c-a2c8-33562117a08e
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_booking_check_availability_schema_template
+    id: 6de9afb6-6225-453a-a96d-761d40b2d7ec
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_booking_schema_compiled
+    id: f8d39c3d-d888-4983-948b-813e2ede3145
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_booking_schema_template
+    id: 17ed38c9-fc55-43d4-9c14-51206281dddd
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_business_context
+    id: 9194feeb-56a5-422e-a83e-9aa469a547aa
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_email_variables
+    id: 9818a144-46f6-4d5b-8768-ab28491022df
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_variables
+    id: 62f16c76-3b51-4d42-9b89-eb0f4625bbc9
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_intents_list
+    id: 33f2718c-242c-4341-a44f-3db91ed9f931
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_phone_variables
+    id: f75461fe-398c-406c-98d3-cfea4aecb40a
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_prompt_calendar_created_at
+    id: 0db52dd3-b15e-4ef0-a149-12101bf0d51f
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_tech_variables
+    id: 2dc5e8ab-6eb0-469a-9ec0-6835947ab639
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_workflow_builder_canvas_library
+    id: a17c0998-3dce-4004-b758-bcfa882ec0b9
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_workflow_builder_canvas
+    id: 96276d9e-5492-4371-b690-4a1d4d7b1ba8
+    category: private
+    type: string
+  - name: project_attributes_setting_email_sender_name
+    id: c6ee5d37-7d49-4eac-bcf4-793809decd58
+    category: attributes
+    type: string
+  - name: project_attributes_private_feature_flag_booking_use_new_restaurant_availability_check_approach
+    id: 3b92528b-7579-40ee-80b4-80f1861ea5f0
+    category: private
+    type: string
+  - name: project_attributes_private_feature_flag_booking_use_new_restaurant_create_booking_approach
+    id: e77a1d3c-a11d-4fcd-aa3f-58d993b61d7c
+    category: private
+    type: string
+  - name: project_attributes_setting_hipaa_mode_enabled
+    id: 9a25f7fe-e7db-44bc-aa0b-5e7243daf02b
+    category: attributes
+    type: string
+  - name: project_attributes_setting_magic_browser_alert_enabled
+    id: 21bda26d-7be7-40a5-a66f-891e4cbbc14c
+    category: attributes
+    type: string
+  - name: project_attributes_setting_hitl_monitoring_enabled
+    id: 9a02a6c9-0ff7-44ac-b98d-3fc74b7dddd5
+    category: attributes
+    type: string
+  - name: project_attributes_private_dynamic_itm_compiled
+    id: a50c74f3-88c3-4b8e-b260-430a867431bb
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_itm_non_working_hours_compiled
+    id: 273a0149-d017-48ac-bb3e-f75c52db54f1
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_itm_template
+    id: bc50fe17-e3ca-4c30-98ff-f9e1c590b549
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_itm_working_hours_compiled
+    id: e0b6f5de-6f98-4c59-834f-d922c9b3a5d0
+    category: private
+    type: string
+  - name: project_attributes_known_employees
+    id: 2773790f-88d6-4cf4-a314-4766bd8b73d0
+    category: attributes
+    type: string
+  - name: project_attributes_setting_lead_nurturing_instructions
+    id: d660199f-bec8-4a27-b61e-c947f108ed4f
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_googlemaps_url
+    id: d380a552-ca8e-48e6-a836-43d471841edd
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_menu_url
+    id: 042ca223-fbca-4901-8373-e82ed2957c42
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_opentable_url
+    id: a3540c4c-ede6-47b3-a5b9-06afbaa2065f
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_yelp_url
+    id: b921adec-e5da-4728-a74a-f6a3d24bb0e8
+    category: attributes
+    type: string
+  - name: project_attributes_setting_manychat_api_token
+    id: 7462c96c-39d3-4c44-93e3-7a43cc9cee16
+    category: attributes
+    type: string
+  - name: project_business_top_location_count
+    id: 9de46db5-9651-4ba7-b984-125dffe048c3
+    category: business
+    type: string
+  - name: project_attributes_outbound_call_table_csv
+    id: 01a9e9ac-c507-487f-984c-4bcf8b6bfcc8
+    category: attributes
+    type: string
+  - name: project_attributes_outbound_call_table_csv_result
+    id: 80ac436b-7834-4ed8-baf6-f7260c21fb2a
+    category: attributes
+    type: string
+  - name: project_attributes_setting_outbound_default_retry_timeout
+    id: d593d943-a676-4483-9e9d-77352398306a
+    category: attributes
+    type: string
+  - name: project_attributes_setting_outbound_greeting_delay
+    id: 06ee5aa8-9322-4ae1-bec0-79b681265e54
+    category: attributes
+    type: string
+  - name: project_attributes_setting_outbound_default_retry_number
+    id: 09e98678-14f2-4a00-9049-7f8158f2dcef
+    category: attributes
+    type: string
+  - name: project_attributes_setting_outbound_payload_schema
+    id: 7b9abd7e-4088-4422-a005-517e213b8dfa
+    category: attributes
+    type: string
+  - name: project_attributes_setting_outbound_request_endpoint
+    id: 92b473b8-7f55-47e0-bb16-39b3044dd23f
+    category: attributes
+    type: string
+  - name: project_attributes_setting_outbound_request_headers
+    id: a8438251-c9b0-484d-800b-372ab7246245
+    category: attributes
+    type: string
+  - name: project_attributes_setting_outbound_sms_session_duration
+    id: a0f4782b-b34d-424d-a2c5-10b35ae40f87
+    category: attributes
+    type: string
+  - name: project_business_top_url
+    id: 2ad65fd9-08b5-4a07-9b15-a7a9e14e336b
+    category: business
+    type: string
+  - name: project_business_top_name
+    id: e5c51e4c-7ac8-45d8-9e91-fd94faac20f6
+    category: business
+    type: string
+  - name: project_attributes_setting_blocked_phone_numbers
+    id: c04d222f-485e-4d1c-94aa-66b37b4a3f59
+    category: attributes
+    type: string
+  - name: project_attributes_setting_phone_dialpad_output_enabled
+    id: 1ce11ce6-98e5-4a22-84d3-4ac3f2b29df9
+    category: attributes
+    type: string
+  - name: project_attributes_setting_spam_limit
+    id: 54dda265-92fa-43df-91de-9fceecd3979c
+    category: attributes
+    type: string
+  - name: project_attributes_products_and_services_served_area
+    id: fef0bd47-f197-4abb-b3e7-acfb25374c17
+    category: attributes
+    type: string
+  - name: project_attributes_setting_products_and_services_background_check_availability_enabled
+    id: abbb9ffe-d324-4bf7-876b-75129ce79965
+    category: attributes
+    type: string
+  - name: project_attributes_setting_products_and_services_background_check_location_enabled
+    id: e341ab66-5969-446d-ba3b-d872401765ca
+    category: attributes
+    type: string
+  - name: project_attributes_setting_products_and_services_structured_representation_enabled
+    id: f5edc97b-e6ea-456f-8ead-e4e0e5dfa155
+    category: attributes
+    type: string
+  - name: project_attributes_products_and_services_served_zip_codes
+    id: 4aff2b15-4c95-4703-b3db-0e85b271678d
+    category: attributes
+    type: string
+  - name: project_attributes_info_client_session_logs_table_link
+    id: c8451b06-1bfc-4af2-8e25-725eafc0e185
+    category: attributes
+    type: string
+  - name: project_attributes_setting_conversation_summary_instruction
+    id: 4ac8d273-17b7-43dc-a5c5-94b54aa38d2f
+    category: attributes
+    type: string
+  - name: project_attributes_private_custom_schema_inbound_call_report
+    id: 6f3219cd-7f95-4870-985a-d43b4c2992c6
+    category: private
+    type: string
+  - name: project_attributes_setting_send_report_during_conversation
+    id: 1cb14f59-6771-4bd1-beb9-d2c3e0dcdee6
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_report_criteria_compiled
+    id: 4f142383-65b4-470b-bd07-9401ffaa69d5
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_report_include_conversation_and_record_urls
+    id: d87e5fd0-1845-42b5-842f-b675b112562d
+    category: attributes
+    type: string
+  - name: project_attributes_private_technical_owners
+    id: fc67009b-a025-499c-b3a7-1704a3131628
+    category: private
+    type: string
+  - name: project_attributes_setting_session_ended_webhook_auth_token
+    id: bd9332be-5349-450b-9de5-1145a405797f
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_webhook_url
+    id: a7bdf71e-ba40-4bfb-9f56-b31358c6abc9
+    category: attributes
+    type: string
+  - name: project_attributes_setting_session_ended_webhook_schema
+    id: 01333250-db0a-461e-89e2-5edeebd574f4
+    category: attributes
+    type: string
+  - name: project_attributes_private_dynamic_restaurant_google_restaurant_id
+    id: 04abc21f-c46d-4b3c-b9b2-97d9d1c3337f
+    category: private
+    type: string
+  - name: project_attributes_private_dynamic_restaurant_google_restaurant_seating_options
+    id: cb108bf8-cbd7-4352-90dd-f1f4bdd8aa74
+    category: private
+    type: string
+  - name: project_attributes_restaurant_menu_overview
+    id: 02a69e16-0056-4866-9662-d85ae6bc7a81
+    category: attributes
+    type: string
+  - name: project_attributes_restaurant_regular_events_schedule_url
+    id: 092eb8d9-fc7a-4e04-8c28-beeca34c5e88
+    category: attributes
+    type: string
+  - name: project_attributes_task_context_w1s3_reserve_table_task
+    id: 7de66c11-44d6-49c6-ad4a-ce09a135b8f3
+    category: attributes
+    type: string
+  - name: project_attributes_scenario
+    id: ba0fc3f6-9160-47c5-83e5-ad51497e77b2
+    category: attributes
+    type: string
+  - name: setup_persona_id
+    id: 8af3debf-21ca-4969-9924-2944eaa180ae
+    category: custom
+    type: string
+  - name: project_attributes_current_specials_url
+    id: 24a82d26-423d-4bb0-8c6a-88f8b57e3209
+    category: attributes
+    type: string
+  - name: project_attributes_support_log_document_link
+    id: 088f026c-06ed-45a9-9e31-bf761c81f0a2
+    category: attributes
+    type: string
+  - name: project_attributes_setting_test_mode
+    id: ae498fca-227e-42a2-8718-5bb6bd1e4ea4
+    category: attributes
+    type: string
+  - name: project_attributes_setting_time_format
+    id: af9fa518-6975-4c40-8668-87315965b626
+    category: attributes
+    type: string
+  - name: project_attributes_setting_transfer_call_additional_statement
+    id: c13c7115-c906-493c-96e7-94f6fbebb096
+    category: attributes
+    type: string
+  - name: project_attributes_setting_transfer_call_confirmation_phrase
+    id: 4e5c0633-b2e3-46a9-9b84-70f35a35d8ef
+    category: attributes
+    type: string
+  - name: project_representative_agent_voice_tts_provider_id
+    id: 7d280c4d-b6f8-409a-9a35-e40c57c340e4
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_tts_model_id
+    id: ee9fa66a-20e6-480c-87a1-23bbfb33188f
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_stt_provider_id
+    id: 961253e5-3d7f-45f7-8952-9e26cf8e3f7f
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_stt_model_id
+    id: 30ea8843-7289-4609-bada-fbb1b0533a57
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_transcriber_language
+    id: d5dce144-eaa3-469b-93ee-049ca8155c98
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_phone_fallback_area_code
+    id: 840546f7-fbf4-47da-ba9c-8a9865716a2b
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_phone_area_code
+    id: 9a28406d-a7bd-4595-9bf6-c75e99234d38
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_phone_country_code
+    id: 18c04aa3-f079-4238-9acf-0810cba8d32d
+    category: agent
+    type: string
+  - name: project_representative_agent_voice_phone_alpha2_code
+    id: add5bc8c-9cf5-4b88-8d7c-42f7cf6815b3
+    category: agent
+    type: string
+  - name: project_attributes_setting_voice_integration_service_send_sms_via_sip_enabled
+    id: 63fdeac7-ef87-4c49-a9ad-69ffffee9cfb
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_integration_service_voice_mode
+    id: 3f2195ad-b02d-4707-9596-fbda9bbefe57
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_integration_service_voice_to_voice_provider_genai_functions_enabled
+    id: f9b06dde-8d41-4102-b979-b41e5519d5c1
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_integration_service_voice_to_voice_provider_genai_functions
+    id: d211b0b6-9212-445b-8d5c-e8a84e9a75ed
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_integration_service_voice_to_voice_provider_genai_functions_description
+    id: cf563687-7ca2-4ef6-b250-f60951e8cdb6
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_integration_service_voice_to_voice_provider_genai_vertex_enabled
+    id: 9a02fa9b-4318-426f-a2ad-e2a320fab6f4
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_integration_service_voice_to_voice_provider
+    id: 73ff5979-3922-460b-a677-263b1d085378
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_integration_service
+    id: 58ec2f81-6d3e-4fe4-8648-6e2d97bc356b
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_stop_call_timeout
+    id: a4eabcd2-a43f-4560-afcc-815cb62bb0d6
+    category: attributes
+    type: string
+  - name: project_attributes_setting_voice_transfer_call_timeout
+    id: dc961502-9b0b-4258-9a4b-e273cca910be
+    category: attributes
+    type: string
+  - name: agent_creator_actor_id
+    id: f22130cf-9d14-4acc-9034-5f2099d84e0e
+    category: custom
+    type: string
+  - name: agent_creator_agent_info_name
+    id: 8f024b98-e55b-4681-aabf-c94000f7461d
+    category: custom
+    type: string
+  - name: agent_creator_agent_info_title
+    id: c1563d4d-8ed2-401b-bf0d-fcc74b106a06
+    category: custom
+    type: string
+  - name: agent_creator_api_key
+    id: c0d3db78-fae8-4af7-9b07-ba3fbfbd3680
+    category: custom
+    type: string
+  - name: agent_creator_business_info_address
+    id: fc71f71d-aa7d-43a5-938f-4836d2219eef
+    category: custom
+    type: string
+  - name: agent_creator_business_info_average_prices
+    id: 63be1fa1-8d74-43da-8ec1-ab533595c19e
+    category: custom
+    type: string
+  - name: agent_creator_business_info_country
+    id: 2457d9c1-7c9b-4021-9abf-c6d32ada7e71
+    category: custom
+    type: string
+  - name: agent_creator_business_info_faq
+    id: 28641619-941c-4a22-943d-f790a71a49c7
+    category: custom
+    type: string
+  - name: agent_creator_business_info_industry
+    id: b377e2fe-74ca-4f9c-9f1e-64ce6d146b92
+    category: custom
+    type: string
+  - name: agent_creator_business_info_language
+    id: d03fa24f-1c8c-494b-9fc9-9ef6fa9aec50
+    category: custom
+    type: string
+  - name: agent_creator_business_info_name
+    id: e3695fae-690f-4207-b2a4-c43c1b26a7ab
+    category: custom
+    type: string
+  - name: agent_creator_business_info_payment_methods
+    id: 1bfa7994-4928-4bec-b3e2-948e55ffd0f8
+    category: custom
+    type: string
+  - name: agent_creator_business_info_public_phone
+    id: aa4b7da8-d8ae-42ac-8941-f33669d5055c
+    category: custom
+    type: string
+  - name: agent_creator_business_info_story
+    id: 26e81aab-f04e-425a-ac2f-6815a9ca0a92
+    category: custom
+    type: string
+  - name: agent_creator_business_info_terms_and_conditions
+    id: 0399a63c-7efc-4b56-8c74-6686a4f752f5
+    category: custom
+    type: string
+  - name: agent_creator_business_info_time_zone
+    id: 52b97456-6f82-4a9c-9be7-f25cdb1650f5
+    category: custom
+    type: string
+  - name: agent_creator_business_info_website_url
+    id: 671e1e86-a03d-4e95-80f9-dd958700fc37
+    category: custom
+    type: string
+  - name: agent_creator_business_info_working_hours
+    id: 3ccbc5f5-05d1-4197-845d-26b4b2eaa51b
+    category: custom
+    type: string
+  - name: agent_creator_calcom_event_id
+    id: f57383f5-e668-4ba7-a04d-0ce5ab6f6d8e
+    category: custom
+    type: string
+  - name: agent_creator_calcom_key
+    id: c6dcf858-f06e-465e-a0d4-0604e733d12a
+    category: custom
+    type: string
+  - name: agent_creator_calcom_mode
+    id: 12fba330-0981-4e0e-8498-81d5eafca87e
+    category: custom
+    type: string
+  - name: agent_creator_chat_channel_greeting_phrase
+    id: f6d0dc28-9fac-47c8-958e-6f83cb8cdfd9
+    category: custom
+    type: string
+  - name: agent_creator_products_and_services
+    id: ce4fbf78-af08-4a57-852c-cc8b1d5db8d6
+    category: custom
+    type: string
+  - name: agent_creator_query_params
+    id: 805a0428-53cf-4599-9e1d-4d96390676de
+    category: custom
+    type: string
+  - name: agent_creator_restaurant_googlemaps_reservation_url
+    id: 44d214ee-a978-4cb6-a2bc-c543b9041002
+    category: custom
+    type: string
+  - name: agent_creator_restaurant_menu
+    id: 3c0f8181-a67d-4d69-b1e3-38359075ae42
+    category: custom
+    type: string
+  - name: agent_creator_restaurant_menu_url
+    id: 035c092a-f28c-4fd2-9f03-4cc9014cc4f2
+    category: custom
+    type: string
+  - name: agent_creator_restaurant_order_url
+    id: 1809666c-67df-481a-9839-3d12a2a7d671
+    category: custom
+    type: string
+  - name: agent_creator_restaurant_signature_dishes
+    id: cf32e545-37cc-44e9-ad8b-e91840a20b14
+    category: custom
+    type: string
+  - name: agent_creator_setting_booking_email
+    id: 5e1088ba-d7b9-4082-b6cc-a9d03a265368
+    category: custom
+    type: string
+  - name: agent_creator_setting_email_sender_name
+    id: 23f599bd-7e99-4809-acc9-07b799294fe2
+    category: custom
+    type: string
+  - name: agent_creator_setting_session_ended_report_include_conversation_and_record_urls
+    id: 9b63eee9-0e83-4c57-8577-962dec3a5958
+    category: custom
+    type: string
+  - name: agent_creator_setting_voice_integration_service
+    id: 2c1c9988-cbf7-431a-9262-8f3f363506c7
+    category: custom
+    type: string
+  - name: agent_creator_source
+    id: 646837b4-5ea3-4457-b2a8-18245d6b8252
+    category: custom
+    type: string
+  - name: agent_creator_voice_channel_connectors
+    id: 53eb0abe-262b-494f-b286-3b54d2cf4e51
+    category: custom
+    type: string
+  - name: agent_creator_voice_channel_disclaimer_phrase
+    id: 362392dc-d572-42d7-868a-3230f4c94af7
+    category: custom
+    type: string
+  - name: agent_creator_voice_channel_greeting_phrase
+    id: 01018f60-4593-42fe-8a9a-0f2946846f7c
+    category: custom
+    type: string
+  - name: agent_creator_voice_channel_phone
+    id: 88784c5a-f594-4a4d-8a35-e878898ed31e
+    category: custom
+    type: string

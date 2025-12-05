@@ -1,0 +1,183 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Newo Jinja",
+  "scopeName": "source.newo-jinja",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#expressions" },
+    { "include": "#statements" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.newo-jinja",
+          "begin": "\\{#",
+          "end": "#\\}",
+          "captures": {
+            "0": { "name": "punctuation.definition.comment.newo-jinja" }
+          }
+        },
+        {
+          "name": "comment.block.newo-jinja",
+          "begin": "\\{\\{!--",
+          "end": "--\\}\\}",
+          "captures": {
+            "0": { "name": "punctuation.definition.comment.newo-jinja" }
+          }
+        }
+      ]
+    },
+    "expressions": {
+      "begin": "\\{\\{",
+      "end": "\\}\\}",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.begin.newo-jinja" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.end.newo-jinja" }
+      },
+      "name": "meta.template.expression.newo-jinja",
+      "patterns": [
+        { "include": "#expression-content" }
+      ]
+    },
+    "statements": {
+      "begin": "\\{%",
+      "end": "%\\}",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.template-statement.begin.newo-jinja" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.template-statement.end.newo-jinja" }
+      },
+      "name": "meta.template.statement.newo-jinja",
+      "patterns": [
+        { "include": "#statement-content" }
+      ]
+    },
+    "expression-content": {
+      "patterns": [
+        { "include": "#strings" },
+        { "include": "#numbers" },
+        { "include": "#builtin-functions" },
+        { "include": "#skill-calls" },
+        { "include": "#operators" },
+        { "include": "#variables" }
+      ]
+    },
+    "statement-content": {
+      "patterns": [
+        { "include": "#keywords" },
+        { "include": "#strings" },
+        { "include": "#numbers" },
+        { "include": "#builtin-functions" },
+        { "include": "#skill-calls" },
+        { "include": "#operators" },
+        { "include": "#variables" }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.newo-jinja",
+          "match": "\\b(if|elif|else|endif|for|endfor|in|not|and|or|is|set|macro|endmacro|block|endblock|extends|include|import|from|as|with|without|context)\\b"
+        },
+        {
+          "name": "constant.language.newo-jinja",
+          "match": "\\b(true|false|none|True|False|None)\\b"
+        }
+      ]
+    },
+    "builtin-functions": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.newo-jinja",
+          "match": "\\b(Return|Set|Gen|GenStream|GetTriggeredAct|GetCurrentPrompt|GetCustomerAttribute|SetCustomerAttribute|SetCustomerMetadataAttribute|GetCustomerMetadataAttribute|DeleteCustomerAttribute|GetProjectAttribute|SetProjectAttribute|SetProjectMetadataAttribute|GetPersonaAttribute|SetPersonaAttribute|SendSystemEvent|SendCommand|SendMessage|CreateConnector|GetConnectorInfo|DeleteConnector|SetConnectorInfo|GetDatetime|GetDateTime|GetDateInterval|GetValueJSON|UpdateValueJSON|GetItemsArrayByIndexesJSON|GetIndexesOfItemsArrayJSON|AppendItemsArrayJSON|AsStringJSON|Stringify|Concat|IsEmpty|IsSimilar|IsGlobal|StartNotInterruptibleBlock|StopNotInterruptibleBlock|DUMMY|GetActors|GetActor|GetAct|GetAgent|GetMemory|SendTypingStart|SendTypingStop|GetUser|UpdateUser|GetAgentPersona|CreatePersona|CreateActor|CreateMessageAct|GetState|SetState|CreateArray|GetRandomChoice|Sleep|Do|SearchFuzzyAkb|DeleteAkb|UpdateAkb|SetManualAkb|GetCustomerInfo|GetCustomer|GetWebhook|CreateWebhook|DeleteWebhook)\\b"
+        },
+        {
+          "name": "support.function.json.newo-jinja",
+          "match": "\\bjson\\.(loads|dumps)\\b"
+        }
+      ]
+    },
+    "skill-calls": {
+      "patterns": [
+        {
+          "name": "entity.name.function.skill.newo-jinja",
+          "match": "\\b_?[A-Za-z][A-Za-z0-9_]*Skill\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.newo-jinja",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.newo-jinja",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.newo-jinja",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.newo-jinja",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.newo-jinja",
+          "match": "\\b\\d+(\\.\\d+)?\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.comparison.newo-jinja",
+          "match": "==|!=|<=|>=|<|>"
+        },
+        {
+          "name": "keyword.operator.assignment.newo-jinja",
+          "match": "="
+        },
+        {
+          "name": "keyword.operator.arithmetic.newo-jinja",
+          "match": "\\+|-|\\*|/|%|\\*\\*|//"
+        },
+        {
+          "name": "keyword.operator.logical.newo-jinja",
+          "match": "\\b(and|or|not)\\b"
+        },
+        {
+          "name": "keyword.operator.string.newo-jinja",
+          "match": "~"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.parameter.newo-jinja",
+          "match": "\\b[a-z_][a-z0-9_]*(?=\\s*=)"
+        },
+        {
+          "name": "variable.other.newo-jinja",
+          "match": "\\b[a-z_][a-z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

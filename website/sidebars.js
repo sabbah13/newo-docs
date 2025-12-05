@@ -50,6 +50,8 @@ const sidebars = {
         { type: 'doc', id: 'development-guide', label: '👨‍💻 Development Guide' },
         { type: 'doc', id: 'integration-guide', label: '🔧 Integration Guide' },
         { type: 'doc', id: 'integration-setup', label: '🔗 Integration Setup' },
+        { type: 'doc', id: 'newo-tools', label: '🔨 Newo Tools' },
+        { type: 'doc', id: 'sip-setup', label: '📞 SIP Setup' },
       ],
     },
     

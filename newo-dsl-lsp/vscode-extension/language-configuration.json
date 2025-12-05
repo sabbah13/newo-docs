@@ -1,0 +1,42 @@
+{
+  "comments": {
+    "blockComment": ["{#", "#}"]
+  },
+  "brackets": [
+    ["{{", "}}"],
+    ["{%", "%}"],
+    ["{#", "#}"],
+    ["(", ")"],
+    ["[", "]"],
+    ["{", "}"]
+  ],
+  "autoClosingPairs": [
+    { "open": "{{", "close": "}}" },
+    { "open": "{%", "close": "%}" },
+    { "open": "{#", "close": "#}" },
+    { "open": "(", "close": ")" },
+    { "open": "[", "close": "]" },
+    { "open": "{", "close": "}" },
+    { "open": "\"", "close": "\"", "notIn": ["string"] },
+    { "open": "'", "close": "'", "notIn": ["string"] }
+  ],
+  "surroundingPairs": [
+    { "open": "{{", "close": "}}" },
+    { "open": "{%", "close": "%}" },
+    { "open": "(", "close": ")" },
+    { "open": "[", "close": "]" },
+    { "open": "{", "close": "}" },
+    { "open": "\"", "close": "\"" },
+    { "open": "'", "close": "'" }
+  ],
+  "folding": {
+    "markers": {
+      "start": "^\\s*\\{%\\s*(if|for|macro|block)",
+      "end": "^\\s*\\{%\\s*(endif|endfor|endmacro|endblock)"
+    }
+  },
+  "indentationRules": {
+    "increaseIndentPattern": "\\{%\\s*(if|for|macro|block|elif|else).*%\\}",
+    "decreaseIndentPattern": "\\{%\\s*(endif|endfor|endmacro|endblock|elif|else).*%\\}"
+  }
+}

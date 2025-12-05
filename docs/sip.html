@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Connect SIP in Newo - Complete Setup Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .credentials-box {
+            background: #ecf0f1;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .credentials-box h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .credential-item {
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #bdc3c7;
+        }
+        .credential-item:last-child {
+            border-bottom: none;
+        }
+        .credential-label {
+            font-weight: bold;
+            color: #2980b9;
+            display: inline-block;
+            width: 180px;
+        }
+        .steps {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 10px 0;
+        }
+        .step-number {
+            background: #27ae60;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .ip-whitelist {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .ip-address {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            font-weight: bold;
+            color: #d63384;
+        }
+        .note {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .success-indicator {
+            color: #27ae60;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>How to Connect SIP in Newo</h1>
+        
+        <p>This guide will walk you through the process of setting up SIP (Session Initiation Protocol) connectivity in Newo. Follow these steps to configure your SIP connection properly.</p>
+        
+        <div class="note">
+            <strong>Important:</strong> Newo uses standard SIP account registration (not IP trunk). Your SIP provider must provide you with SIP credentials and support standard SIP capabilities. TCP or TLS protocol support is recommended for optimal performance.
+        </div>
+
+        <h2>Prerequisites</h2>
+        
+        <p>Before you begin, ensure you have the following:</p>
+        
+        <ul>
+            <li><strong>SIP Provider Account:</strong> You must have an active SIP account with your provider</li>
+            <li><strong>Standard SIP Support:</strong> Your provider must support standard SIP capabilities</li>
+            <li><strong>Protocol Support:</strong> TCP or TLS protocol support is recommended (UDP is also supported)</li>
+            <li><strong>Provider Testing:</strong> Ensure your SIP provider has been tested and works correctly</li>
+            <li><strong>Phone Number:</strong> A phone number assigned to your SIP account for caller ID</li>
+        </ul>
+        
+        <div class="note">
+            <strong>Note:</strong> Newo does not use IP trunk connections - only standard SIP account registration is supported. No additional configuration or integration is required beyond the SIP credentials.
+        </div>
+
+        <div class="credentials-box">
+            <h3>Required SIP Credentials</h3>
+            <p>Obtain the following information from your SIP provider:</p>
+            
+            <div class="credential-item">
+                <span class="credential-label">SIP hostname:</span>
+                <span>The SIP server address with port (e.g., sip.yourprovider.com:5060)</span>
+            </div>
+            
+            <div class="credential-item">
+                <span class="credential-label">SIP username:</span>
+                <span>Your SIP account username/login credentials</span>
+            </div>
+            
+            <div class="credential-item">
+                <span class="credential-label">SIP password:</span>
+                <span>Your SIP account password</span>
+            </div>
+            
+            <div class="credential-item">
+                <span class="credential-label">SIP caller id:</span>
+                <span>The phone number assigned to your SIP account</span>
+            </div>
+            
+            <div class="credential-item">
+                <span class="credential-label">SIP connection type:</span>
+                <span>Protocol supported by your provider (UDP, TCP, or TLS)</span>
+            </div>
+        </div>
+
+        <h2>Setup Process</h2>
+        
+        <div class="steps">
+            <h3>Step-by-Step Configuration</h3>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Navigate to Integrations:</strong> Go to your Newo builder interface and click on <span class="highlight">"Integrations"</span> in the left sidebar.
+            </div>
+            
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Locate Newo Voice:</strong> Find the <span class="highlight">"Newo Voice"</span> integration in your integrations list.
+            </div>
+            
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Access Voice Connector Settings:</strong> Click on the <span class="highlight">"newo_voice_connector"</span> (showing "Running" status) and select the three dots menu, then choose <span class="highlight">"Edit Settings"</span>.
+            </div>
+            
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Configure SIP Credentials:</strong> In the "Edit newo_voice_connector Connector Settings" dialog, fill in the following fields:
+                <ul>
+                    <li><strong>SIP caller id:</strong> Enter your caller ID number</li>
+                    <li><strong>SIP connection type:</strong> Select your preferred protocol</li>
+                    <li><strong>SIP hostname:</strong> Enter your SIP server address</li>
+                    <li><strong>SIP password:</strong> Enter your SIP account password</li>
+                    <li><strong>SIP username:</strong> Enter your SIP account username</li>
+                </ul>
+            </div>
+            
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Enable SIP:</strong> Scroll down in the settings dialog and locate the <span class="highlight">"Enable SIP"</span> option. Change the value from "False" to "True".
+            </div>
+            
+            <div class="step">
+                <span class="step-number">6</span>
+                <strong>Save Configuration:</strong> Save your settings to apply the SIP configuration.
+            </div>
+            
+            <div class="step">
+                <span class="step-number">7</span>
+                <strong>Test the Connection:</strong> Make a test call to your configured SIP caller ID number to verify the setup.
+            </div>
+            
+            <div class="step">
+                <span class="step-number">8</span>
+                <strong>Verification:</strong> If the call connects successfully, <span class="success-indicator">voilà!</span> Your SIP connection is properly configured and ready for use.
+            </div>
+        </div>
+
+        <h2>Network Configuration</h2>
+        
+        <div class="ip-whitelist">
+            <h3>IP Address Whitelist Requirements</h3>
+            <p><strong>ONLY IF REQUIRED:</strong> Most SIP providers do not require IP whitelisting. Add the following addresses to your provider's whitelist <strong>only if specifically requested by your SIP provider</strong>:</p>
+            
+            <h4>NAT Gateway IP (Egress):</h4>
+            <p><span class="ip-address">34.135.75.172</span></p>
+            
+            <h4>TURN Server IP Addresses (if needed):</h4>
+            <ul>
+                <li><span class="ip-address">34.9.125.3</span></li>
+                <li><span class="ip-address">34.66.205.78</span></li>
+            </ul>
+            
+            <div class="note">
+                <strong>Note:</strong> The majority of SIP providers do not require IP whitelisting. Only contact your provider about these IP addresses if they specifically mention whitelist requirements for your service.
+            </div>
+        </div>
+
+        <h2>SIP Connection Types</h2>
+        
+        <div class="note">
+            <strong>Important:</strong> You can only use the connection types that your SIP provider supports. Most providers support either TCP or UDP, but not necessarily both. Check with your provider before changing protocols.
+        </div>
+        
+        <h3>Available Protocols</h3>
+        <ul>
+            <li><strong>UDP (User Datagram Protocol):</strong> Widely supported by most SIP providers, suitable for most voice calls.</li>
+            <li><strong>TCP (Transmission Control Protocol):</strong> Recommended for Newo, more reliable than UDP, ensures packet delivery.</li>
+            <li><strong>TLS (Transport Layer Security):</strong> Encrypted connection for enhanced security - use only if your provider supports it.</li>
+        </ul>
+
+        <h2>Troubleshooting</h2>
+        
+        <h3>Common Issues and Solutions</h3>
+        <ul>
+            <li><strong>Connection fails:</strong> Verify all SIP credentials are correct in the newo_voice_connector settings</li>
+            <li><strong>SIP not working:</strong> Ensure "Enable SIP" is set to "True" in the connector settings</li>
+            <li><strong>No audio:</strong> Check your voice configuration settings and ensure TURN server IP is whitelisted if specifically required by your provider</li>
+            <li><strong>Registration errors:</strong> Double-check SIP hostname (including port) and verify your provider supports the selected connection type</li>
+            <li><strong>Protocol issues:</strong> Ensure your provider supports the selected protocol (UDP/TCP/TLS) - you cannot switch to unsupported protocols</li>
+            <li><strong>Connector not running:</strong> If the newo_voice_connector shows a status other than "Running", check your configuration and restart the connector</li>
+        </ul>
+
+        <div class="note">
+            <strong>Support:</strong> If you continue to experience issues, contact your SIP provider's technical support team with your configuration details for assistance.
+        </div>
+
+        <h2>Security Recommendations</h2>
+        <ul>
+            <li>Use TLS connection type <strong>only if your provider supports it</strong> - verify support before switching</li>
+            <li>Regularly update your SIP account passwords</li>
+            <li>Monitor call logs for any unauthorized usage</li>
+            <li>Ensure your network firewall is properly configured</li>
+            <li>Work with reputable SIP providers that have been tested with Newo</li>
+        </ul>
+
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        
+        <div class="credentials-box">
+            <h3>Provider and Technical Questions</h3>
+            
+            <h4>Do phone numbers need to be registered on Newo's server or with the provider?</h4>
+            <p>Phone numbers must be registered with your SIP provider, not on Newo's server. Newo connects to your provider using standard SIP account registration. If you're registering numbers from outside your provider's primary service region, check if your provider requires IP whitelisting.</p>
+            
+            <h4>Does Newo require trunk registration or IP-based connection?</h4>
+            <p>No, Newo does not use IP trunk connections. Only standard SIP account registration is supported. You need to provide SIP credentials (hostname:port, login/password, phone number) from your provider.</p>
+            
+            <h4>What configuration is required on the provider side?</h4>
+            <p>No special configuration is required from your provider beyond standard SIP account setup. Your provider must support standard SIP capabilities and preferably TCP or TLS protocols.</p>
+            
+            <h4>Is any special integration needed?</h4>
+            <p>No additional integration is required. Newo works with standard SIP providers using basic SIP credentials. The main requirement is that your provider supports standard SIP functionality and has been tested for compatibility.</p>
+            
+            <h4>Do I need to whitelist Newo's IP addresses?</h4>
+            <p>Most SIP providers do not require IP whitelisting. If your provider specifically requests it, whitelist the following Newo IP addresses:</p>
+            <ul>
+                <li><strong>NAT gateway (egress):</strong> 34.135.75.172</li>
+                <li><strong>TURN servers:</strong> 34.9.125.3, 34.66.205.78</li>
+            </ul>
+            <p>The majority of providers work without any IP restrictions.</p>
+            
+            <h4>What's the difference between SIP account and SIP connection?</h4>
+            <p>These terms are often used interchangeably. Your SIP connection is established using your SIP account credentials provided by your provider. Newo creates a SIP connection to your provider using your account details.</p>
+        </div>
+        
+        <div class="note">
+            <h3>Provider Requirements Summary</h3>
+            <p>For successful Newo SIP integration, ensure your provider:</p>
+            <ul>
+                <li>Supports standard SIP capabilities</li>
+                <li>Provides SIP account credentials (not IP trunk)</li>
+                <li>Supports TCP or TLS protocols (recommended)</li>
+                <li>Has been tested for compatibility</li>
+                <li>Provides reliable service quality</li>
+            </ul>
+        </div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #dee2e6;">
+        
+        <p style="text-align: center; color: #6c757d; font-size: 14px;">
+            <em>This guide provides the essential steps for connecting SIP in Newo. For additional features and advanced configuration options, visit <a href="https://docs.newo.ai" target="_blank">Newo documentation</a>.</em>
+        </p>
+    </div>
+</body>
+</html>

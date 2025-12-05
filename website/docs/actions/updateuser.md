@@ -12,7 +12,7 @@ Updates specific fields in a user's profile with new values. Allows modification
 
 ```newo
 UpdateUser(
-  name: str,
+  field: str,     {{!-- or use "name" as alias --}}
   value: str
 )
 ```
@@ -21,7 +21,7 @@ UpdateUser(
 
 ### Required Parameters
 
-- **`name`** (string): The user field to update. Options:
+- **`field`** or **`name`** (string): The user field to update. Both parameter names work. Options:
   - `"title"` - User's title or role
   - `"description"` - User description or bio  
   - `"name"` - User's display name

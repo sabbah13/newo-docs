@@ -1,0 +1,1679 @@
+version: '1.0'
+description: Newo DSL Events Schema - Auto-generated
+generated_at: '2025-12-04T05:09:29.999Z'
+total_count: 186
+events:
+  - idn: get_available_slots
+    agent_idn: CalComAgent
+    flow_idn: AvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: CheckAvailabilitySkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: integration_test
+    agent_idn: CalComAgent
+    flow_idn: AvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: CheckAvailabilityTestSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: CalComAgent
+    flow_idn: AvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ResultErrorSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: calcom_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: CalComAgent
+    flow_idn: AvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ResultSuccessSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: calcom_connector
+    interrupt_mode: queue
+  - idn: session_started
+    agent_idn: CalComAgent
+    flow_idn: AvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: CheckAvailabilityOnConversationSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: book_slot
+    agent_idn: CalComAgent
+    flow_idn: BookingFlow
+    skill_selector: skill_idn
+    skill_idn: CreateAppointmentSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: integration_test
+    agent_idn: CalComAgent
+    flow_idn: BookingFlow
+    skill_selector: skill_idn
+    skill_idn: CreateAppointmentTestSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: CalComAgent
+    flow_idn: BookingFlow
+    skill_selector: skill_idn
+    skill_idn: ResultErrorSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: calcom_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: CalComAgent
+    flow_idn: BookingFlow
+    skill_selector: skill_idn
+    skill_idn: ResultSuccessSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: calcom_connector
+    interrupt_mode: queue
+  - idn: convo_agent_cancel_booking
+    agent_idn: CalComAgent
+    flow_idn: CancellationFlow
+    skill_selector: skill_idn
+    skill_idn: CancelAppointmentSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: integration_test
+    agent_idn: CalComAgent
+    flow_idn: CancellationFlow
+    skill_selector: skill_idn
+    skill_idn: CancelAppointmentTestSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: CalComAgent
+    flow_idn: CancellationFlow
+    skill_selector: skill_idn
+    skill_idn: ResultErrorSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: calcom_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: CalComAgent
+    flow_idn: CancellationFlow
+    skill_selector: skill_idn
+    skill_idn: ResultSuccessSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: calcom_connector
+    interrupt_mode: queue
+  - idn: integration_test
+    agent_idn: CalComAgent
+    flow_idn: RescheduleFlow
+    skill_selector: skill_idn
+    skill_idn: RescheduleAppointmentTestSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: reschedule_booking_tool
+    agent_idn: CalComAgent
+    flow_idn: RescheduleFlow
+    skill_selector: skill_idn
+    skill_idn: RescheduleAppointmentSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: project_publish_finish
+    agent_idn: CalComAgent
+    flow_idn: SetupFlow
+    skill_selector: skill_idn
+    skill_idn: SetupSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: project
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: CalComAgent
+    flow_idn: SetupFlow
+    skill_selector: skill_idn
+    skill_idn: ResultErrorSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: calcom_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: CalComAgent
+    flow_idn: SetupFlow
+    skill_selector: skill_idn
+    skill_idn: ResultSuccessSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: calcom_connector
+    interrupt_mode: queue
+  - idn: start_update_event
+    agent_idn: CalComAgent
+    flow_idn: SetupFlow
+    skill_selector: skill_idn
+    skill_idn: SetupSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: environment
+    interrupt_mode: queue
+  - idn: import_finish
+    agent_idn: LeadFollowupAgent
+    flow_idn: LFUInitFlow
+    skill_selector: skill_idn
+    skill_idn: ProjectImportSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: customer
+    interrupt_mode: queue
+  - idn: project_publish_finish
+    agent_idn: LeadFollowupAgent
+    flow_idn: LFUInitFlow
+    skill_selector: skill_idn
+    skill_idn: ProjectPublishSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: custom_session_ended
+    agent_idn: LeadFollowupAgent
+    flow_idn: LFUTriggerFlow
+    skill_selector: skill_idn
+    skill_idn: ResolveFollowupsSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: agent_creator_callback
+    agent_idn: AgentCreator
+    flow_idn: ACCallbackFlow
+    skill_selector: skill_idn
+    skill_idn: AgentCreatorCallbackDuringFirstSetup
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: agent_creator_event
+    agent_idn: AgentCreator
+    flow_idn: ACIncomingEventFlow
+    skill_selector: skill_idn
+    skill_idn: AgentCreatorIncomingEvent
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: agent_creator_event
+    agent_idn: AgentCreator
+    flow_idn: ACIncomingEventFlow
+    skill_selector: skill_idn
+    skill_idn: AgentCreatorIncomingEvent
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: check_availability_hospitality
+    agent_idn: ApifyCheckAvailabilityWorker
+    flow_idn: ACAMainFlow
+    skill_selector: skill_idn
+    skill_idn: HospitalityRequestAvailableSlotsDefaultSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: run_actor_error
+    agent_idn: ApifyCheckAvailabilityWorker
+    flow_idn: ACAMainFlow
+    skill_selector: skill_idn
+    skill_idn: HospitalityReceiveAvailableSlotsDefaultSkill
+    state_idn: null
+    integration_idn: apify
+    connector_idn: hospitality_availability
+    interrupt_mode: queue
+  - idn: run_actor_success
+    agent_idn: ApifyCheckAvailabilityWorker
+    flow_idn: ACAMainFlow
+    skill_selector: skill_idn
+    skill_idn: HospitalityReceiveAvailableSlotsDefaultSkill
+    state_idn: null
+    integration_idn: apify
+    connector_idn: hospitality_availability
+    interrupt_mode: queue
+  - idn: analyze_conversation
+    agent_idn: ConvoAgent
+    flow_idn: CAActionCallDefineVoiceMailFlow
+    skill_selector: skill_idn
+    skill_idn: AnalyzeConversationSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: end_conversation_tool
+    agent_idn: ConvoAgent
+    flow_idn: CAActionCallHangUpFlow
+    skill_selector: skill_idn
+    skill_idn: EndConversationToolSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: broadcast_analyze_conversation
+    agent_idn: ConvoAgent
+    flow_idn: CAActionCallSendDialpadDigitsFlow
+    skill_selector: skill_idn
+    skill_idn: AnalyzeConversationSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: transfer_call_tool
+    agent_idn: ConvoAgent
+    flow_idn: CAActionCallTransferFlow
+    skill_selector: skill_idn
+    skill_idn: TransferCallToolSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: send_email_tool
+    agent_idn: ConvoAgent
+    flow_idn: CAActionSendEmailInformationFlow
+    skill_selector: skill_idn
+    skill_idn: SendEmailToolSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: send_sms_error
+    agent_idn: ConvoAgent
+    flow_idn: CAActionSendSMSInformationFlow
+    skill_selector: skill_idn
+    skill_idn: HandleSMSSendingErrorSkill
+    state_idn: null
+    integration_idn: twilio_messenger
+    connector_idn: sms_connector
+    interrupt_mode: queue
+  - idn: send_sms_tool
+    agent_idn: ConvoAgent
+    flow_idn: CAActionSendSMSInformationFlow
+    skill_selector: skill_idn
+    skill_idn: SendSMSToolSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: assess_session
+    agent_idn: ConvoAgent
+    flow_idn: CAAssessmentFlow
+    skill_selector: skill_idn
+    skill_idn: convo_agent_assessment
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: cancel_booking_tool
+    agent_idn: ConvoAgent
+    flow_idn: CABookingManagementFlow
+    skill_selector: skill_idn
+    skill_idn: CancelBookingTool
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CABookingManagementFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveCancellationResult
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CABookingManagementFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveCancellationResult
+    state_idn: null
+    integration_idn: http
+    connector_idn: http_connector
+    interrupt_mode: queue
+  - idn: send_manage_booking_url_tool
+    agent_idn: ConvoAgent
+    flow_idn: CABookingManagementFlow
+    skill_selector: skill_idn
+    skill_idn: SendManageBookingURLTool
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: analyze_conversation
+    agent_idn: ConvoAgent
+    flow_idn: CABroadcastConversationFlow
+    skill_selector: skill_idn
+    skill_idn: BroadcastAnalyzeConversation
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: convoagent_get_conversation
+    agent_idn: ConvoAgent
+    flow_idn: CABroadcastConversationFlow
+    skill_selector: skill_idn
+    skill_idn: GetConversation
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: calculation_tool
+    agent_idn: ConvoAgent
+    flow_idn: CACalculatorFlow
+    skill_selector: skill_idn
+    skill_idn: CalculateSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: check_availability_tool
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: CheckAvailabilityToolSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: receive_available_slots
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsSystemSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsDefaultErrorSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsDefaultErrorSkill
+    state_idn: null
+    integration_idn: customer_intercom
+    connector_idn: connection
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsDefaultErrorSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: http_connector
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsDefaultErrorSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: connection
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsDefaultErrorSkill
+    state_idn: null
+    integration_idn: magic_browser
+    connector_idn: magic_browser_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsDefaultSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsDefaultSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: http_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsDefaultSkill
+    state_idn: null
+    integration_idn: magic_browser
+    connector_idn: magic_browser_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveAvailableSlotsDefaultSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: connection
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CACheckingAvailabilityFlow
+    skill_selector: skill_idn
+    skill_idn: ResultSuccessIntercomSkill
+    state_idn: null
+    integration_idn: customer_intercom
+    connector_idn: connection
+    interrupt_mode: queue
+  - idn: build_operating_phrase
+    agent_idn: ConvoAgent
+    flow_idn: CADataInjectionFlow
+    skill_selector: skill_idn
+    skill_idn: BuildTodaysScheduleSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: calculate_working_hours
+    agent_idn: ConvoAgent
+    flow_idn: CADataInjectionFlow
+    skill_selector: skill_idn
+    skill_idn: CalculateWorkingHoursSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: new_data_to_inject
+    agent_idn: ConvoAgent
+    flow_idn: CADataInjectionFlow
+    skill_selector: skill_idn
+    skill_idn: RetrieveDataSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: prepare_injecting_data
+    agent_idn: ConvoAgent
+    flow_idn: CADataInjectionFlow
+    skill_selector: skill_idn
+    skill_idn: PrepareInjectingDataSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: cancel
+  - idn: remove_prompt_custom_section
+    agent_idn: ConvoAgent
+    flow_idn: CADataInjectionFlow
+    skill_selector: skill_idn
+    skill_idn: RemoveCustomSectionSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: set_prompt_custom_section
+    agent_idn: ConvoAgent
+    flow_idn: CADataInjectionFlow
+    skill_selector: skill_idn
+    skill_idn: InjectCustomSectionSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: timer
+    agent_idn: ConvoAgent
+    flow_idn: CADataInjectionFlow
+    skill_selector: skill_idn
+    skill_idn: FetchData
+    state_idn: null
+    integration_idn: program_timer
+    connector_idn: data_injection_timer
+    interrupt_mode: queue
+  - idn: end_session
+    agent_idn: ConvoAgent
+    flow_idn: CAEndSessionFlow
+    skill_selector: skill_idn
+    skill_idn: EndSessionSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: extend_session
+    agent_idn: ConvoAgent
+    flow_idn: CAEndSessionFlow
+    skill_selector: skill_idn
+    skill_idn: ExtendSessionSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: execute_tasks
+    agent_idn: ConvoAgent
+    flow_idn: CAExecuteExternalTasksFlow
+    skill_selector: skill_idn
+    skill_idn: ExecuteTasksSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: task_manager_execute_task
+    agent_idn: ConvoAgent
+    flow_idn: CAExecuteExternalTasksFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveTaskSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: send_external_reply
+    agent_idn: ConvoAgent
+    flow_idn: CAExternalReply
+    skill_selector: skill_idn
+    skill_idn: ExternalReplySkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: agent_speech_ended
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: SetFollowUpAgentSpeechEndedSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: agent_speech_started
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: SetFollowUpAgentSpeechStartedSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: convoagent_disable_follow_up
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: DisableFollowUp
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: convoagent_update_followup
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: SetFollowupSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: end_session
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: ResetFollowUpStateSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: follow_up_message
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: FollowUpMessageSkill
+    state_idn: null
+    integration_idn: program_timer
+    connector_idn: message_followup
+    interrupt_mode: queue
+  - idn: send_user_message
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: SetFollowUpUserSpeechStartedSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: session_started
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: ResetFollowUpStateSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: urgent_message
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: UrgentMessage
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: user_message_transcription_finished
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: SetFollowUpUserSpeechEndedSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: user_speech_ended
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: SetFollowUpUserSpeechEndedSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: user_speech_started
+    agent_idn: ConvoAgent
+    flow_idn: CAFollowUpFlow
+    skill_selector: skill_idn
+    skill_idn: SetFollowUpUserSpeechStartedSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: agent_message_finished
+    agent_idn: ConvoAgent
+    flow_idn: CAGen2SendAgentMessageFlow
+    skill_selector: skill_idn
+    skill_idn: SendAgentMessageSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: user_message_transcription_finished
+    agent_idn: ConvoAgent
+    flow_idn: CAGen2SendUserMessageFlow
+    skill_selector: skill_idn
+    skill_idn: SendUserMessageSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: agent_message_finished
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: Gen2UpdateCurrentPromptGenAISkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: agent_speech_ended
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: Gen2UpdateCurrentPromptSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: analyze_conversation
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: UpdateConversationMetaSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: conversation_ended
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: ConversationEndedSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: conversation_started
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: ConversationStartedSkill
+    state_idn: null
+    integration_idn: vapi
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: conversation_started
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: ConversationStartedSkill
+    state_idn: null
+    integration_idn: newo_chat
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: conversation_started
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn_from_state
+    skill_idn: null
+    state_idn: conversation_started_newo_voice_skill
+    integration_idn: newo_voice
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: convoagent_activate_waiting_mode
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: ControllerWaitingModeSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: convoagent_create_message_act
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: CreateMessageActSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: push_agent_turn
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: PushAgentTurnSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: real_user_message
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: RealUserMessageSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: CallTransferredSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: switch_conversation_started_skill
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: SwitchConversationStartedSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: switch_outbound_reply_skill
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: SwitchReplyOutboundSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: tool_called
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: Gen2HandleToolCallSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: user_message
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: UserSMSReplySkill
+    state_idn: null
+    integration_idn: twilio_messenger
+    connector_idn: sms_connector
+    interrupt_mode: interrupt
+  - idn: user_message
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: UserNewoChatReplySkill
+    state_idn: null
+    integration_idn: newo_chat
+    connector_idn: newo_chat
+    interrupt_mode: queue
+  - idn: user_message
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: UserSandboxReplySkill
+    state_idn: null
+    integration_idn: sandbox
+    connector_idn: convo_agent_sandbox
+    interrupt_mode: queue
+  - idn: user_message
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: UserPhoneReplySkill
+    state_idn: null
+    integration_idn: vapi
+    connector_idn: vapi_caller
+    interrupt_mode: interrupt
+  - idn: user_message
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn_from_state
+    skill_idn: null
+    state_idn: phone_reply_skill
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: interrupt
+  - idn: user_message
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: UserTelegramReplySkill
+    state_idn: null
+    integration_idn: telegram
+    connector_idn: telegram_connector
+    interrupt_mode: interrupt
+  - idn: user_message
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: UserAPIReplySkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: user_message_proxy
+    agent_idn: ConvoAgent
+    flow_idn: CAMainFlow
+    skill_selector: skill_idn
+    skill_idn: UserProxyReplySkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: interrupt
+  - idn: convoagent_send_notification_message
+    agent_idn: ConvoAgent
+    flow_idn: CAMessageFlow
+    skill_selector: skill_idn
+    skill_idn: SendMessage
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: broadcast_analyze_conversation
+    agent_idn: ConvoAgent
+    flow_idn: CANewoToolCaller
+    skill_selector: skill_idn
+    skill_idn: AnalyzeConversation
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CANewoToolCaller
+    skill_selector: skill_idn
+    skill_idn: ResultSuccessSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: http_connector
+    interrupt_mode: queue
+  - idn: broadcast_analyze_conversation
+    agent_idn: ConvoAgent
+    flow_idn: CAObserverFlow
+    skill_selector: skill_idn
+    skill_idn: AnalyzeConversationSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: define_user_phone_number
+    agent_idn: ConvoAgent
+    flow_idn: CAObserverFlow
+    skill_selector: skill_idn
+    skill_idn: DefineUserPhoneNumberSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: prepare_rag_context_command
+    agent_idn: ConvoAgent
+    flow_idn: CARagFlow
+    skill_selector: skill_idn
+    skill_idn: PrepareRagContext
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: broadcast_analyze_conversation
+    agent_idn: ConvoAgent
+    flow_idn: CAReportFlow
+    skill_selector: skill_idn
+    skill_idn: AnalyzeConversationSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: convoagent_send_fallback_email_report
+    agent_idn: ConvoAgent
+    flow_idn: CAReportFlow
+    skill_selector: skill_idn
+    skill_idn: SendFallbackEmailReportSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: end_session
+    agent_idn: ConvoAgent
+    flow_idn: CAReportFlow
+    skill_selector: skill_idn
+    skill_idn: SendReportSkill
+    state_idn: null
+    integration_idn: program_timer
+    connector_idn: session_timer
+    interrupt_mode: queue
+  - idn: create_booking_tool
+    agent_idn: ConvoAgent
+    flow_idn: CAScheduleFlow
+    skill_selector: skill_idn
+    skill_idn: CreateBookingToolSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: create_event_error
+    agent_idn: ConvoAgent
+    flow_idn: CAScheduleFlow
+    skill_selector: skill_idn
+    skill_idn: GoogleMeetingCreationErrorSkill
+    state_idn: null
+    integration_idn: google_calendar
+    connector_idn: calendar
+    interrupt_mode: queue
+  - idn: create_event_success
+    agent_idn: ConvoAgent
+    flow_idn: CAScheduleFlow
+    skill_selector: skill_idn
+    skill_idn: GoogleMeetingCreatedSkill
+    state_idn: null
+    integration_idn: google_calendar
+    connector_idn: calendar
+    interrupt_mode: queue
+  - idn: create_meeting_tool
+    agent_idn: ConvoAgent
+    flow_idn: CAScheduleFlow
+    skill_selector: skill_idn
+    skill_idn: CreateMeetingToolSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: ConvoAgent
+    flow_idn: CAScheduleFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveBookingErrorSkill
+    state_idn: null
+    integration_idn: magic_browser
+    connector_idn: magic_browser_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CAScheduleFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveBookingResultSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CAScheduleFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveBookingResultSkill
+    state_idn: null
+    integration_idn: http
+    connector_idn: http_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CAScheduleFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveBookingResultSkill
+    state_idn: null
+    integration_idn: magic_browser
+    connector_idn: magic_browser_connector
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: ConvoAgent
+    flow_idn: CAScheduleFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveBookingResultSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: connection
+    interrupt_mode: queue
+  - idn: search_booking_tool
+    agent_idn: ConvoAgent
+    flow_idn: CASearchBookingFlow
+    skill_selector: skill_idn
+    skill_idn: SearchBookingTool
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: check_product_or_service_availability
+    agent_idn: ConvoAgent
+    flow_idn: CAThinkFlow
+    skill_selector: skill_idn
+    skill_idn: CheckProductOrServiceAvailabilityTool
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: check_zip_code_served_tool
+    agent_idn: ConvoAgent
+    flow_idn: CAThinkFlow
+    skill_selector: skill_idn
+    skill_idn: CheckZipCodeServedTool
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: broadcast_analyze_conversation
+    agent_idn: ConvoAgent
+    flow_idn: CAThoughtsFlow
+    skill_selector: skill_idn
+    skill_idn: AnalyzeConversationSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: interrupt
+  - idn: convoagent_activate_waiting_mode
+    agent_idn: ConvoAgent
+    flow_idn: CAThoughtsFlow
+    skill_selector: skill_idn
+    skill_idn: WaitingModeActivateSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: urgent_message
+    agent_idn: ConvoAgent
+    flow_idn: CAThoughtsFlow
+    skill_selector: skill_idn
+    skill_idn: WaitingModeDisableSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: check_timezone_tool
+    agent_idn: ConvoAgent
+    flow_idn: CATimezoneFlow
+    skill_selector: skill_idn
+    skill_idn: ReasonSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: convoagent_remove_custom_user_data
+    agent_idn: ConvoAgent
+    flow_idn: CAUserManagementFlow
+    skill_selector: skill_idn
+    skill_idn: RemoveCustomUserDataSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: convoagent_update_custom_user_data
+    agent_idn: ConvoAgent
+    flow_idn: CAUserManagementFlow
+    skill_selector: skill_idn
+    skill_idn: UpdateCustomUserDataSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: convoagent_update_user_memories
+    agent_idn: ConvoAgent
+    flow_idn: CAUserManagementFlow
+    skill_selector: skill_idn
+    skill_idn: update_user_memories
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: email_worker_send_email
+    agent_idn: EmailWorker
+    flow_idn: SendEmailFlow
+    skill_selector: skill_idn
+    skill_idn: SendEmailSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: delete_item
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMcanvasBuilderFlow
+    skill_selector: skill_idn
+    skill_idn: controller_delete_item
+    state_idn: null
+    integration_idn: newo_chat
+    connector_idn: workflow_builder
+    interrupt_mode: queue
+  - idn: gm_prepare_instructions
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMcanvasBuilderFlow
+    skill_selector: skill_idn
+    skill_idn: prepare_instructions
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: init_canvas
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMcanvasBuilderFlow
+    skill_selector: skill_idn
+    skill_idn: controller_init_canvas
+    state_idn: null
+    integration_idn: newo_chat
+    connector_idn: workflow_builder
+    interrupt_mode: queue
+  - idn: init_library
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMcanvasBuilderFlow
+    skill_selector: skill_idn
+    skill_idn: controller_init_library
+    state_idn: null
+    integration_idn: newo_chat
+    connector_idn: workflow_builder
+    interrupt_mode: queue
+  - idn: save_item
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMcanvasBuilderFlow
+    skill_selector: skill_idn
+    skill_idn: controller_save_item
+    state_idn: null
+    integration_idn: newo_chat
+    connector_idn: workflow_builder
+    interrupt_mode: queue
+  - idn: import_finish
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMmainFlow
+    skill_selector: skill_idn
+    skill_idn: ProjectImportSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: customer
+    interrupt_mode: queue
+  - idn: project_publish_finish
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMmainFlow
+    skill_selector: skill_idn
+    skill_idn: ProjectPublishSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: project
+    interrupt_mode: queue
+  - idn: result_success
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMmainFlow
+    skill_selector: skill_idn
+    skill_idn: AttachTwilioPhoneNumberToNewoVoice
+    state_idn: null
+    integration_idn: twilio_messenger
+    connector_idn: sms_connector
+    interrupt_mode: queue
+  - idn: run_tests
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMmainFlow
+    skill_selector: skill_idn
+    skill_idn: RunTestsSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: sa_init_finished
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMmainFlow
+    skill_selector: skill_idn
+    skill_idn: RegisterInitEvents
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: sa_init_started
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMmainFlow
+    skill_selector: skill_idn
+    skill_idn: RegisterInitEvents
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: web_search_event
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMmainFlow
+    skill_selector: skill_idn
+    skill_idn: PrepareAkbRagKnowledgeBaseWebSearchResponseSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: gm_clear_itm
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMPrepareITMFlow
+    skill_selector: skill_idn
+    skill_idn: clear_itm
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: gm_prepare_itm
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMPrepareITMFlow
+    skill_selector: skill_idn
+    skill_idn: prepare_itm
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: gm_itm_built
+    agent_idn: GeneralManagerAgent
+    flow_idn: GMPrepareReportsFlow
+    skill_selector: skill_idn
+    skill_idn: prepare_reports
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: magic_browser_response
+    agent_idn: MagicWorker
+    flow_idn: MWmainFlow
+    skill_selector: skill_idn
+    skill_idn: MWreceiveResponseSkill
+    state_idn: null
+    integration_idn: magic_browser
+    connector_idn: magic_browser_connector
+    interrupt_mode: queue
+  - idn: mock_magic_browser_response
+    agent_idn: MagicWorker
+    flow_idn: MWmainFlow
+    skill_selector: skill_idn
+    skill_idn: MockReceiveResponseSkill
+    state_idn: null
+    integration_idn: program_timer
+    connector_idn: mock_magic_browser_response
+    interrupt_mode: queue
+  - idn: worker_message
+    agent_idn: MagicWorker
+    flow_idn: MWmainFlow
+    skill_selector: skill_idn
+    skill_idn: MWworkerMessageInboxSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: broadcast_analyze_conversation
+    agent_idn: MultiLocationAgent
+    flow_idn: MLAMainFlow
+    skill_selector: skill_idn
+    skill_idn: AnalyzeConversationSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: user_message
+    agent_idn: ScenarioWriter
+    flow_idn: WriteScenarioFlow
+    skill_selector: skill_idn
+    skill_idn: start
+    state_idn: null
+    integration_idn: sandbox
+    connector_idn: scenario_writer
+    interrupt_mode: queue
+  - idn: sms_worker_send_sms
+    agent_idn: SmsWorker
+    flow_idn: SWmainFlow
+    skill_selector: skill_idn
+    skill_idn: SendSMSSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: worker_message
+    agent_idn: SmsWorker
+    flow_idn: SWmainFlow
+    skill_selector: skill_idn
+    skill_idn: ProcessWorkerMessageSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: get_project_metadata
+    agent_idn: SuperAgentProject
+    flow_idn: Metadata
+    skill_selector: skill_idn
+    skill_idn: GetProjectMetadata
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: set_sa_version
+    agent_idn: SuperAgentProject
+    flow_idn: Metadata
+    skill_selector: skill_idn
+    skill_idn: SetVersionSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: contact_details_received
+    agent_idn: TaskManager
+    flow_idn: TaskTableFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveContactDetailsSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: start_calling
+    agent_idn: TaskManager
+    flow_idn: TaskTableFlow
+    skill_selector: skill_idn
+    skill_idn: StartCallingSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: stop_calling
+    agent_idn: TaskManager
+    flow_idn: TaskTableFlow
+    skill_selector: skill_idn
+    skill_idn: StopCallingSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: task_manager_start_calling
+    agent_idn: TaskManager
+    flow_idn: TaskTableFlow
+    skill_selector: skill_idn
+    skill_idn: StartCallingFromAttributeSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: update_call_record
+    agent_idn: TaskManager
+    flow_idn: TaskTableFlow
+    skill_selector: skill_idn
+    skill_idn: UpdateCallRecordSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: external_request
+    agent_idn: TaskManager
+    flow_idn: TMManageTasksFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveTasksSkill
+    state_idn: null
+    integration_idn: api
+    connector_idn: webhook
+    interrupt_mode: queue
+  - idn: task_manager_get_task
+    agent_idn: TaskManager
+    flow_idn: TMManageTasksFlow
+    skill_selector: skill_idn
+    skill_idn: GetTaskSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: task_manager_schedule_tasks
+    agent_idn: TaskManager
+    flow_idn: TMManageTasksFlow
+    skill_selector: skill_idn
+    skill_idn: ReceiveTasksSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: task_manager_trigger_task
+    agent_idn: TaskManager
+    flow_idn: TMManageTasksFlow
+    skill_selector: skill_idn
+    skill_idn: TriggerTaskSkill
+    state_idn: null
+    integration_idn: program_timer
+    connector_idn: session_timer
+    interrupt_mode: queue
+  - idn: task_manager_update_task_status
+    agent_idn: TaskManager
+    flow_idn: TMManageTasksFlow
+    skill_selector: skill_idn
+    skill_idn: UpdateTaskStatusSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: user_message
+    agent_idn: TestAgent
+    flow_idn: Tests
+    skill_selector: skill_idn
+    skill_idn: TestSkill
+    state_idn: null
+    integration_idn: sandbox
+    connector_idn: test_agent_sandbox
+    interrupt_mode: queue
+  - idn: callback_tool
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: CallbackSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: conversation_ended
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: HandleConversationEndedSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: convoagent_conversation_retrieved
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: ReceiveConversationSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: convoagent_voicemail_detected
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: VoiceMailDetectedSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: outbound_call_finished
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: OutboundCallFinishedSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: outbound_make_call_from_person
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: MakeCallSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: outbound_retry_calling
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: RetryCallSkill
+    state_idn: null
+    integration_idn: program_timer
+    connector_idn: session_timer
+    interrupt_mode: queue
+  - idn: result_error
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: HandleMakeCallErrorSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: server_message_error
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: MakeCallErrorSkill
+    state_idn: null
+    integration_idn: newo_voice
+    connector_idn: newo_voice_connector
+    interrupt_mode: queue
+  - idn: task_manager_execute_task
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: ReceiveTaskSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: task_manager_get_task_success
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWCallDispatcher
+    skill_selector: skill_idn
+    skill_idn: GetTaskResultSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: import_finish
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWInitFlow
+    skill_selector: skill_idn
+    skill_idn: ProjectImportSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: customer
+    interrupt_mode: queue
+  - idn: project_publish_finish
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWInitFlow
+    skill_selector: skill_idn
+    skill_idn: ProjectPublishSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: project
+    interrupt_mode: queue
+  - idn: custom_session_ended
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWSmsDispatcher
+    skill_selector: skill_idn
+    skill_idn: AnalyzeConversationSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: outbound_send_sms_from_person
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWSmsDispatcher
+    skill_selector: skill_idn
+    skill_idn: SendSMSSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: send_sms_error
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWSmsDispatcher
+    skill_selector: skill_idn
+    skill_idn: HandleSendSMSErrorSkill
+    state_idn: null
+    integration_idn: twilio_messenger
+    connector_idn: sms_connector
+    interrupt_mode: queue
+  - idn: smsback_tool
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWSmsDispatcher
+    skill_selector: skill_idn
+    skill_idn: SMSBackSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+  - idn: task_manager_execute_task
+    agent_idn: OutboundCallWorker
+    flow_idn: OCWSmsDispatcher
+    skill_selector: skill_idn
+    skill_idn: ReceiveTaskSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue

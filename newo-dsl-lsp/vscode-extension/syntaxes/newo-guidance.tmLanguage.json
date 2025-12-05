@@ -1,0 +1,297 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Newo Guidance",
+  "scopeName": "source.newo-guidance",
+  "patterns": [
+    { "include": "#blocks" },
+    { "include": "#expressions" },
+    { "include": "#json-structures" }
+  ],
+  "repository": {
+    "blocks": {
+      "patterns": [
+        {
+          "name": "meta.block.system.newo-guidance",
+          "begin": "\\{\\{#system~?\\}\\}",
+          "end": "\\{\\{~?/system\\}\\}",
+          "beginCaptures": {
+            "0": { "name": "keyword.control.block.begin.newo-guidance" }
+          },
+          "endCaptures": {
+            "0": { "name": "keyword.control.block.end.newo-guidance" }
+          },
+          "patterns": [
+            { "include": "#block-content" }
+          ]
+        },
+        {
+          "name": "meta.block.user.newo-guidance",
+          "begin": "\\{\\{#user~?\\}\\}",
+          "end": "\\{\\{~?/user\\}\\}",
+          "beginCaptures": {
+            "0": { "name": "keyword.control.block.begin.newo-guidance" }
+          },
+          "endCaptures": {
+            "0": { "name": "keyword.control.block.end.newo-guidance" }
+          },
+          "patterns": [
+            { "include": "#block-content" }
+          ]
+        },
+        {
+          "name": "meta.block.assistant.newo-guidance",
+          "begin": "\\{\\{#assistant~?\\}\\}",
+          "end": "\\{\\{~?/assistant\\}\\}",
+          "beginCaptures": {
+            "0": { "name": "keyword.control.block.begin.newo-guidance" }
+          },
+          "endCaptures": {
+            "0": { "name": "keyword.control.block.end.newo-guidance" }
+          },
+          "patterns": [
+            { "include": "#block-content" }
+          ]
+        },
+        {
+          "name": "meta.block.if.newo-guidance",
+          "begin": "\\{\\{#if\\s+([^}]+)\\}\\}",
+          "end": "\\{\\{/if\\}\\}",
+          "beginCaptures": {
+            "0": { "name": "keyword.control.conditional.newo-guidance" }
+          },
+          "endCaptures": {
+            "0": { "name": "keyword.control.conditional.newo-guidance" }
+          },
+          "patterns": [
+            { "include": "#block-content" },
+            {
+              "name": "keyword.control.conditional.newo-guidance",
+              "match": "\\{\\{else\\}\\}"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.each.newo-guidance",
+          "begin": "\\{\\{#each\\s+([^}]+)\\}\\}",
+          "end": "\\{\\{/each\\}\\}",
+          "beginCaptures": {
+            "0": { "name": "keyword.control.loop.newo-guidance" }
+          },
+          "endCaptures": {
+            "0": { "name": "keyword.control.loop.newo-guidance" }
+          },
+          "patterns": [
+            { "include": "#block-content" }
+          ]
+        },
+        {
+          "name": "meta.block.gen.newo-guidance",
+          "begin": "\\{\\{#gen\\s*([^}]*)\\}\\}",
+          "end": "\\{\\{/gen\\}\\}",
+          "beginCaptures": {
+            "0": { "name": "keyword.control.gen.newo-guidance" }
+          },
+          "endCaptures": {
+            "0": { "name": "keyword.control.gen.newo-guidance" }
+          },
+          "patterns": [
+            { "include": "#block-content" }
+          ]
+        }
+      ]
+    },
+    "expressions": {
+      "begin": "\\{\\{(?![#/~])",
+      "end": "\\}\\}",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.begin.newo-guidance" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.template-expression.end.newo-guidance" }
+      },
+      "name": "meta.template.expression.newo-guidance",
+      "patterns": [
+        { "include": "#expression-content" }
+      ]
+    },
+    "block-content": {
+      "patterns": [
+        { "include": "#expressions" },
+        { "include": "#json-structures" }
+      ]
+    },
+    "json-structures": {
+      "patterns": [
+        { "include": "#json-object" },
+        { "include": "#json-array" }
+      ]
+    },
+    "json-object": {
+      "begin": "\\{(?!\\{)",
+      "end": "\\}(?!\\})",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.dictionary.begin.json" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.dictionary.end.json" }
+      },
+      "name": "meta.structure.dictionary.json",
+      "patterns": [
+        { "include": "#json-key" },
+        { "include": "#json-value" },
+        { "include": "#json-object" },
+        { "include": "#json-array" },
+        {
+          "name": "punctuation.separator.dictionary.key-value.json",
+          "match": ":"
+        },
+        {
+          "name": "punctuation.separator.dictionary.pair.json",
+          "match": ","
+        }
+      ]
+    },
+    "json-array": {
+      "begin": "\\[",
+      "end": "\\]",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.array.begin.json" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.array.end.json" }
+      },
+      "name": "meta.structure.array.json",
+      "patterns": [
+        { "include": "#json-value" },
+        { "include": "#json-object" },
+        { "include": "#json-array" },
+        {
+          "name": "punctuation.separator.array.json",
+          "match": ","
+        }
+      ]
+    },
+    "json-key": {
+      "match": "(\"[^\"]*\")\\s*(?=:)",
+      "captures": {
+        "1": { "name": "support.type.property-name.json" }
+      }
+    },
+    "json-value": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.json",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.json",
+              "match": "\\\\(?:[\"\\\\/bfnrt]|u[0-9a-fA-F]{4})"
+            }
+          ]
+        },
+        {
+          "name": "constant.numeric.json",
+          "match": "-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?"
+        },
+        {
+          "name": "constant.language.json",
+          "match": "\\b(true|false|null|True|False|None)\\b"
+        }
+      ]
+    },
+    "expression-content": {
+      "patterns": [
+        { "include": "#whitespace-control" },
+        { "include": "#strings" },
+        { "include": "#numbers" },
+        { "include": "#builtin-functions" },
+        { "include": "#skill-calls" },
+        { "include": "#operators" },
+        { "include": "#variables" }
+      ]
+    },
+    "whitespace-control": {
+      "patterns": [
+        {
+          "name": "keyword.operator.whitespace.newo-guidance",
+          "match": "~"
+        }
+      ]
+    },
+    "builtin-functions": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.newo-guidance",
+          "match": "\\b(Return|Set|Gen|GenStream|GetTriggeredAct|GetCurrentPrompt|GetCustomerAttribute|SetCustomerAttribute|SetCustomerMetadataAttribute|GetCustomerMetadataAttribute|DeleteCustomerAttribute|GetProjectAttribute|SetProjectAttribute|SetProjectMetadataAttribute|GetPersonaAttribute|SetPersonaAttribute|SendSystemEvent|SendCommand|SendMessage|CreateConnector|GetConnectorInfo|DeleteConnector|SetConnectorInfo|GetDatetime|GetDateTime|GetDateInterval|GetValueJSON|UpdateValueJSON|GetItemsArrayByIndexesJSON|GetIndexesOfItemsArrayJSON|AppendItemsArrayJSON|AsStringJSON|Stringify|Concat|IsEmpty|IsSimilar|IsGlobal|StartNotInterruptibleBlock|StopNotInterruptibleBlock|DUMMY|GetActors|GetActor|GetAct|GetAgent|GetMemory|SendTypingStart|SendTypingStop|GetUser|UpdateUser|GetAgentPersona|CreatePersona|CreateActor|CreateMessageAct|GetState|SetState|CreateArray|GetRandomChoice|Sleep|Do|SearchFuzzyAkb|DeleteAkb|UpdateAkb|SetManualAkb|GetCustomerInfo|GetCustomer|GetWebhook|CreateWebhook|DeleteWebhook)\\b"
+        }
+      ]
+    },
+    "skill-calls": {
+      "patterns": [
+        {
+          "name": "entity.name.function.skill.newo-guidance",
+          "match": "\\b_?[A-Za-z][A-Za-z0-9_]*Skill\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.newo-guidance",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.newo-guidance",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.newo-guidance",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.newo-guidance",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.newo-guidance",
+          "match": "\\b\\d+(\\.\\d+)?\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.comparison.newo-guidance",
+          "match": "==|!=|<=|>=|<|>"
+        },
+        {
+          "name": "keyword.operator.assignment.newo-guidance",
+          "match": "="
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.parameter.newo-guidance",
+          "match": "\\b[a-z_][a-z0-9_]*(?=\\s*=)"
+        },
+        {
+          "name": "variable.other.newo-guidance",
+          "match": "\\b[a-z_][a-z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

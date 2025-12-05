@@ -1,0 +1,717 @@
+# Newo DSL Actions Schema
+# Official action/function definitions for LSP support
+# Generated from Newo SuperAgent documentation
+
+version: "1.0"
+
+actions:
+  # ============================================================================
+  # MESSAGING & COMMUNICATION
+  # ============================================================================
+
+  SendMessage:
+    description: "Send direct messages to specific actors across all communication channels (SMS, email, chat, voice)"
+    category: messaging
+    syntax: "SendMessage(message, actorIds?, useFilter?, **arguments)"
+    parameters:
+      message:
+        type: string
+        required: true
+        description: "The message content to send"
+      actorIds:
+        type: "List[str]"
+        required: false
+        default: "GetActors()"
+        description: "Target actor IDs. Defaults to current conversation actors"
+      useFilter:
+        type: boolean
+        required: false
+        default: false
+        description: "When true, removes content within [[[text]]] brackets"
+    returns: "void"
+    example: '{{SendMessage(message="Hello! How can I help you?")}}'
+
+  SendCommand:
+    description: "Execute commands on external connectors to integrate with third-party services"
+    category: integration
+    syntax: "SendCommand(commandIdn, integrationIdn, connectorIdn, **arguments)"
+    parameters:
+      commandIdn:
+        type: string
+        required: true
+        description: "The specific command to execute (see connector documentation)"
+      integrationIdn:
+        type: string
+        required: true
+        description: "Integration type identifier (vapi, twilio_messenger, program_timer, etc.)"
+      connectorIdn:
+        type: string
+        required: true
+        description: "Specific connector instance identifier"
+    returns: "string - Command result or acknowledgment"
+    example: '{{SendCommand(commandIdn="send_message", integrationIdn="twilio_messenger", connectorIdn="sms_connector", text="Hello")}}'
+
+  SendSystemEvent:
+    description: "Broadcast internal system events for logging, analytics, and inter-skill communication"
+    category: system
+    syntax: "SendSystemEvent(eventIdn, **arguments)"
+    parameters:
+      eventIdn:
+        type: string
+        required: true
+        description: "Event identifier for categorization and routing"
+    returns: "void"
+    example: '{{SendSystemEvent(eventIdn="user_action", userId=GetUser(field="id"))}}'
+
+  # ============================================================================
+  # VARIABLES & STATE
+  # ============================================================================
+
+  Set:
+    description: "Assign values to local variables within skill execution scope. Variables persist throughout skill execution"
+    category: variables
+    syntax: "Set(name, value)"
+    parameters:
+      name:
+        type: string
+        required: true
+        description: "Variable name (must be valid identifier)"
+      value:
+        type: any
+        required: true
+        description: "Value to assign (string, number, object, array, or action result)"
+    returns: "void"
+    example: '{{Set(name="user_name", value=GetUser(field="name"))}}'
+
+  GetState:
+    description: "Retrieve persistent state data that survives across skill executions and conversation turns"
+    category: state
+    syntax: "GetState(name)"
+    parameters:
+      name:
+        type: string
+        required: true
+        description: "State variable name to retrieve"
+    returns: "any - The stored state value or empty string if not found"
+    example: '{{Set(name="current_step", value=GetState(name="booking_step"))}}'
+
+  SetState:
+    description: "Store persistent state data accessible across skill executions within the conversation flow"
+    category: state
+    syntax: "SetState(name, value)"
+    parameters:
+      name:
+        type: string
+        required: true
+        description: "State variable name to store"
+      value:
+        type: any
+        required: true
+        description: "Value to persist (string, number, object, array)"
+    returns: "void"
+    example: '{{SetState(name="booking_step", value="2")}}'
+
+  SetAKB:
+    description: "Store data in the Agent Knowledge Base for long-term persistent storage"
+    category: storage
+    syntax: "SetAKB(key, value)"
+    parameters:
+      key:
+        type: string
+        required: true
+        description: "Unique key for the stored data"
+      value:
+        type: string
+        required: true
+        description: "Value to store (must be stringified)"
+    returns: "void"
+    example: '{{SetAKB(key="customer_preferences", value=Stringify(preferences))}}'
+
+  # ============================================================================
+  # AI GENERATION
+  # ============================================================================
+
+  Gen:
+    description: "Generate AI responses synchronously for validation, JSON generation, and preprocessing"
+    category: ai
+    syntax: "gen(name, temperature?, stop?, maxTokens?, topP?, skipFilter?, skipChecks?, maxRetries?, jsonSchema?)"
+    parameters:
+      name:
+        type: string
+        required: true
+        description: "Variable name to store the generated result"
+      temperature:
+        type: float
+        required: false
+        default: 0.75
+        description: "Controls randomness (0.0-2.0). Lower = more deterministic"
+      stop:
+        type: "List[str]"
+        required: false
+        default: '["Agent:", "User:"]'
+        description: "Stop sequences to halt generation"
+      maxTokens:
+        type: int
+        required: false
+        description: "Maximum response length"
+      topP:
+        type: float
+        required: false
+        default: 1.0
+        description: "Nucleus sampling parameter (0.0-1.0)"
+      skipFilter:
+        type: boolean
+        required: false
+        default: false
+        description: "Bypass content moderation (use for JSON output)"
+      skipChecks:
+        type: boolean
+        required: false
+        default: false
+        description: "Skip validation checks for performance"
+      maxRetries:
+        type: int
+        required: false
+        default: 5
+        description: "Retry attempts for failed requests"
+      jsonSchema:
+        type: string
+        required: false
+        description: "OpenAPI/JSON Schema specification for structured output"
+    returns: "string - Generated content stored in named variable"
+    example: '{{gen(name="response", temperature=0.3, maxTokens=200)}}'
+
+  GenStream:
+    description: "Generate AI responses with streaming output visible to users in real-time"
+    category: ai
+    syntax: "genstream(name, temperature?, stop?, maxTokens?, topP?)"
+    parameters:
+      name:
+        type: string
+        required: true
+        description: "Variable name to store the generated result"
+      temperature:
+        type: float
+        required: false
+        default: 0.75
+        description: "Controls randomness (0.0-2.0)"
+      maxTokens:
+        type: int
+        required: false
+        description: "Maximum response length"
+    returns: "string - Generated content streamed to user"
+    example: '{{genstream(name="response", maxTokens=500)}}'
+
+  # ============================================================================
+  # USER & PERSONA
+  # ============================================================================
+
+  GetUser:
+    description: "Retrieve user information and attributes from the current conversation session"
+    category: user
+    syntax: 'GetUser(field?, personaId?)'
+    parameters:
+      field:
+        type: string
+        required: false
+        default: "name"
+        description: "User field to retrieve: id, name, title, description, type, email, phone, language, timezone"
+      personaId:
+        type: string
+        required: false
+        description: "Specific persona ID to query (defaults to current user)"
+    returns: "string - The requested field value or empty string"
+    example: '{{Set(name="user_name", value=GetUser(field="name"))}}'
+
+  UpdateUser:
+    description: "Modify user information and attributes in the current session"
+    category: user
+    syntax: "UpdateUser(field, value)"
+    parameters:
+      field:
+        type: string
+        required: true
+        description: "User field to update"
+      value:
+        type: string
+        required: true
+        description: "New value for the field"
+    returns: "void"
+    example: '{{UpdateUser(field="language", value="es")}}'
+
+  GetAgentPersona:
+    description: "Retrieve the agent's persona configuration and attributes"
+    category: persona
+    syntax: "GetAgentPersona(field?)"
+    parameters:
+      field:
+        type: string
+        required: false
+        description: "Specific persona field to retrieve"
+    returns: "string - Agent persona information"
+    example: '{{Set(name="agent_name", value=GetAgentPersona(field="name"))}}'
+
+  # ============================================================================
+  # ACTORS & CHANNELS
+  # ============================================================================
+
+  GetActors:
+    description: "Retrieve actor IDs for targeting messages to specific communication channels"
+    category: actors
+    syntax: "GetActors(integrationIdn?, connectorIdn?, personaId?, externalId?)"
+    parameters:
+      integrationIdn:
+        type: string
+        required: false
+        description: "Filter by integration type (vapi, twilio_messenger, email)"
+      connectorIdn:
+        type: string
+        required: false
+        description: "Filter by specific connector"
+      personaId:
+        type: string
+        required: false
+        description: "Filter by user persona ID"
+      externalId:
+        type: string
+        required: false
+        description: "Filter by external identifier"
+    returns: "List[str] - Array of matching actor IDs"
+    example: '{{Set(name="sms_actors", value=GetActors(integrationIdn="twilio_messenger"))}}'
+
+  GetActor:
+    description: "Retrieve information about a specific actor (communication channel)"
+    category: actors
+    syntax: "GetActor(field?)"
+    parameters:
+      field:
+        type: string
+        required: false
+        description: "Actor field to retrieve: id, integrationIdn, connectorIdn, externalId"
+    returns: "string - Actor field value"
+    example: '{{Set(name="channel", value=GetActor(field="integrationIdn"))}}'
+
+  CreateActor:
+    description: "Create a new communication channel actor for the conversation"
+    category: actors
+    syntax: "CreateActor(integrationIdn, connectorIdn, externalId?, **attributes)"
+    parameters:
+      integrationIdn:
+        type: string
+        required: true
+        description: "Integration type identifier"
+      connectorIdn:
+        type: string
+        required: true
+        description: "Connector instance identifier"
+      externalId:
+        type: string
+        required: false
+        description: "External identifier (email, phone, etc.)"
+    returns: "string - Created actor ID"
+    example: '{{CreateActor(integrationIdn="email", connectorIdn="gmail", externalId="user@example.com")}}'
+
+  # ============================================================================
+  # MEMORY & CONTEXT
+  # ============================================================================
+
+  GetMemory:
+    description: "Retrieve conversation history with filtering and processing options"
+    category: memory
+    syntax: "GetMemory(fromPerson?, offset?, count?, maxLen?, asEnglishText?, summarize?, fromDate?, toDate?, filterByActorIds?, filterByUserPersonaIds?)"
+    parameters:
+      fromPerson:
+        type: string
+        required: false
+        default: "Both"
+        description: "Filter by source: User, Agent, or Both"
+      offset:
+        type: string
+        required: false
+        default: "0"
+        description: "Skip recent conversation turns"
+      count:
+        type: string
+        required: false
+        default: "10"
+        description: "Number of conversation turns to retrieve"
+      maxLen:
+        type: string
+        required: false
+        default: "5000"
+        description: "Maximum character limit"
+      asEnglishText:
+        type: string
+        required: false
+        default: "false"
+        description: "Auto-translate to English"
+      summarize:
+        type: string
+        required: false
+        default: "false"
+        description: "AI-generated summary for efficiency"
+      fromDate:
+        type: string
+        required: false
+        description: "Start date filter (ISO-8601)"
+      toDate:
+        type: string
+        required: false
+        description: "End date filter (ISO-8601)"
+      filterByActorIds:
+        type: string
+        required: false
+        description: "Filter by specific actor IDs"
+      filterByUserPersonaIds:
+        type: string
+        required: false
+        description: "Filter by persona IDs"
+    returns: "string - Conversation history"
+    example: '{{Set(name="context", value=GetMemory(count="10", maxLen="3000"))}}'
+
+  GetTriggeredAct:
+    description: "Get the user input or event that triggered the current skill execution"
+    category: context
+    syntax: "GetTriggeredAct()"
+    parameters: {}
+    returns: "string - The triggering user message or event data"
+    example: '{{Set(name="user_input", value=GetTriggeredAct())}}'
+
+  GetCurrentPrompt:
+    description: "Retrieve the current prompt template being used for AI generation"
+    category: context
+    syntax: "GetCurrentPrompt()"
+    parameters: {}
+    returns: "string - Current prompt template"
+    example: '{{Set(name="prompt", value=GetCurrentPrompt())}}'
+
+  # ============================================================================
+  # FLOW CONTROL
+  # ============================================================================
+
+  Return:
+    description: "Output a final value and stop skill execution. Essential for early exits and structured responses"
+    category: flow
+    syntax: "Return(val)"
+    parameters:
+      val:
+        type: string
+        required: true
+        description: "The value to return as the final result"
+    returns: "void - Terminates skill execution"
+    example: '{{Return(val="Operation completed successfully")}}'
+
+  Do:
+    description: "Execute a dynamic action by name with provided parameters"
+    category: flow
+    syntax: "Do(action, **arguments)"
+    parameters:
+      action:
+        type: string
+        required: true
+        description: "Name of the action to execute"
+    returns: "any - Result of the executed action"
+    example: '{{Do(action="CustomSkill", param1="value1")}}'
+
+  Dummy:
+    description: "Placeholder action that does nothing. Useful for conditional blocks without actions"
+    category: flow
+    syntax: "Dummy()"
+    parameters: {}
+    returns: "void"
+    example: '{{Dummy()}}'
+
+  # ============================================================================
+  # STRING OPERATIONS
+  # ============================================================================
+
+  Concat:
+    description: "Concatenate multiple strings and arrays into a single string. Arrays are joined with newlines"
+    category: string
+    syntax: "Concat(str | [str], ...)"
+    parameters:
+      arguments:
+        type: "string | array"
+        required: true
+        description: "Any number of strings or arrays to concatenate"
+    returns: "string - Combined string result"
+    example: '{{Set(name="greeting", value=Concat("Hello, ", user_name, "!"))}}'
+
+  Stringify:
+    description: "Convert any value to its string representation. Cleans JSON quotes from values"
+    category: string
+    syntax: "Stringify(value)"
+    parameters:
+      value:
+        type: any
+        required: true
+        description: "Value to convert to string"
+    returns: "string - String representation"
+    example: '{{Set(name="text", value=Stringify(json_data))}}'
+
+  Summarize:
+    description: "Generate an AI summary of the provided text content"
+    category: string
+    syntax: "Summarize(inputText, maxLen?)"
+    parameters:
+      inputText:
+        type: string
+        required: true
+        description: "Text content to summarize"
+      maxLen:
+        type: string
+        required: false
+        description: "Maximum length of the summary"
+    returns: "string - Summarized text"
+    example: '{{Set(name="summary", value=Summarize(inputText=conversation, maxLen="100"))}}'
+
+  # ============================================================================
+  # CONDITIONALS & COMPARISONS
+  # ============================================================================
+
+  IsEmpty:
+    description: 'Check if a string is empty, null, or whitespace-only. Returns "t" if empty'
+    category: conditional
+    syntax: "IsEmpty(text)"
+    parameters:
+      text:
+        type: string
+        required: true
+        description: "The string to test for emptiness"
+    returns: 'Literal["t", ""] - "t" if empty, "" if has content'
+    example: '{{#if IsEmpty(text=user_input)}}Please provide input{{/if}}'
+
+  IsSimilar:
+    description: "Compare string similarity using distance algorithms. Returns truthy if above threshold"
+    category: conditional
+    syntax: "IsSimilar(val1, val2, strategy?, threshold?)"
+    parameters:
+      val1:
+        type: string
+        required: true
+        description: "First string to compare"
+      val2:
+        type: string
+        required: true
+        description: "Second string to compare"
+      strategy:
+        type: string
+        required: false
+        default: "hamming"
+        description: "Algorithm: hamming, levenshtein, or symbols"
+      threshold:
+        type: float
+        required: false
+        default: 0.4
+        description: "Similarity threshold (0.0-1.0)"
+    returns: 'Literal["t", ""] - "t" if similar, "" otherwise'
+    example: '{{#if IsSimilar(val1=user_input, val2="yes", threshold=0.7)}}Confirmed{{/if}}'
+
+  IsGlobal:
+    description: "Check if a variable exists in global scope"
+    category: conditional
+    syntax: "IsGlobal(name)"
+    parameters:
+      name:
+        type: string
+        required: true
+        description: "Variable name to check"
+    returns: 'Literal["t", ""] - "t" if global, "" otherwise'
+    example: '{{#if IsGlobal(name="config")}}Config exists{{/if}}'
+
+  # ============================================================================
+  # JSON & DATA OPERATIONS
+  # ============================================================================
+
+  GetValueJSON:
+    description: "Extract values from JSON objects using keys or dot-notation paths"
+    category: json
+    syntax: "GetValueJSON(obj, key)"
+    parameters:
+      obj:
+        type: string
+        required: true
+        description: "JSON object or array string to query"
+      key:
+        type: string
+        required: true
+        description: "Key or path (e.g., 'field' or 'parent.child.field')"
+    returns: "any - Extracted value or empty string if not found"
+    example: '{{Set(name="email", value=GetValueJSON(obj=user_data, key="contact.email"))}}'
+
+  UpdateValueJSON:
+    description: "Update a value in a JSON object at the specified key"
+    category: json
+    syntax: "UpdateValueJSON(obj, key, value)"
+    parameters:
+      obj:
+        type: string
+        required: true
+        description: "JSON object to modify"
+      key:
+        type: string
+        required: true
+        description: "Key or path to update"
+      value:
+        type: any
+        required: true
+        description: "New value to set"
+    returns: "string - Updated JSON object"
+    example: '{{Set(name="updated", value=UpdateValueJSON(obj=data, key="status", value="active"))}}'
+
+  CreateArray:
+    description: "Create arrays from string literals and variables for data organization"
+    category: json
+    syntax: "CreateArray(item1, item2, ...)"
+    parameters:
+      items:
+        type: "string | variable"
+        required: true
+        description: "Any number of values to include in the array"
+    returns: "string - Space-separated array representation"
+    example: '{{Set(name="options", value=CreateArray("yes", "no", "maybe"))}}'
+
+  GetRandomChoice:
+    description: "Select a random item from an array or list of options"
+    category: json
+    syntax: "GetRandomChoice(choices)"
+    parameters:
+      choices:
+        type: array
+        required: true
+        description: "Array of options to choose from"
+    returns: "string - Randomly selected item"
+    example: '{{Set(name="greeting", value=GetRandomChoice(choices=greetings))}}'
+
+  # ============================================================================
+  # DATE & TIME
+  # ============================================================================
+
+  GetDateTime:
+    description: "Get current date/time with customizable format and timezone"
+    category: datetime
+    syntax: "GetDateTime(format?, timezone?, weekday?)"
+    parameters:
+      format:
+        type: string
+        required: false
+        default: "datetime"
+        description: "Output format: datetime, date, or time"
+      timezone:
+        type: string
+        required: false
+        default: "UTC"
+        description: "Timezone identifier (e.g., America/New_York)"
+      weekday:
+        type: string
+        required: false
+        default: "false"
+        description: 'Include weekday name when "true"'
+    returns: "string - Formatted date/time string"
+    example: '{{Set(name="now", value=GetDateTime(format="datetime", timezone="America/New_York"))}}'
+
+  GetDateInterval:
+    description: "Calculate date/time intervals with offset operations"
+    category: datetime
+    syntax: "GetDateInterval(start, offset)"
+    parameters:
+      start:
+        type: string
+        required: true
+        description: "Starting date/time"
+      offset:
+        type: string
+        required: true
+        description: "Offset to apply (e.g., '-24h', '+7d', '-30m')"
+    returns: "string - Calculated date/time"
+    example: '{{Set(name="tomorrow", value=GetDateInterval(start=GetDateTime(), offset="+24h"))}}'
+
+# ============================================================================
+# BLOCK STRUCTURES (Guidance/Handlebars syntax)
+# ============================================================================
+
+blocks:
+  if:
+    description: "Conditional logic block for branching skill execution"
+    syntax: "{{#if condition}}...{{else}}...{{/if}}"
+    example: |
+      {{#if IsEmpty(text=user_input)}}
+        {{SendMessage(message="Please provide input")}}
+      {{else}}
+        {{SendMessage(message="Got it!")}}
+      {{/if}}
+
+  each:
+    description: "Iterate over array elements"
+    syntax: "{{#each array}}...{{/each}}"
+    example: |
+      {{#each items}}
+        {{SendMessage(message=this)}}
+      {{/each}}
+
+  system:
+    description: "Define system prompt for AI generation"
+    syntax: "{{#system~}}...{{~/system}}"
+    example: |
+      {{#system~}}
+      You are a helpful assistant.
+      {{~/system}}
+
+  assistant:
+    description: "Define assistant response block for AI generation"
+    syntax: "{{#assistant~}}...{{~/assistant}}"
+    example: |
+      {{#assistant~}}
+      {{Gen(name="response")}}
+      {{~/assistant}}
+
+  user:
+    description: "Define user message block for AI context"
+    syntax: "{{#user~}}...{{~/user}}"
+    example: |
+      {{#user~}}
+      {{GetMemory(count="1", fromPerson="User")}}
+      {{~/user}}
+
+# ============================================================================
+# VALIDATION RULES
+# ============================================================================
+
+validation:
+  required_parameters:
+    SendMessage: [message]
+    SendCommand: [commandIdn, integrationIdn, connectorIdn]
+    Set: [name, value]
+    SetState: [name, value]
+    GetState: [name]
+    Return: [val]
+    Gen: [name]
+    GetValueJSON: [obj, key]
+    UpdateValueJSON: [obj, key, value]
+    IsSimilar: [val1, val2]
+    IsEmpty: [text]
+    Concat: []  # variadic, at least 1 argument
+    CreateArray: []  # variadic, at least 1 argument
+
+  deprecated_actions:
+    - GetCustomerAttribute  # Use GetUser instead
+    - SetCustomerAttribute  # Use UpdateUser instead
+
+  parameter_constraints:
+    Gen.temperature:
+      min: 0.0
+      max: 2.0
+    Gen.topP:
+      min: 0.0
+      max: 1.0
+    IsSimilar.threshold:
+      min: 0.0
+      max: 1.0
+    IsSimilar.strategy:
+      allowed: [hamming, levenshtein, symbols]
+    GetDateTime.format:
+      allowed: [datetime, date, time]
+    GetMemory.fromPerson:
+      allowed: [User, Agent, Both]
+    GetUser.field:
+      allowed: [id, name, title, description, type, email, phone, language, timezone]

@@ -1,0 +1,293 @@
+@Nikita Ziniuk @Aleksandr Pronin  I have a partner client needing to call a webhook to get data during a conversation.  Who can I talk to to learn more about the new attribute/feature for "Conversation - Tools [C] / project_attributes_settings_newo_tools" ?? Would love a training session on how to implement this new feature.
+:bangbang:
+1
+
+New
+
+
+Efrem Sarmazov
+  Monday at 10:10 PM
+@Dmitry Filin
+
+
+Efrem Sarmazov
+  Monday at 10:10 PM
+https://nometa.xyz/
+
+
+Dmitry Filin
+  Monday at 10:22 PM
+I remember I added docs to the attribute. feel free to contact me if help needed
+
+
+Dmitry Filin
+  Monday at 10:42 PM
+#### `project_attributes_settings_newo_tools`
+
+**Title:** Conversation - Tools [C]
+
+**Description:**
+
+````md
+This Attributes specifies the `Tools` that are available for the agent to use during the
+conversation. You can either override existing tools or add new ones.
+
+**Important:** This feature is under development, use with caution. Interface might be changed in
+future releases. Do not use if it's not necessary.
+
+Each tool has an `action` and `after_actions` (optionally)
+
+**The following actions are supported:**
+
+# Actions
+
+## 1) `send_event`
+
+Fire a named system event. **After actions:** _Not supported_ (this action cannot have
+`after_actions`).
+
+**Options**
+
+- `type`: `"send_event"` (not required, `type` defaults to it)
+
+> Use when you just need to notify the system and handle the event completely on your own.
+
+---
+
+## 2) `send_webhook`
+
+Make an HTTP request to an external endpoint. **After actions:** _Supported_ (you may chain one or
+more after actions below, in order).
+
+**Options**
+
+- `type`: `"send_webhook"` (required)
+- `options.method`: HTTP method. One of `"GET" | "POST" | "PUT" | "PATCH" | "DELETE"`. Default:
+  `"GET"`.
+- `options.url`: Target URL. **Required.**
+- `options.query`: Fields to place in the URL query string. _(Object schema describing fields to
+  fill.)_
+- `options.headers`: HTTP headers to send. _(Object schema describing fields to fill.)_
+- `options.body`: JSON body to send. _(Object schema describing fields to fill.)_
+
+> Tip: Provide only the fields you actually need in `query`, `headers`, and `body`.
+
+---
+
+# After actions
+
+## A) `send_urgent_message`
+
+### Supported actions: [`send_webhook`]
+
+Immediately sends a high-priority message to the user.
+
+**Options**
+
+- `prefix` _(string, optional)_: Text placed on a line above the message content.
+- `uninterruptible` _(boolean, optional)_: If set, the message won't be interrupted by other flows.
+  Default behavior is enabled.
+- `call_analyze_conversation_skill` _(boolean, optional)_: Request follow-up analysis. Default:
+  `false`.
+- `call_manage_task_skill` _(boolean, optional)_: Request task handling. Default: `false`.
+
+---
+
+## B) `set_persona_attribute`
+
+### Supported actions: [`send_webhook`]
+
+Writes a value into the user's persona/profile.
+
+**Options**
+
+- `attribute_name` _(string, required)_: The profile field to set.
+- `llm_process_instruction` _(string, optional)_: A short instruction telling the AI how to
+  transform the latest input into the value to store (e.g., "If data is successfully collected,
+  generate True, else False."). If empty, input used as-is with no post-pro.
+
+---
+
+## C) `set_prompt_section`
+
+### Supported actions: [`send_webhook`]
+
+Stores text into a named custom section of the user's prompt (for future turns).
+
+**Options**
+
+- `section_name` _(string, required)_: The prompt section to write to. Example: "section_name":
+  "FullNameValidationProcess".
+- `llm_process_instruction` _(string, optional)_: A short instruction telling the AI how to
+  transform the latest input into the section value (e.g., "If validated, output the full name;
+  otherwise output 'False'."). If empty, input used as-is with no post-pro.
+
+---
+
+# Notes
+
+- **Conditions**: You decide when a tool triggers by defining booleans like `emailProvided`,
+  `phoneNumberProvided`, etc.
+- **useConversationHistory**: `true/false`—whether the tool can use prior conversation context to
+  auto-fill fields. When `false`, only last agent's message considered.
+- **Order of after actions** matters: they run top to bottom.
+
+Example of overriding existing tool - `calculation_tool` and adding new `report_phone_number_tool`:
+
+```json
+{
+  "tools": {
+    "report_phone_number_tool": {
+      "conditions": {
+        "phoneNumberProvided": {
+          "type": "boolean",
+          "description": "The user just provided their phone number"
+        }
+      },
+      "action": {
+        "type": "send_webhook",
+        "options": {
+          "method": "GET",
+          "query": {
+            "type": "object",
+            "properties": {
+              "phone_number": {
+                "type": "string",
+                "description": "User's provided phone number"
+              }
+            }
+          },
+          "headers": {
+            "type": "object",
+            "properties": {
+              "Content-Type": {
+                "type": "string",
+                "enum": ["application/json"]
+              }
+            }
+          },
+          "url": "https://hook.us1.make.com/somewebhookup"
+        }
+      },
+      "after_actions": [
+        {
+          "type": "send_urgent_message"
+        }
+      ],
+      "useConversationHistory": true
+    },
+    "calculation_tool": {
+      "description": "The agent calculates the price and informs the user about it.",
+      "conditions": {
+        "agentPromised": {
+          "type": "boolean",
+          "description": "The agent promised to calculate the approximate estimate price right now exactly in their last message (enclosed in <LatestConvoAgentAnswer>)."
+        }
+      },
+      "useConversationHistory": false
+    }
+  }
+}
+```
+
+Example of adding new tool - `custom_tool`:
+
+```json
+{
+  "tools": {
+    "custom_tool": {
+      "conditions": {
+        "userAskedForCustomTool": {
+          "type": "boolean",
+          "description": "The agent promised to use a custom tool in their last message (enclosed in <LatestConvoAgentAnswer>) and use previously provided data in the conversation (enclosed in <Conversation>)."
+        }
+      },
+      "useConversationHistory": true
+    }
+  }
+}
+```
+
+You can add any amount of tools. For example, you can override `calculation_tool` and add
+`custom_tool` at the same time:
+
+```json
+{
+  "tools": {
+    "calculation_tool": {
+      "description": "The agent calculates the price and informs the user about it.",
+      "conditions": {
+        "agentPromised": {
+          "type": "boolean",
+          "description": "The agent promised to calculate the approximate estimate price right now exactly in their last message (enclosed in <LatestConvoAgentAnswer>)."
+        }
+      },
+      "useConversationHistory": false
+    },
+    "custom_tool": {
+      "conditions": {
+        "userAskedForCustomTool": {
+          "type": "boolean",
+          "description": "The agent promised to use a custom tool in their last message (enclosed in <LatestConvoAgentAnswer>) and use previously provided data in the conversation (enclosed in <Conversation>)."
+        }
+      },
+      "useConversationHistory": true
+    }
+  }
+}
+```
+````
+:fire:
+1
+
+
+
+Nikita Ziniuk
+  Yesterday at 3:05 AM
+@Dmitry Filin, this description still is not obvious enough. We need to document it better and ask @Ryan to include the article in our help center.
+
+
+Dmitry Filin
+  Yesterday at 3:06 AM
+I don't agree, we don't teach people about webhook and http/ interface
+Please address precisely what is unclear
+
+
+Abhi
+  Yesterday at 2:49 PM
+@Dmitry Filin If the tool calls a webhook and it returns some data in a JSON format, how can we configure the agent to use that data in the ongoing conversation?
+
+
+Dmitry Filin
+  Yesterday at 9:52 PM
+There are few different concepts you can invoke here to achieve such result:
+Instruction -> send_urgent_message.
+ More robust, less flexible
+In instruction, the agent says: Let me According to instructions, agent says something like: 'let me do something, ill get back to you with the information'
+Tool trigger fires, receiving a response
+using prefix after_action property you tell agent how to process the reponse
+agent speaks the information loud to print it in the conversation
+you continue with the information in the history
+2. Instruction -> set_custom_prompt_section
+ Relied mostly on v2v interpretation, way more flexible
+According to instructions, agent says some trigger phrase
+Tool trigger fires, receiving a response
+using llm_process_instruction after_action property you format the information in the needed way
+it writes to the custom_prompt_section and eventually becomes available in the agent context
+In instruction, you refer to the introduced prompt section
+
+
+Jacob Birmingham
+  Today at 11:10 AM
+@Pavel @Alex Efremov @Ryan I believe we have a huge opportunity to help with adaptive and expedited 3rd party integrations using this really cool feature that @Dmitry Filin has built.  But the documentation is lacking, although I understand there are some details on the platform as pointed out by Dmitry, but I share the same questions from Abhi, Nikita and others with regards to how exactly we can utilize this new capability.   What would be very helpful, is a single document that demonstrates many use cases starting with scenario setup/code-phrase, etc....  then the webhoook setup for each after action example provided and how to handle the response within a scenario.
+The added information provided above is helpful, but still incomplete for someone like myself to adapt and deploy.
+It would be great to see full complete use cases and examples for each of those concepts.
+How exactly does one continue with the information in the history after a send_urgent_message is executed?
+How exactly should the llm process instructions to best work with LLM in a recommended format?  Example of an instruction to format data best suitable for LLM would be helpful.
+According to what instructions will the agent say some trigger phrase when using a set_custom_prompt_section?
+An example of how to use the response data that is added to a custom_prompt_section, when it becomes "eventually" available to the agent context again would be very useful.
+Where and how in the instruction would you refer to the introduced prompt section?
+How does using urgent message differ from adding to set custom prompt section in different use cases?
+A complete help document built similiar to how we've provided help documents for outbound, CRM and other integrations would be VERY VALUABLE for the entire newo support team.
+Bottomline, we aren't as skilled to know how to utilize this feature without more documentation, examples, and definitions of the various parts to this.  I'm not alone here.  If this were made available, I know this would enable many more integrations to occur with our Level B/C partners and could alleviate many more requests going to Alex Pronin for custom integration support.
+@Dmitry Filin Fantastic job thus far building this capability!  This has enormous potential for everyone!  Thank you for your hard work and support.

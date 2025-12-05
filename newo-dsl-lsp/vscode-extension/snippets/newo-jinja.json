@@ -1,0 +1,118 @@
+{
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "{% if ${1:condition} %}",
+      "\t$0",
+      "{% endif %}"
+    ],
+    "description": "Jinja if statement"
+  },
+  "If Else Statement": {
+    "prefix": "ifelse",
+    "body": [
+      "{% if ${1:condition} %}",
+      "\t$2",
+      "{% else %}",
+      "\t$0",
+      "{% endif %}"
+    ],
+    "description": "Jinja if-else statement"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "{% for ${1:item} in ${2:items} %}",
+      "\t$0",
+      "{% endfor %}"
+    ],
+    "description": "Jinja for loop"
+  },
+  "Set Variable": {
+    "prefix": "set",
+    "body": [
+      "{% set ${1:variable} = ${2:value} %}"
+    ],
+    "description": "Jinja set variable"
+  },
+  "Return": {
+    "prefix": "return",
+    "body": [
+      "{{Return(val=${1:value})}}"
+    ],
+    "description": "Return from skill"
+  },
+  "Get Customer Attribute": {
+    "prefix": "getattr",
+    "body": [
+      "GetCustomerAttribute(field=\"${1:field_name}\")"
+    ],
+    "description": "Get customer attribute"
+  },
+  "Set Customer Attribute": {
+    "prefix": "setattr",
+    "body": [
+      "{{SetCustomerAttribute(field=\"${1:field_name}\", value=${2:value})}}"
+    ],
+    "description": "Set customer attribute"
+  },
+  "Get Persona Attribute": {
+    "prefix": "getpersona",
+    "body": [
+      "GetPersonaAttribute(field=\"${1:field_name}\")"
+    ],
+    "description": "Get persona attribute"
+  },
+  "Send Message": {
+    "prefix": "sendmsg",
+    "body": [
+      "{{SendMessage(text=\"${1:message}\")}}"
+    ],
+    "description": "Send message"
+  },
+  "Send System Event": {
+    "prefix": "sendevent",
+    "body": [
+      "{{SendSystemEvent(eventIdn=\"${1:event_name}\", data=${2:{}})}}"
+    ],
+    "description": "Send system event"
+  },
+  "Get Triggered Act": {
+    "prefix": "gettrigger",
+    "body": [
+      "{% set triggered_act = GetTriggeredAct() %}",
+      "{% set payload = triggered_act[\"arguments\"][\"payload\"] %}"
+    ],
+    "description": "Get triggered action and payload"
+  },
+  "Skill Call": {
+    "prefix": "skill",
+    "body": [
+      "{{${1:_skillName}(${2:parameters})}}"
+    ],
+    "description": "Call a skill"
+  },
+  "Validation Block": {
+    "prefix": "validate",
+    "body": [
+      "{% set errors = [] %}",
+      "{% for attr in ${1:required_attrs} %}",
+      "\t{% if not GetCustomerAttribute(field=attr).strip() %}",
+      "\t\t{% set _ = errors.append(\"Missing: \" ~ attr) %}",
+      "\t{% endif %}",
+      "{% endfor %}",
+      "{% if errors %}",
+      "\t{{DUMMY(\"Errors: \" ~ json.dumps(errors))}}",
+      "\t{{Return()}}",
+      "{% endif %}"
+    ],
+    "description": "Attribute validation block"
+  },
+  "Debug Log": {
+    "prefix": "debug",
+    "body": [
+      "{{DUMMY(\"Debug: ${1:message}\")}}"
+    ],
+    "description": "Debug logging"
+  }
+}

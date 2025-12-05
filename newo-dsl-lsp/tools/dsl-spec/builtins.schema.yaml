@@ -1,0 +1,479 @@
+# Newo DSL Built-in Functions Schema
+# Auto-generated from codebase analysis
+# Last updated: Phase 1 extraction
+
+version: "1.0"
+description: "Core built-in functions available in Newo DSL templates"
+
+categories:
+  - name: control_flow
+    description: "Functions for controlling execution flow"
+  - name: attributes
+    description: "Functions for managing customer/persona attributes"
+  - name: system
+    description: "Functions for system integration and events"
+  - name: data
+    description: "Functions for data manipulation"
+  - name: utilities
+    description: "Utility functions"
+  - name: logging
+    description: "Logging and debugging functions"
+
+functions:
+  # ============================================
+  # CONTROL FLOW
+  # ============================================
+
+  - name: Return
+    category: control_flow
+    description: "Exit current skill and return a value"
+    syntax:
+      jinja: "{{Return(val=output)}}"
+      guidance: "{{Return(val=output)}}"
+    parameters:
+      - name: val
+        type: any
+        required: false
+        default: null
+        description: "Value to return from the skill"
+    returns:
+      type: void
+      description: "Exits skill execution"
+    examples:
+      - "{{Return()}}"
+      - "{{Return(val=result)}}"
+      - "{{Return(val=GetCurrentPrompt())}}"
+
+  - name: Set
+    category: control_flow
+    description: "Set a variable in the current scope"
+    syntax:
+      jinja: "{{Set(name=\"var\", value=expr)}}"
+      guidance: "{{Set(name=\"var\", value=expr)}}"
+    parameters:
+      - name: name
+        type: string
+        required: true
+        description: "Variable name to set"
+      - name: value
+        type: any
+        required: true
+        description: "Value to assign"
+    returns:
+      type: void
+    examples:
+      - "{{Set(name=\"user_id\", value=123)}}"
+      - "{{Set(name=\"result\", value=GetCustomerAttribute(field=\"name\"))}}"
+
+  - name: GetTriggeredAct
+    category: control_flow
+    description: "Get the event/action that triggered this skill"
+    syntax:
+      jinja: "{% set act = GetTriggeredAct() %}"
+      guidance: "{{Set(name=\"act\", value=GetTriggeredAct())}}"
+    parameters: []
+    returns:
+      type: object
+      description: "Object containing trigger information"
+      properties:
+        - name: arguments
+          type: object
+          description: "Arguments passed to the trigger"
+        - name: arguments.payload
+          type: object
+          description: "Payload data"
+    examples:
+      - "{% set triggered_act = GetTriggeredAct() %}"
+      - "{% set payload = GetTriggeredAct()[\"arguments\"][\"payload\"] %}"
+
+  - name: GetCurrentPrompt
+    category: control_flow
+    description: "Get the current LLM prompt context"
+    syntax:
+      jinja: "{{GetCurrentPrompt()}}"
+      guidance: "{{GetCurrentPrompt()}}"
+    parameters: []
+    returns:
+      type: string
+      description: "Current prompt context"
+    examples:
+      - "{{Return(val=GetCurrentPrompt())}}"
+
+  # ============================================
+  # ATTRIBUTES
+  # ============================================
+
+  - name: GetCustomerAttribute
+    category: attributes
+    description: "Retrieve a customer/project attribute value"
+    syntax:
+      jinja: "{% set val = GetCustomerAttribute(field=\"name\") %}"
+      guidance: "{{GetCustomerAttribute(field=\"name\")}}"
+    parameters:
+      - name: field
+        type: string
+        required: true
+        description: "Attribute field name (e.g., 'project_business_name')"
+    returns:
+      type: string
+      description: "Attribute value or empty string"
+    examples:
+      - "{% set name = GetCustomerAttribute(field=\"project_business_name\") %}"
+      - "{% if GetCustomerAttribute(field=\"status\").strip() %}"
+
+  - name: SetCustomerAttribute
+    category: attributes
+    description: "Set a customer/project attribute value"
+    syntax:
+      jinja: "{{SetCustomerAttribute(field=\"name\", value=val)}}"
+      guidance: "{{SetCustomerAttribute(field=\"name\", value=val)}}"
+    parameters:
+      - name: field
+        type: string
+        required: true
+        description: "Attribute field name"
+      - name: value
+        type: any
+        required: true
+        description: "Value to set"
+    returns:
+      type: void
+    examples:
+      - "{{SetCustomerAttribute(field=\"project_status\", value=\"active\")}}"
+
+  - name: GetPersonaAttribute
+    category: attributes
+    description: "Retrieve a persona-specific attribute value"
+    syntax:
+      jinja: "{% set val = GetPersonaAttribute(field=\"name\") %}"
+      guidance: "{{GetPersonaAttribute(field=\"name\")}}"
+    parameters:
+      - name: field
+        type: string
+        required: true
+        description: "Persona attribute field name"
+    returns:
+      type: string
+      description: "Persona attribute value"
+    examples:
+      - "{% set persona_name = GetPersonaAttribute(field=\"persona_name\") %}"
+
+  - name: SetPersonaAttribute
+    category: attributes
+    description: "Set a persona-specific attribute value"
+    syntax:
+      jinja: "{{SetPersonaAttribute(field=\"name\", value=val)}}"
+      guidance: "{{SetPersonaAttribute(field=\"name\", value=val)}}"
+    parameters:
+      - name: field
+        type: string
+        required: true
+        description: "Persona attribute field name"
+      - name: value
+        type: any
+        required: true
+        description: "Value to set"
+    returns:
+      type: void
+    examples:
+      - "{{SetPersonaAttribute(field=\"persona_mood\", value=\"friendly\")}}"
+
+  # ============================================
+  # SYSTEM INTEGRATION
+  # ============================================
+
+  - name: SendSystemEvent
+    category: system
+    description: "Trigger a system event"
+    syntax:
+      jinja: "{{SendSystemEvent(eventIdn=\"event_name\", data={})}}"
+      guidance: "{{SendSystemEvent(eventIdn=\"event_name\", data={})}}"
+    parameters:
+      - name: eventIdn
+        type: string
+        required: true
+        description: "Event identifier"
+      - name: data
+        type: object
+        required: false
+        default: {}
+        description: "Event payload data"
+    returns:
+      type: void
+    examples:
+      - "{{SendSystemEvent(eventIdn=\"user_action\", data={\"action\": \"click\"})}}"
+
+  - name: SendCommand
+    category: system
+    description: "Send a command to the system"
+    syntax:
+      jinja: "{{SendCommand(command=\"cmd\", data={})}}"
+      guidance: "{{SendCommand(command=\"cmd\", data={})}}"
+    parameters:
+      - name: command
+        type: string
+        required: true
+        description: "Command name"
+      - name: data
+        type: object
+        required: false
+        default: {}
+        description: "Command data"
+    returns:
+      type: void
+    examples:
+      - "{{SendCommand(command=\"transfer\", data={\"target\": \"agent\"})}}"
+
+  - name: SendMessage
+    category: system
+    description: "Send a message to a channel"
+    syntax:
+      jinja: "{{SendMessage(text=\"message\", channel=\"default\")}}"
+      guidance: "{{SendMessage(text=\"message\")}}"
+    parameters:
+      - name: text
+        type: string
+        required: true
+        description: "Message text"
+      - name: channel
+        type: string
+        required: false
+        default: "default"
+        description: "Target channel"
+    returns:
+      type: void
+    examples:
+      - "{{SendMessage(text=\"Hello, how can I help?\")}}"
+
+  - name: CreateConnector
+    category: system
+    description: "Create a new connector instance"
+    syntax:
+      jinja: "{{CreateConnector(type=\"connector_type\", config={})}}"
+    parameters:
+      - name: type
+        type: string
+        required: true
+        description: "Connector type"
+      - name: config
+        type: object
+        required: false
+        description: "Connector configuration"
+    returns:
+      type: object
+      description: "Connector instance"
+
+  - name: SetConnectorInfo
+    category: system
+    description: "Configure connector information"
+    syntax:
+      jinja: "{{SetConnectorInfo(connector_id=\"id\", info={})}}"
+    parameters:
+      - name: connector_id
+        type: string
+        required: true
+        description: "Connector identifier"
+      - name: info
+        type: object
+        required: true
+        description: "Connector info to set"
+    returns:
+      type: void
+
+  # ============================================
+  # DATA MANIPULATION
+  # ============================================
+
+  - name: GetDatetime
+    category: data
+    description: "Get formatted date/time"
+    syntax:
+      jinja: "{{GetDatetime(format=\"date\", timezone=\"UTC\")}}"
+      guidance: "{{GetDatetime(format=\"date\", timezone=\"UTC\")}}"
+    parameters:
+      - name: format
+        type: string
+        required: false
+        default: "datetime"
+        description: "Format type: date, time, datetime, custom strftime"
+      - name: timezone
+        type: string
+        required: false
+        default: "UTC"
+        description: "Timezone name"
+    returns:
+      type: string
+      description: "Formatted date/time string"
+    examples:
+      - "{{GetDatetime(format=\"date\", timezone=\"America/New_York\")}}"
+      - "{% set now = GetDatetime(format=\"%Y-%m-%d %H:%M\") %}"
+
+  - name: GetValueJSON
+    category: data
+    description: "Extract a value from JSON object by key"
+    syntax:
+      jinja: "{{GetValueJSON(obj, key)}}"
+    parameters:
+      - name: obj
+        type: object
+        required: true
+        description: "JSON object to extract from"
+      - name: key
+        type: string
+        required: true
+        description: "Key to extract"
+    returns:
+      type: any
+      description: "Value at the specified key"
+    examples:
+      - "{% set name = GetValueJSON(user_data, \"name\") %}"
+
+  - name: GetItemsArrayByIndexesJSON
+    category: data
+    description: "Extract array items by indexes"
+    syntax:
+      jinja: "{{GetItemsArrayByIndexesJSON(array, indexes)}}"
+    parameters:
+      - name: array
+        type: array
+        required: true
+        description: "Source array"
+      - name: indexes
+        type: array
+        required: true
+        description: "Array of indexes to extract"
+    returns:
+      type: array
+      description: "Selected items"
+
+  - name: Stringify
+    category: data
+    description: "Convert value to string"
+    syntax:
+      jinja: "{{Stringify(value)}}"
+    parameters:
+      - name: value
+        type: any
+        required: true
+        description: "Value to stringify"
+    returns:
+      type: string
+
+  - name: Concat
+    category: data
+    description: "Concatenate strings"
+    syntax:
+      jinja: "{{Concat(a, b, ...)}}"
+    parameters:
+      - name: "..."
+        type: string
+        required: true
+        description: "Strings to concatenate"
+    returns:
+      type: string
+    examples:
+      - "{{Concat(\"Hello \", name, \"!\")}}"
+
+  # ============================================
+  # UTILITIES
+  # ============================================
+
+  - name: IsEmpty
+    category: utilities
+    description: "Check if a value is empty"
+    syntax:
+      jinja: "{{IsEmpty(text=\"value\")}}"
+    parameters:
+      - name: text
+        type: string
+        required: true
+        description: "Value to check"
+    returns:
+      type: boolean
+      description: "True if empty, false otherwise"
+    examples:
+      - "{% if IsEmpty(text=user_input) %}"
+
+  - name: StartNotInterruptibleBlock
+    category: utilities
+    description: "Start a block that cannot be interrupted"
+    syntax:
+      jinja: "{{StartNotInterruptibleBlock()}}"
+    parameters: []
+    returns:
+      type: void
+
+  - name: StopNotInterruptibleBlock
+    category: utilities
+    description: "End a non-interruptible block"
+    syntax:
+      jinja: "{{StopNotInterruptibleBlock()}}"
+    parameters: []
+    returns:
+      type: void
+
+  # ============================================
+  # LOGGING
+  # ============================================
+
+  - name: DUMMY
+    category: logging
+    description: "No-op function for logging/debugging (output ignored)"
+    syntax:
+      jinja: "{{DUMMY(value)}}"
+    parameters:
+      - name: value
+        type: any
+        required: true
+        description: "Value to log (not output)"
+    returns:
+      type: void
+    examples:
+      - "{{DUMMY(\"Debug: \" ~ json.dumps(data))}}"
+      - "{{DUMMY(\"Error: \" ~ error_message)}}"
+
+# Standard library modules available
+modules:
+  - name: json
+    description: "JSON manipulation module"
+    functions:
+      - name: loads
+        description: "Parse JSON string to object"
+        syntax: "json.loads(string)"
+        parameters:
+          - name: string
+            type: string
+            required: true
+        returns:
+          type: object
+      - name: dumps
+        description: "Serialize object to JSON string"
+        syntax: "json.dumps(object)"
+        parameters:
+          - name: object
+            type: any
+            required: true
+        returns:
+          type: string
+
+# Guidance-specific constructs
+guidance_blocks:
+  - name: system
+    description: "Define system prompt content for LLM"
+    syntax: "{{#system~}} ... {{~/system}}"
+    usage: "Wrap system-level instructions for the LLM"
+
+  - name: user
+    description: "Define user message content"
+    syntax: "{{#user~}} ... {{~/user}}"
+    usage: "Wrap user-provided content"
+
+  - name: assistant
+    description: "Define assistant response content"
+    syntax: "{{#assistant~}} ... {{~/assistant}}"
+    usage: "Wrap expected assistant responses"
+
+  - name: if
+    description: "Conditional block"
+    syntax: "{{#if condition}} ... {{else}} ... {{/if}}"
+    usage: "Conditional content rendering"

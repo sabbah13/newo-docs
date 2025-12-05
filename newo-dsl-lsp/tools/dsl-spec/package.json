@@ -1,0 +1,15 @@
+{
+  "name": "@newo-dsl/spec-generator",
+  "version": "0.1.0",
+  "description": "Schema generator for Newo DSL",
+  "main": "generate.js",
+  "bin": {
+    "generate-schemas": "./generate.js"
+  },
+  "scripts": {
+    "generate": "node generate.js"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}
