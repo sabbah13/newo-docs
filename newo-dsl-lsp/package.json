@@ -1,26 +1,45 @@
 {
-  "name": "newo-dsl-lsp",
-  "version": "0.1.0",
-  "description": "Language Server Protocol implementation for Newo DSL (NSL)",
+  "name": "newo-nsl-lsp",
+  "version": "0.5.3",
+  "description": "Language Server Protocol implementation for Newo Skill Language (NSL)",
   "private": true,
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/newo-ai/newo-nsl-lsp"
+  },
+  "homepage": "https://github.com/newo-ai/newo-nsl-lsp#readme",
+  "bugs": {
+    "url": "https://github.com/newo-ai/newo-nsl-lsp/issues"
+  },
+  "author": "Newo AI <engineering@newo.ai> (https://newo.ai)",
   "workspaces": [
     "packages/*",
     "tools/*",
     "vscode-extension"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build -w packages/dsl-data && npm run build -w packages/dsl-analyzer && npm run build -w packages/dsl-lsp-server && npm run build -w vscode-extension",
     "lint:templates": "node tools/template-lint/cli.js",
     "lint:flows": "node tools/template-lint/cli.js --flows",
     "generate:schemas": "node tools/dsl-spec/generate.js",
-    "test": "npm test --workspaces",
-    "clean": "rm -rf packages/*/dist tools/*/dist vscode-extension/dist"
+    "generate:actions-yaml": "npx tsx packages/dsl-data/scripts/export-yaml.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "version:sync": "node scripts/sync-versions.js",
+    "version:check": "node scripts/sync-versions.js --check",
+    "clean": "rm -rf packages/dsl-data/dist packages/dsl-analyzer/dist packages/dsl-lsp-server/dist vscode-extension/dist",
+    "docs": "typedoc --entryPoints packages/dsl-analyzer/src/index.ts packages/dsl-data/src/index.ts --out docs/api --tsconfig packages/dsl-analyzer/tsconfig.json"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
-    "typescript": "^5.3.0"
+    "@vitest/coverage-v8": "^3.2.4",
+    "typedoc": "^0.27.0",
+    "typescript": "^5.3.0",
+    "vitest": "^3.2.4"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   }
 }

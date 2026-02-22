@@ -9,7 +9,21 @@
  */
 
 class JinjaParser {
-  constructor() {
+  /**
+   * @param {string[]|null} builtinNames - Built-in function names from schema (null = use hardcoded fallback)
+   */
+  constructor(builtinNames = null) {
+    const defaultBuiltins = [
+      'Return', 'Set', 'GetTriggeredAct', 'GetCurrentPrompt',
+      'GetCustomerAttribute', 'SetCustomerAttribute', 'GetPersonaAttribute', 'SetPersonaAttribute',
+      'SendSystemEvent', 'SendCommand', 'SendMessage', 'CreateConnector', 'SetConnectorInfo',
+      'GetDatetime', 'GetValueJSON', 'GetItemsArrayByIndexesJSON', 'Stringify', 'Concat', 'IsEmpty',
+      'StartNotInterruptibleBlock', 'StopNotInterruptibleBlock', 'DUMMY'
+    ];
+    const names = builtinNames || defaultBuiltins;
+    this.builtinNames = new Set(names);
+    const builtinPattern = names.join('|');
+
     // Regex patterns for Jinja syntax
     this.patterns = {
       // {{ expression }} - expressions/function calls
@@ -42,8 +56,8 @@ class JinjaParser {
       // Skill call pattern: _skillName() or SkillName()
       skillCall: /\b(_?[A-Za-z][A-Za-z0-9_]*Skill)\s*\(/g,
 
-      // Built-in function calls
-      builtinCall: /(Return|Set|GetTriggeredAct|GetCurrentPrompt|GetCustomerAttribute|SetCustomerAttribute|GetPersonaAttribute|SetPersonaAttribute|SendSystemEvent|SendCommand|SendMessage|CreateConnector|SetConnectorInfo|GetDatetime|GetValueJSON|GetItemsArrayByIndexesJSON|Stringify|Concat|IsEmpty|StartNotInterruptibleBlock|StopNotInterruptibleBlock|DUMMY)\s*\(/g,
+      // Built-in function calls (dynamically built from schema)
+      builtinCall: new RegExp(`(${builtinPattern})\\s*\\(`, 'g'),
 
       // Parameter pattern: name=value
       parameter: /([A-Za-z_][A-Za-z0-9_]*)\s*=/g
@@ -76,9 +90,38 @@ class JinjaParser {
     // Track defined variables for reference checking
     const definedVars = new Set(['true', 'false', 'none', 'json']);
 
+    // Track multi-line {# ... #} comment state
+    let inBlockComment = false;
+
     // Parse line by line for accurate position reporting
     lines.forEach((line, lineIndex) => {
       const lineNum = lineIndex + 1;
+
+      // Handle multi-line {# ... #} comments
+      if (inBlockComment) {
+        const closeIdx = line.indexOf('#}');
+        if (closeIdx >= 0) {
+          inBlockComment = false;
+          // Process only the portion after the comment close
+          line = line.substring(closeIdx + 2);
+        } else {
+          return; // Entire line inside comment, skip
+        }
+      }
+
+      // Check for comment open on this line
+      const commentOpenIdx = line.indexOf('{#');
+      if (commentOpenIdx >= 0) {
+        const commentCloseIdx = line.indexOf('#}', commentOpenIdx + 2);
+        if (commentCloseIdx >= 0) {
+          // Single-line comment: strip it out and process the rest
+          line = line.substring(0, commentOpenIdx) + line.substring(commentCloseIdx + 2);
+        } else {
+          // Multi-line comment starts: process only the portion before it
+          line = line.substring(0, commentOpenIdx);
+          inBlockComment = true;
+        }
+      }
 
       // Extract expressions {{ ... }}
       this.extractExpressions(line, lineNum, result);
@@ -86,9 +129,12 @@ class JinjaParser {
       // Extract statements {% ... %}
       this.extractStatements(line, lineNum, result, definedVars);
 
-      // Check for syntax errors
+      // Check for per-line syntax errors (typos only - brace checks moved to document level)
       this.checkSyntaxErrors(line, lineNum, result);
     });
+
+    // Document-level brace balance checks (context-aware to avoid FPs)
+    this.checkDocumentBraces(content, result);
 
     // Cross-reference variables
     this.analyzeVariables(result, definedVars);
@@ -208,10 +254,13 @@ class JinjaParser {
       });
     }
 
-    // Extract other function calls (potentially custom functions)
+    // Extract other function calls (skip if inside string literals)
     const funcPattern = new RegExp(this.patterns.functionCall.source, 'g');
     while ((match = funcPattern.exec(expr)) !== null) {
       const funcName = match[1];
+
+      // Skip function-like patterns inside string arguments
+      if (this._isInsideString(expr, match.index)) continue;
 
       // Skip if already captured as skill or builtin
       const alreadyCaptured = result.functionCalls.some(
@@ -227,6 +276,24 @@ class JinjaParser {
         });
       }
     }
+  }
+
+  /**
+   * Check if a position in text is inside a string literal.
+   */
+  _isInsideString(text, pos) {
+    let inString = false;
+    let stringChar = '';
+    for (let i = 0; i < pos && i < text.length; i++) {
+      const ch = text[i];
+      if (inString) {
+        if (ch === '\\') { i++; continue; }
+        if (ch === stringChar) { inString = false; }
+        continue;
+      }
+      if (ch === '"' || ch === "'") { inString = true; stringChar = ch; }
+    }
+    return inString;
   }
 
   /**
@@ -290,8 +357,11 @@ class JinjaParser {
     const eqIndex = param.indexOf('=');
     if (eqIndex > 0 && !param.startsWith('"') && !param.startsWith("'")) {
       const name = param.substring(0, eqIndex).trim();
-      const value = param.substring(eqIndex + 1).trim();
-      return { name, value, type: 'keyword' };
+      // Only treat as keyword if name is a simple identifier (no parens or nested calls)
+      if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)) {
+        const value = param.substring(eqIndex + 1).trim();
+        return { name, value, type: 'keyword' };
+      }
     }
     return { value: param, type: 'positional' };
   }
@@ -319,34 +389,9 @@ class JinjaParser {
   }
 
   /**
-   * Check for syntax errors
+   * Check for per-line syntax errors (typos only)
    */
   checkSyntaxErrors(line, lineNum, result) {
-    // Check for unclosed braces
-    const openExpr = (line.match(/\{\{/g) || []).length;
-    const closeExpr = (line.match(/\}\}/g) || []).length;
-    if (openExpr !== closeExpr) {
-      result.diagnostics.push({
-        severity: 'error',
-        code: 'E001',
-        message: 'Unbalanced expression braces {{ }}',
-        line: lineNum,
-        column: 1
-      });
-    }
-
-    const openStmt = (line.match(/\{%/g) || []).length;
-    const closeStmt = (line.match(/%\}/g) || []).length;
-    if (openStmt !== closeStmt) {
-      result.diagnostics.push({
-        severity: 'error',
-        code: 'E002',
-        message: 'Unbalanced statement braces {% %}',
-        line: lineNum,
-        column: 1
-      });
-    }
-
     // Check for common typos
     if (line.includes('{%if') || line.includes('{%for')) {
       result.diagnostics.push({
@@ -357,6 +402,211 @@ class JinjaParser {
         column: line.indexOf('{%') + 1
       });
     }
+  }
+
+  /**
+   * Document-level brace balance checking (context-aware).
+   * Counts {{ / }} and {% / %} pairs while skipping:
+   * - String literals (" and ')
+   * - Comment blocks {# ... #}
+   * - Statement blocks when counting expressions (and vice versa)
+   * - Dict literal braces {} inside {{ }} expressions
+   */
+  checkDocumentBraces(content, result) {
+    // Count expression braces {{ }}
+    const expr = this._countExpressionBraces(content);
+    if (expr.open !== expr.close) {
+      result.diagnostics.push({
+        severity: 'error',
+        code: 'E001',
+        message: `Unbalanced expression braces: ${expr.open} {{ vs ${expr.close} }}`,
+        line: 1,
+        column: 1
+      });
+    }
+
+    // Count statement braces {% %}
+    const stmt = this._countStatementBraces(content);
+    if (stmt.open !== stmt.close) {
+      result.diagnostics.push({
+        severity: 'error',
+        code: 'E002',
+        message: `Unbalanced statement braces: ${stmt.open} {% vs ${stmt.close} %}`,
+        line: 1,
+        column: 1
+      });
+    }
+  }
+
+  /**
+   * Context-aware expression brace counter.
+   * Tracks string, comment, statement, and dict contexts.
+   */
+  _countExpressionBraces(text) {
+    let open = 0;
+    let close = 0;
+    let inString = false;
+    let stringChar = '';
+    let inComment = false;    // {# ... #}
+    let inStatement = false;  // {% ... %}
+    let inExpression = false; // {{ ... }}
+    let braceDepth = 0;       // dict {} depth inside expressions
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = i + 1 < text.length ? text[i + 1] : '';
+
+      // String handling (not inside comments)
+      if (!inComment) {
+        if (!inString && (ch === '"' || ch === "'")) {
+          inString = true;
+          stringChar = ch;
+          continue;
+        }
+        if (inString) {
+          if (ch === '\\') { i++; continue; }
+          if (ch === stringChar) { inString = false; }
+          continue;
+        }
+      }
+
+      // Comment blocks {# ... #}
+      if (!inComment && !inStatement && !inExpression && ch === '{' && next === '#') {
+        inComment = true;
+        i++;
+        continue;
+      }
+      if (inComment) {
+        if (ch === '#' && next === '}') { inComment = false; i++; }
+        continue;
+      }
+
+      // Statement blocks {% ... %}
+      if (!inStatement && !inExpression && ch === '{' && next === '%') {
+        // Check for block-form {% set var %}...{% endset %} (no = sign)
+        // Content between is raw text where }} should not be counted
+        const stmtEnd = text.indexOf('%}', i + 2);
+        if (stmtEnd !== -1) {
+          const stmtContent = text.substring(i + 2, stmtEnd).trim();
+          // Block-form set: {% set varname %} (no = sign, just "set varname")
+          if (/^-?\s*set\s+[A-Za-z_]\w*\s*-?$/.test(stmtContent)) {
+            // Skip to {% endset %}
+            const endsetRe = /\{%-?\s*endset\s*-?%\}/g;
+            endsetRe.lastIndex = stmtEnd + 2;
+            const endsetMatch = endsetRe.exec(text);
+            if (endsetMatch) {
+              i = endsetMatch.index + endsetMatch[0].length - 1;
+              continue;
+            }
+          }
+        }
+        inStatement = true;
+        i++;
+        continue;
+      }
+      if (inStatement) {
+        if (ch === '%' && next === '}') { inStatement = false; i++; }
+        continue;
+      }
+
+      // Expression blocks {{ ... }}
+      if (!inExpression && ch === '{' && next === '{') {
+        open++;
+        inExpression = true;
+        braceDepth = 0;
+        i++; // skip second {
+        continue;
+      }
+
+      if (inExpression) {
+        if (ch === '{') { braceDepth++; continue; }
+        if (ch === '}') {
+          if (braceDepth > 0) { braceDepth--; continue; }
+          if (next === '}') {
+            close++;
+            inExpression = false;
+            i++;
+            continue;
+          }
+          continue;
+        }
+        continue;
+      }
+
+      // Orphaned }} at top level
+      if (ch === '}' && next === '}') {
+        close++;
+        i++;
+      }
+    }
+
+    return { open, close };
+  }
+
+  /**
+   * Context-aware statement brace counter.
+   * Skips string literals, comments, and expression blocks.
+   */
+  _countStatementBraces(text) {
+    let open = 0;
+    let close = 0;
+    let inString = false;
+    let stringChar = '';
+    let inComment = false;
+    let inExpression = false;
+    let exprBraceDepth = 0;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = i + 1 < text.length ? text[i + 1] : '';
+
+      // String handling (not inside comments)
+      if (!inComment) {
+        if (!inString && (ch === '"' || ch === "'")) {
+          inString = true;
+          stringChar = ch;
+          continue;
+        }
+        if (inString) {
+          if (ch === '\\') { i++; continue; }
+          if (ch === stringChar) { inString = false; }
+          continue;
+        }
+      }
+
+      // Comments {# ... #}
+      if (!inComment && !inExpression && ch === '{' && next === '#') {
+        inComment = true;
+        i++;
+        continue;
+      }
+      if (inComment) {
+        if (ch === '#' && next === '}') { inComment = false; i++; }
+        continue;
+      }
+
+      // Expression blocks {{ ... }} - skip entirely
+      if (!inExpression && ch === '{' && next === '{') {
+        inExpression = true;
+        exprBraceDepth = 0;
+        i++;
+        continue;
+      }
+      if (inExpression) {
+        if (ch === '{') { exprBraceDepth++; continue; }
+        if (ch === '}') {
+          if (exprBraceDepth > 0) { exprBraceDepth--; continue; }
+          if (next === '}') { inExpression = false; i++; }
+        }
+        continue;
+      }
+
+      // Count statement braces
+      if (ch === '{' && next === '%') { open++; i++; continue; }
+      if (ch === '%' && next === '}') { close++; i++; continue; }
+    }
+
+    return { open, close };
   }
 
   /**
@@ -415,19 +665,9 @@ class JinjaParser {
    */
   isBuiltinOrKeyword(name) {
     if (this.isJinjaKeyword(name)) return true;
-
-    const builtins = [
-      'Return', 'Set', 'GetTriggeredAct', 'GetCurrentPrompt',
-      'GetCustomerAttribute', 'SetCustomerAttribute',
-      'GetPersonaAttribute', 'SetPersonaAttribute',
-      'SendSystemEvent', 'SendCommand', 'SendMessage',
-      'CreateConnector', 'SetConnectorInfo',
-      'GetDatetime', 'GetValueJSON', 'GetItemsArrayByIndexesJSON',
-      'Stringify', 'Concat', 'IsEmpty',
-      'StartNotInterruptibleBlock', 'StopNotInterruptibleBlock',
-      'DUMMY', 'json', 'range', 'dict', 'list'
-    ];
-    return builtins.includes(name);
+    if (this.builtinNames.has(name)) return true;
+    const jinjaGlobals = ['json', 'range', 'dict', 'list'];
+    return jinjaGlobals.includes(name);
   }
 
   /**

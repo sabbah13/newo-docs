@@ -1,0 +1,8 @@
+{# Greeting skill for testing #}
+{% set greeting = "Hello" %}
+{% if user_name %}
+  {{SendMessage(message=greeting ~ " " ~ user_name)}}
+{% else %}
+  {{SendMessage(message=greeting ~ "!")}}
+{% endif %}
+{{Return()}}

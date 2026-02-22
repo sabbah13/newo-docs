@@ -28,23 +28,12 @@ let client: LanguageClient | undefined;
 export function activate(context: vscode.ExtensionContext) {
   console.log('Newo DSL extension activating...');
 
-  // Try multiple possible server paths
-  const possibleServerPaths = [
-    path.join(context.extensionPath, '..', 'packages', 'dsl-lsp-server', 'dist', 'server.js'),
-    path.join(context.extensionPath, 'server', 'server.js'),
-    path.join(context.extensionPath, 'dist', 'server.js')
-  ];
+  // Server is bundled at dist/server.js (same directory as extension.js)
+  const serverModule = path.join(context.extensionPath, 'dist', 'server.js');
+  const serverExists = fs.existsSync(serverModule);
 
-  let serverModule = '';
-  for (const serverPath of possibleServerPaths) {
-    if (fs.existsSync(serverPath)) {
-      serverModule = serverPath;
-      break;
-    }
-  }
-
-  console.log('Extension path:', context.extensionPath);
-  console.log('Server module:', serverModule || 'NOT FOUND');
+  console.log('Newo DSL Extension path:', context.extensionPath);
+  console.log('Newo DSL Server module:', serverExists ? serverModule : 'NOT FOUND');
 
   // Register commands (always available)
   context.subscriptions.push(
@@ -75,7 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // Only start the language client if server exists
-  if (serverModule) {
+  if (serverExists) {
     // Server options
     const serverOptions: ServerOptions = {
       run: {
@@ -95,7 +84,9 @@ export function activate(context: vscode.ExtensionContext) {
     const clientOptions: LanguageClientOptions = {
       documentSelector: [
         { scheme: 'file', language: 'newo-jinja' },
-        { scheme: 'file', language: 'newo-guidance' }
+        { scheme: 'file', language: 'newo-guidance' },
+        { scheme: 'file', language: 'newo-nsl' },
+        { scheme: 'file', language: 'newo-nslg' }
       ],
       synchronize: {
         fileEvents: vscode.workspace.createFileSystemWatcher('**/*.schema.yaml')
@@ -144,7 +135,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.onDidChangeActiveTextEditor(editor => {
       if (editor) {
         const lang = editor.document.languageId;
-        if (lang === 'newo-jinja' || lang === 'newo-guidance') {
+        if (lang === 'newo-jinja' || lang === 'newo-guidance' || lang === 'newo-nsl' || lang === 'newo-nslg') {
           statusBarItem.show();
         } else {
           statusBarItem.hide();
@@ -156,7 +147,7 @@ export function activate(context: vscode.ExtensionContext) {
   // Check initial editor
   if (vscode.window.activeTextEditor) {
     const lang = vscode.window.activeTextEditor.document.languageId;
-    if (lang === 'newo-jinja' || lang === 'newo-guidance') {
+    if (lang === 'newo-jinja' || lang === 'newo-guidance' || lang === 'newo-nsl' || lang === 'newo-nslg') {
       statusBarItem.show();
     }
   }

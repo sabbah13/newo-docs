@@ -1,0 +1,16 @@
+{# Invalid template with intentional errors for testing #}
+
+{# Typo in action name - should be SendMessage #}
+{{SendMessge(message="Hello")}}
+
+{# Unknown action #}
+{{DoSomethingWeird(param1="test")}}
+
+{# Missing required parameter 'field' #}
+{% set val = GetCustomerAttribute() %}
+
+{# Unknown parameter 'typo_param' #}
+{{SetState(name="key", valeu="test")}}
+
+{# Unbalanced braces - extra {{ #}
+{{Set(name="x", value="1")}

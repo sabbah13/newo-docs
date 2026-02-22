@@ -1,0 +1,3 @@
+{{#system}}You are a farewell assistant.{{/system}}
+{{#user}}Please say goodbye to the user.{{/user}}
+{{#assistant}}{{gen 'response'}}{{/assistant}}

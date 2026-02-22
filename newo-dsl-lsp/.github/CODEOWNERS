@@ -1,0 +1,11 @@
+# Default owners for the entire repository
+* @newo-ai/super-agent
+
+# VS Code extension
+/vscode-extension/ @newo-ai/super-agent
+
+# Core analysis packages
+/packages/ @newo-ai/super-agent
+
+# Schema and tooling
+/tools/ @newo-ai/super-agent

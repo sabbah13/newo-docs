@@ -76,7 +76,8 @@ class SchemaValidator {
           name: func.name,
           parameters: func.parameters || [],
           category: func.category,
-          returns: func.returns
+          returns: func.returns,
+          accepts_extra_params: func.accepts_extra_params || false
         });
       }
     }
@@ -153,11 +154,12 @@ class SchemaValidator {
       return diagnostics;
     }
 
-    // Validate parameters
+    // Validate parameters (skills accept extra user-defined params beyond schema)
     const paramDiags = this.validateParameters(
       skillCall,
       skillInfo.parameters,
-      'skill'
+      'skill',
+      true  // Skills accept extra params not in schema
     );
     diagnostics.push(...paramDiags);
 
@@ -184,11 +186,12 @@ class SchemaValidator {
       return diagnostics;
     }
 
-    // Validate parameters
+    // Validate parameters (skip unknown param check if function accepts extras)
     const paramDiags = this.validateParameters(
       builtinCall,
       funcInfo.parameters,
-      'builtin'
+      'builtin',
+      funcInfo.accepts_extra_params
     );
     diagnostics.push(...paramDiags);
 
@@ -211,15 +214,64 @@ class SchemaValidator {
       return []; // Valid builtin
     }
 
-    // Check common function patterns
+    // Check common function patterns (prefixes that indicate valid functions)
     const commonFunctions = [
       'utils_', 'get_', 'set_', 'check_', 'validate_', 'process_',
-      'json', 'range', 'dict', 'list', 'str', 'int', 'float', 'bool'
+      // Cross-skill call prefixes (common in Newo projects)
+      'v2v_', 'prompt_', 'session_', 'library_', 'action_', 'rag_',
+      'apply_', 'prepare_', 'generate_', 'try_', 'put_', 'add_', 'update_', 'wait_',
+      'send_', 'create_', 'delete_', 'handle_', 'build_', 'parse_', 'fetch_',
+      'load_', 'save_', 'init_', 'setup_', 'reset_', 'clear_', 'convert_',
+      'is_', 'has_', 'can_', 'should_', 'do_', 'run_', 'start_', 'stop_',
+      // Python builtins
+      'json', 'range', 'dict', 'list', 'str', 'int', 'float', 'bool',
+      'len', 'type', 'print', 'sorted', 'reversed', 'enumerate', 'zip', 'map', 'filter',
+      'isinstance', 'hasattr', 'getattr', 'setattr', 'callable', 'hash', 'id', 'repr',
+      'any', 'all', 'min', 'max', 'sum', 'abs', 'round', 'pow', 'divmod',
+      'format', 'chr', 'ord', 'hex', 'oct', 'bin', 'bytes', 'bytearray',
+      'tuple', 'frozenset', 'set', 'super', 'object', 'property',
+      // Module prefixes (Python stdlib)
+      'datetime', 'zoneinfo', 're', 'math', 'os', 'sys', 'uuid',
     ];
 
-    const isLikelyValid = commonFunctions.some(prefix =>
-      funcCall.name.toLowerCase().startsWith(prefix)
-    );
+    // Exact-match method names (Python string/list/dict methods, Jinja filters, datetime methods)
+    const commonMethods = new Set([
+      // Python string methods
+      'replace', 'split', 'join', 'strip', 'lstrip', 'rstrip', 'lower', 'upper',
+      'startswith', 'endswith', 'find', 'count', 'format', 'encode', 'decode',
+      'isdigit', 'isalpha', 'isalnum', 'isspace', 'isupper', 'islower',
+      'title', 'capitalize', 'swapcase', 'center', 'ljust', 'rjust', 'zfill',
+      // Python list/dict methods
+      'append', 'extend', 'insert', 'pop', 'remove', 'update', 'items', 'keys', 'values',
+      'get', 'clear', 'copy', 'sort', 'reverse', 'index',
+      // Jinja filters (when used as functions)
+      'dumps', 'loads', 'tojson', 'fromjson', 'default', 'd',
+      'abs', 'round', 'first', 'last', 'length', 'max', 'min', 'sum',
+      'unique', 'batch', 'slice', 'reject', 'select', 'groupby', 'map',
+      'trim', 'striptags', 'truncate', 'wordcount', 'capitalize', 'title',
+      'urlencode', 'urlize', 'escape', 'safe', 'indent', 'center',
+      // Python datetime methods
+      'fromisoformat', 'strftime', 'strptime', 'isoformat', 'timestamp',
+      'now', 'utcnow', 'today', 'timedelta', 'timezone', 'astimezone',
+      // Python re methods
+      'sub', 'search', 'match', 'findall', 'compile',
+      // Python json methods
+      'dumps', 'loads',
+      // Python dunder methods (used as direct method calls)
+      '__contains__', '__getitem__', '__setitem__', '__len__',
+      '__str__', '__repr__', '__init__', '__call__',
+      // Python uuid
+      'uuid4', 'uuid1',
+      // Cross-skill call names (exact match for common ones)
+      'country_code', 'calls',
+    ]);
+
+    const nameLower = funcCall.name.toLowerCase();
+    // Also skip names starting with _ (private/internal cross-skill calls)
+    const isLikelyValid = nameLower.startsWith('_') ||
+      commonFunctions.some(prefix => nameLower.startsWith(prefix)) ||
+      commonMethods.has(nameLower) ||
+      commonMethods.has(funcCall.name);
 
     if (!isLikelyValid) {
       // Find suggestions
@@ -248,7 +300,7 @@ class SchemaValidator {
   /**
    * Validate parameters against expected schema
    */
-  validateParameters(call, expectedParams, callType) {
+  validateParameters(call, expectedParams, callType, acceptsExtraParams = false) {
     const diagnostics = [];
     const providedParams = call.parameters || [];
 
@@ -258,36 +310,45 @@ class SchemaValidator {
       expectedMap.set(param.name, param);
     }
 
-    // Check for unknown parameters
-    for (const provided of providedParams) {
-      if (provided.type === 'keyword' && provided.name) {
-        if (!expectedMap.has(provided.name)) {
-          // Find similar parameter names
-          const similar = this.findSimilarParams(provided.name, expectedParams);
-          let message = `Unknown parameter '${provided.name}' for ${call.name}`;
-          if (similar.length > 0) {
-            message += `. Did you mean: ${similar.join(', ')}?`;
-          }
+    // Check for unknown parameters (skip if function accepts extra params)
+    if (!acceptsExtraParams) {
+      for (const provided of providedParams) {
+        if (provided.type === 'keyword' && provided.name) {
+          if (!expectedMap.has(provided.name)) {
+            // Find similar parameter names
+            const similar = this.findSimilarParams(provided.name, expectedParams);
+            let message = `Unknown parameter '${provided.name}' for ${call.name}`;
+            if (similar.length > 0) {
+              message += `. Did you mean: ${similar.join(', ')}?`;
+            }
 
-          diagnostics.push({
-            severity: 'warning',
-            code: 'W102',
-            message,
-            line: call.line,
-            column: call.column,
-            source: 'newo-lint'
-          });
+            diagnostics.push({
+              severity: 'warning',
+              code: 'W102',
+              message,
+              line: call.line,
+              column: call.column,
+              source: 'newo-lint'
+            });
+          }
         }
       }
     }
 
     // Check for missing required parameters
+    // Count positional args - they can satisfy required params in declaration order
+    const positionalCount = providedParams.filter(p => p.type === 'positional').length;
+    let positionalIndex = 0;
+
     for (const [name, param] of expectedMap) {
       if (param.required) {
-        const isProvided = providedParams.some(
+        const isProvidedByKeyword = providedParams.some(
           p => p.type === 'keyword' && p.name === name
         );
-        if (!isProvided) {
+        const isProvidedByPosition = positionalIndex < positionalCount;
+        if (isProvidedByPosition) positionalIndex++;
+
+        if (!isProvidedByKeyword && !isProvidedByPosition) {
           diagnostics.push({
             severity: 'error',
             code: 'E101',

@@ -1,479 +1,1151 @@
-# Newo DSL Built-in Functions Schema
-# Auto-generated from codebase analysis
-# Last updated: Phase 1 extraction
-
-version: "1.0"
-description: "Core built-in functions available in Newo DSL templates"
-
+version: '2.0'
+description: Core built-in functions available in Newo DSL templates
+generated: '2026-02-21T08:18:49.514Z'
+source: '@newo-dsl/data actions.ts'
 categories:
-  - name: control_flow
-    description: "Functions for controlling execution flow"
+  - name: messaging
+    description: Messaging and communication functions
+  - name: state
+    description: Variable and state management
   - name: attributes
-    description: "Functions for managing customer/persona attributes"
-  - name: system
-    description: "Functions for system integration and events"
+    description: Customer, persona, and project attribute management
+  - name: connectors
+    description: External connector management
+  - name: actors
+    description: Actor and persona management
+  - name: generation
+    description: LLM text generation
+  - name: control_flow
+    description: Execution flow control
   - name: data
-    description: "Functions for data manipulation"
-  - name: utilities
-    description: "Utility functions"
-  - name: logging
-    description: "Logging and debugging functions"
-
+    description: Data manipulation and utilities
+  - name: datetime
+    description: Date and time functions
+  - name: system
+    description: System events and commands
+  - name: knowledge
+    description: Knowledge base operations
+  - name: typing
+    description: Typing indicators
 functions:
-  # ============================================
-  # CONTROL FLOW
-  # ============================================
-
-  - name: Return
-    category: control_flow
-    description: "Exit current skill and return a value"
-    syntax:
-      jinja: "{{Return(val=output)}}"
-      guidance: "{{Return(val=output)}}"
+  - name: SendMessage
+    category: messaging
+    description: Send direct messages to specific actors across all communication channels (SMS, email, chat, voice)
     parameters:
-      - name: val
-        type: any
+      - name: message
+        type: string
+        required: true
+        description: The message content to send
+      - name: actorIds
+        type: List[str]
         required: false
-        default: null
-        description: "Value to return from the skill"
-    returns:
-      type: void
-      description: "Exits skill execution"
-    examples:
-      - "{{Return()}}"
-      - "{{Return(val=result)}}"
-      - "{{Return(val=GetCurrentPrompt())}}"
-
-  - name: Set
-    category: control_flow
-    description: "Set a variable in the current scope"
-    syntax:
-      jinja: "{{Set(name=\"var\", value=expr)}}"
-      guidance: "{{Set(name=\"var\", value=expr)}}"
+        default: GetActors()
+        description: Target actor IDs
+      - name: useFilter
+        type: boolean
+        required: false
+        default: 'false'
+        description: Remove content within [[[text]]] brackets
+    returns: {}
+  - name: SendCommand
+    category: integration
+    description: Execute commands on external connectors (VAPI voice calls, Twilio SMS, program timers, etc.)
     parameters:
-      - name: name
+      - name: commandIdn
         type: string
         required: true
-        description: "Variable name to set"
-      - name: value
-        type: any
-        required: true
-        description: "Value to assign"
-    returns:
-      type: void
-    examples:
-      - "{{Set(name=\"user_id\", value=123)}}"
-      - "{{Set(name=\"result\", value=GetCustomerAttribute(field=\"name\"))}}"
-
-  - name: GetTriggeredAct
-    category: control_flow
-    description: "Get the event/action that triggered this skill"
-    syntax:
-      jinja: "{% set act = GetTriggeredAct() %}"
-      guidance: "{{Set(name=\"act\", value=GetTriggeredAct())}}"
-    parameters: []
-    returns:
-      type: object
-      description: "Object containing trigger information"
-      properties:
-        - name: arguments
-          type: object
-          description: "Arguments passed to the trigger"
-        - name: arguments.payload
-          type: object
-          description: "Payload data"
-    examples:
-      - "{% set triggered_act = GetTriggeredAct() %}"
-      - "{% set payload = GetTriggeredAct()[\"arguments\"][\"payload\"] %}"
-
-  - name: GetCurrentPrompt
-    category: control_flow
-    description: "Get the current LLM prompt context"
-    syntax:
-      jinja: "{{GetCurrentPrompt()}}"
-      guidance: "{{GetCurrentPrompt()}}"
-    parameters: []
-    returns:
-      type: string
-      description: "Current prompt context"
-    examples:
-      - "{{Return(val=GetCurrentPrompt())}}"
-
-  # ============================================
-  # ATTRIBUTES
-  # ============================================
-
-  - name: GetCustomerAttribute
-    category: attributes
-    description: "Retrieve a customer/project attribute value"
-    syntax:
-      jinja: "{% set val = GetCustomerAttribute(field=\"name\") %}"
-      guidance: "{{GetCustomerAttribute(field=\"name\")}}"
-    parameters:
-      - name: field
+        description: Command to execute (make_call, send_message, set_timer)
+      - name: integrationIdn
         type: string
         required: true
-        description: "Attribute field name (e.g., 'project_business_name')"
-    returns:
-      type: string
-      description: "Attribute value or empty string"
-    examples:
-      - "{% set name = GetCustomerAttribute(field=\"project_business_name\") %}"
-      - "{% if GetCustomerAttribute(field=\"status\").strip() %}"
-
-  - name: SetCustomerAttribute
-    category: attributes
-    description: "Set a customer/project attribute value"
-    syntax:
-      jinja: "{{SetCustomerAttribute(field=\"name\", value=val)}}"
-      guidance: "{{SetCustomerAttribute(field=\"name\", value=val)}}"
-    parameters:
-      - name: field
+        description: 'Integration type: vapi, twilio_messenger, program_timer, email'
+      - name: connectorIdn
         type: string
         required: true
-        description: "Attribute field name"
-      - name: value
-        type: any
-        required: true
-        description: "Value to set"
-    returns:
-      type: void
-    examples:
-      - "{{SetCustomerAttribute(field=\"project_status\", value=\"active\")}}"
-
-  - name: GetPersonaAttribute
-    category: attributes
-    description: "Retrieve a persona-specific attribute value"
-    syntax:
-      jinja: "{% set val = GetPersonaAttribute(field=\"name\") %}"
-      guidance: "{{GetPersonaAttribute(field=\"name\")}}"
-    parameters:
-      - name: field
-        type: string
-        required: true
-        description: "Persona attribute field name"
-    returns:
-      type: string
-      description: "Persona attribute value"
-    examples:
-      - "{% set persona_name = GetPersonaAttribute(field=\"persona_name\") %}"
-
-  - name: SetPersonaAttribute
-    category: attributes
-    description: "Set a persona-specific attribute value"
-    syntax:
-      jinja: "{{SetPersonaAttribute(field=\"name\", value=val)}}"
-      guidance: "{{SetPersonaAttribute(field=\"name\", value=val)}}"
-    parameters:
-      - name: field
-        type: string
-        required: true
-        description: "Persona attribute field name"
-      - name: value
-        type: any
-        required: true
-        description: "Value to set"
-    returns:
-      type: void
-    examples:
-      - "{{SetPersonaAttribute(field=\"persona_mood\", value=\"friendly\")}}"
-
-  # ============================================
-  # SYSTEM INTEGRATION
-  # ============================================
-
+        description: Connector instance identifier
+    returns: {}
   - name: SendSystemEvent
     category: system
-    description: "Trigger a system event"
-    syntax:
-      jinja: "{{SendSystemEvent(eventIdn=\"event_name\", data={})}}"
-      guidance: "{{SendSystemEvent(eventIdn=\"event_name\", data={})}}"
+    description: Broadcast internal system events for logging, analytics, and inter-skill communication
+    accepts_extra_params: true
     parameters:
       - name: eventIdn
         type: string
         required: true
-        description: "Event identifier"
-      - name: data
-        type: object
-        required: false
-        default: {}
-        description: "Event payload data"
-    returns:
-      type: void
-    examples:
-      - "{{SendSystemEvent(eventIdn=\"user_action\", data={\"action\": \"click\"})}}"
-
-  - name: SendCommand
-    category: system
-    description: "Send a command to the system"
-    syntax:
-      jinja: "{{SendCommand(command=\"cmd\", data={})}}"
-      guidance: "{{SendCommand(command=\"cmd\", data={})}}"
+        description: Event identifier for categorization and routing
+    returns: {}
+  - name: Set
+    category: variables
+    description: Assign values to local variables within skill execution scope
     parameters:
-      - name: command
+      - name: name
         type: string
         required: true
-        description: "Command name"
-      - name: data
+        description: Variable name (must be valid identifier)
+      - name: value
+        type: any
+        required: true
+        description: Value to assign
+      - name: expose
+        type: boolean
+        required: false
+        default: 'false'
+        description: Expose variable to parent scope
+    returns: {}
+  - name: GetState
+    category: state
+    description: Retrieve persistent state data that survives across skill executions within the flow
+    parameters:
+      - name: name
+        type: string
+        required: true
+        description: State variable name to retrieve
+    returns: {}
+  - name: SetState
+    category: state
+    description: Store persistent state data accessible across skill executions within the flow
+    parameters:
+      - name: name
+        type: string
+        required: true
+        description: State variable name to store
+      - name: value
+        type: any
+        required: true
+        description: Value to persist
+    returns: {}
+  - name: GetCustomerAttribute
+    category: attributes
+    description: Retrieve project/customer attribute values. Used for project settings, business info, and configuration
+    parameters:
+      - name: field
+        type: string
+        required: true
+        description: Attribute field name (e.g., project_business_time_zone, project_attributes_*)
+    returns: {}
+  - name: SetCustomerAttribute
+    category: attributes
+    description: Set project/customer attribute values. Used to store project settings and configuration
+    parameters:
+      - name: field
+        type: string
+        required: true
+        description: Attribute field name
+      - name: value
+        type: any
+        required: true
+        description: Value to set
+    returns: {}
+  - name: SetCustomerMetadataAttribute
+    category: attributes
+    description: >-
+      Set metadata properties for customer attributes (title, group, is_hidden, value_type, description,
+      possible_values)
+    parameters:
+      - name: idn
+        type: string
+        required: true
+        description: The attribute identifier to set metadata for
+      - name: field
+        type: string
+        required: true
+        description: 'Metadata field: title, group, is_hidden, value_type, description, possible_values'
+      - name: value
+        type: any
+        required: true
+        description: Value to set for the metadata field
+    returns: {}
+  - name: GetCustomerMetadataAttribute
+    category: attributes
+    description: Get metadata property value for a customer attribute
+    parameters:
+      - name: idn
+        type: string
+        required: true
+        description: The attribute identifier to get metadata for
+    returns: {}
+  - name: GetProjectAttribute
+    category: attributes
+    description: Retrieve project attribute value. Used for project-level settings and configuration
+    parameters:
+      - name: field
+        type: string
+        required: true
+        description: Project attribute field name
+    returns: {}
+  - name: SetProjectAttribute
+    category: attributes
+    description: Set project attribute value. Used to store project-level settings and configuration
+    parameters:
+      - name: field
+        type: string
+        required: true
+        description: Project attribute field name
+      - name: value
+        type: any
+        required: true
+        description: Value to set
+    returns: {}
+  - name: SetProjectMetadataAttribute
+    category: attributes
+    description: >-
+      Set metadata properties for project attributes. Supports setting multiple fields at once with
+      field='multiple_fields'
+    parameters:
+      - name: idn
+        type: string
+        required: true
+        description: The project attribute identifier to set metadata for
+      - name: field
+        type: string
+        required: true
+        description: 'Metadata field: title, description, group, value_type, is_hidden, or ''multiple_fields'' for batch update'
+      - name: value
+        type: any
+        required: true
+        description: Value to set - object when field='multiple_fields', otherwise string/boolean
+    returns: {}
+  - name: GetConnectorInfo
+    category: connectors
+    description: Get information about a connector instance. Returns connector details or specific field value
+    parameters:
+      - name: integrationIdn
+        type: string
+        required: true
+        description: Integration type identifier
+      - name: connectorIdn
+        type: string
+        required: true
+        description: Connector instance identifier
+      - name: field
+        type: string
+        required: false
+        description: Specific field to retrieve (optional)
+    returns: {}
+  - name: CreateConnector
+    category: connectors
+    description: Create a new connector instance for an integration
+    parameters:
+      - name: integrationIdn
+        type: string
+        required: true
+        description: Integration type identifier
+      - name: connectorIdn
+        type: string
+        required: true
+        description: Unique connector instance identifier
+      - name: title
+        type: string
+        required: true
+        description: Display title for the connector
+      - name: settings
         type: object
         required: false
-        default: {}
-        description: "Command data"
-    returns:
-      type: void
-    examples:
-      - "{{SendCommand(command=\"transfer\", data={\"target\": \"agent\"})}}"
-
-  - name: SendMessage
-    category: system
-    description: "Send a message to a channel"
-    syntax:
-      jinja: "{{SendMessage(text=\"message\", channel=\"default\")}}"
-      guidance: "{{SendMessage(text=\"message\")}}"
+        default: '{}'
+        description: Connector configuration settings
+      - name: start
+        type: boolean
+        required: false
+        default: 'true'
+        description: Whether to start the connector immediately
+    returns: {}
+  - name: DeleteConnector
+    category: connectors
+    description: Delete an existing connector instance
+    parameters:
+      - name: integrationIdn
+        type: string
+        required: true
+        description: Integration type identifier
+      - name: connectorIdn
+        type: string
+        required: true
+        description: Connector instance identifier to delete
+    returns: {}
+  - name: CreatePersona
+    category: persona
+    description: Create a new persona instance with the given name
+    parameters:
+      - name: name
+        type: string
+        required: true
+        description: Name for the new persona
+    returns: {}
+  - name: CreateActor
+    category: actors
+    description: Create a new actor (communication channel) for a persona
+    parameters:
+      - name: integrationIdn
+        type: string
+        required: true
+        description: Integration type identifier
+      - name: connectorIdn
+        type: string
+        required: true
+        description: Connector instance identifier
+      - name: externalId
+        type: string
+        required: true
+        description: External identifier for the actor
+      - name: personaId
+        type: string
+        required: true
+        description: Persona ID to associate the actor with
+    returns: {}
+  - name: Gen
+    category: ai
+    description: Generate AI responses. Can be used inline or with Set(). Supports JSON schema validation
+    accepts_extra_params: true
+    parameters:
+      - name: name
+        type: string
+        required: false
+        description: Variable name to store result (optional when used inline)
+      - name: temperature
+        type: float
+        required: false
+        default: '0.75'
+        description: Controls randomness (0.0-2.0)
+      - name: topP
+        type: float
+        required: false
+        default: '1.0'
+        description: Nucleus sampling (0.0-1.0)
+      - name: maxTokens
+        type: int
+        required: false
+        description: Maximum response length
+      - name: jsonSchema
+        type: object
+        required: false
+        description: JSON Schema for structured output
+      - name: validateSchema
+        type: string
+        required: false
+        description: Enable schema validation ('True')
+      - name: skipFilter
+        type: boolean
+        required: false
+        default: 'false'
+        description: Bypass content moderation
+      - name: thinkingBudget
+        type: int
+        required: false
+        description: Token budget for reasoning
+    returns: {}
+  - name: GetUser
+    category: user
+    description: Retrieve user information from current session. Returns user object or specific field
+    parameters:
+      - name: field
+        type: string
+        required: false
+        description: 'Field: id, name, title, email, phone, language, timezone'
+    returns: {}
+  - name: UpdateUser
+    category: user
+    description: Modify user information and attributes in the current session
+    parameters:
+      - name: field
+        type: string
+        required: false
+        description: 'User field to update (alias: name)'
+      - name: name
+        type: string
+        required: false
+        description: User field to update (alias for field)
+      - name: value
+        type: string
+        required: true
+        description: New value for the field
+    returns: {}
+  - name: GetPersonaAttribute
+    category: persona
+    description: Retrieve persona-specific attribute value
+    parameters:
+      - name: id
+        type: string
+        required: true
+        description: Persona ID (userId)
+      - name: field
+        type: string
+        required: true
+        description: Attribute field name
+    returns: {}
+  - name: SetPersonaAttribute
+    category: persona
+    description: Set persona-specific attribute value
+    parameters:
+      - name: id
+        type: string
+        required: true
+        description: Persona ID (userId)
+      - name: field
+        type: string
+        required: true
+        description: Attribute field name
+      - name: value
+        type: any
+        required: true
+        description: Value to set
+    returns: {}
+  - name: GetAgentPersona
+    category: persona
+    description: Retrieve the agent's persona configuration and attributes
+    parameters:
+      - name: field
+        type: string
+        required: false
+        description: Specific persona field to retrieve
+    returns: {}
+  - name: GetActors
+    category: actors
+    description: Retrieve actor IDs for targeting messages to specific communication channels
+    parameters:
+      - name: integrationIdn
+        type: string
+        required: false
+        description: 'Filter by integration: vapi, twilio_messenger, newo_voice, system'
+      - name: connectorIdn
+        type: string
+        required: false
+        description: Filter by specific connector
+      - name: personaId
+        type: string
+        required: false
+        description: Filter by user persona ID
+      - name: externalId
+        type: string
+        required: false
+        description: Filter by external ID (e.g., phone number)
+    returns: {}
+  - name: GetActor
+    category: actors
+    description: Get information about the current or specified actor (communication channel)
+    parameters:
+      - name: field
+        type: string
+        required: false
+        description: 'Actor field: id, integrationIdn, connectorIdn, externalId, name'
+      - name: id
+        type: string
+        required: false
+        description: Specific actor ID to query (defaults to current actor)
+    returns: {}
+  - name: GetMemory
+    category: memory
+    description: Retrieve conversation history with filtering and processing options
+    parameters:
+      - name: fromPerson
+        type: string
+        required: false
+        default: Both
+        description: 'Filter: User, Agent, or Both'
+      - name: offset
+        type: string
+        required: false
+        default: '0'
+        description: Skip recent conversation turns
+      - name: count
+        type: string
+        required: false
+        default: '10'
+        description: Number of turns to retrieve
+      - name: maxLen
+        type: string
+        required: false
+        default: '5000'
+        description: Maximum character limit
+      - name: asEnglishText
+        type: string
+        required: false
+        default: 'false'
+        description: Auto-translate to English
+      - name: summarize
+        type: string
+        required: false
+        default: 'false'
+        description: AI-generated summary
+      - name: filterByActorIds
+        type: array
+        required: false
+        description: Filter by specific actor IDs
+      - name: fromDate
+        type: string
+        required: false
+        description: Start date/time for filtering (ISO format)
+      - name: toDate
+        type: string
+        required: false
+        description: End date/time for filtering (ISO format)
+    returns: {}
+  - name: GetTriggeredAct
+    category: context
+    description: Get the user input or event that triggered the current skill execution
+    parameters:
+      - name: fields
+        type: string
+        required: false
+        description: Comma-separated list of fields to extract from the triggered act
+    returns: {}
+  - name: GetCurrentPrompt
+    category: context
+    description: Retrieve the current prompt template being used for AI generation
+    parameters: []
+    returns: {}
+  - name: Return
+    category: flow
+    description: Exit skill execution, optionally returning a value. Empty Return() is valid for early exits
+    parameters:
+      - name: val
+        type: any
+        required: false
+        description: Optional value to return
+    returns: {}
+  - name: DUMMY
+    category: flow
+    description: No-op function for logging/debugging. Output appears in logs but has no runtime effect
+    parameters:
+      - name: message
+        type: string
+        required: false
+        description: Message to log for debugging
+    returns: {}
+  - name: Do
+    category: flow
+    description: Execute a dynamic action by name with provided parameters
+    accepts_extra_params: true
+    parameters:
+      - name: actionName
+        type: string
+        required: true
+        description: Name of the action to execute
+    returns: {}
+  - name: Concat
+    category: string
+    description: Concatenate multiple strings and arrays. Arrays are joined with newlines
+    parameters:
+      - name: arguments
+        type: string | array
+        required: false
+        description: Values to concatenate (variadic - accepts positional arguments)
+    returns: {}
+  - name: Stringify
+    category: string
+    description: Convert any value to its string representation. Cleans JSON quotes
+    parameters:
+      - name: value
+        type: any
+        required: true
+        description: Value to convert to string
+    returns: {}
+  - name: IsEmpty
+    category: conditional
+    description: Check if a string is empty, null, or whitespace-only. Returns "t" if empty, "" otherwise
     parameters:
       - name: text
         type: string
         required: true
-        description: "Message text"
-      - name: channel
+        description: The string to test for emptiness
+    returns: {}
+  - name: IsSimilar
+    category: conditional
+    description: Compare string similarity using distance algorithms. Returns truthy if above threshold
+    parameters:
+      - name: val1
+        type: string
+        required: true
+        description: First string to compare
+      - name: val2
+        type: string
+        required: true
+        description: Second string to compare
+      - name: strategy
         type: string
         required: false
-        default: "default"
-        description: "Target channel"
-    returns:
-      type: void
-    examples:
-      - "{{SendMessage(text=\"Hello, how can I help?\")}}"
-
-  - name: CreateConnector
-    category: system
-    description: "Create a new connector instance"
-    syntax:
-      jinja: "{{CreateConnector(type=\"connector_type\", config={})}}"
-    parameters:
-      - name: type
-        type: string
-        required: true
-        description: "Connector type"
-      - name: config
-        type: object
+        default: hamming
+        description: Algorithm
+      - name: threshold
+        type: float
         required: false
-        description: "Connector configuration"
-    returns:
-      type: object
-      description: "Connector instance"
-
-  - name: SetConnectorInfo
-    category: system
-    description: "Configure connector information"
-    syntax:
-      jinja: "{{SetConnectorInfo(connector_id=\"id\", info={})}}"
+        default: '0.4'
+        description: Similarity threshold (0.0-1.0)
+    returns: {}
+  - name: IsGlobal
+    category: conditional
+    description: Check if a variable exists in global scope
     parameters:
-      - name: connector_id
+      - name: name
         type: string
         required: true
-        description: "Connector identifier"
-      - name: info
-        type: object
+        description: Variable name to check
+    returns: {}
+  - name: GetValueJSON
+    category: json
+    description: Extract values from JSON objects using keys or dot-notation paths
+    parameters:
+      - name: obj
+        type: string
         required: true
-        description: "Connector info to set"
-    returns:
-      type: void
-
-  # ============================================
-  # DATA MANIPULATION
-  # ============================================
-
-  - name: GetDatetime
-    category: data
-    description: "Get formatted date/time"
-    syntax:
-      jinja: "{{GetDatetime(format=\"date\", timezone=\"UTC\")}}"
-      guidance: "{{GetDatetime(format=\"date\", timezone=\"UTC\")}}"
+        description: JSON object or array string to query
+      - name: key
+        type: string
+        required: true
+        description: Key or path (e.g., 'parent.child')
+    returns: {}
+  - name: UpdateValueJSON
+    category: json
+    description: Update a value in a JSON object at the specified key
+    parameters:
+      - name: obj
+        type: string
+        required: true
+        description: JSON object to modify
+      - name: key
+        type: string
+        required: true
+        description: Key or path to update
+      - name: value
+        type: any
+        required: true
+        description: New value to set
+    returns: {}
+  - name: CreateArray
+    category: json
+    description: Create arrays from string literals and variables
+    parameters:
+      - name: items
+        type: string | variable
+        required: true
+        description: Values to include (variadic)
+    returns: {}
+  - name: GetDateTime
+    category: datetime
+    description: Get current date/time with customizable format and timezone
     parameters:
       - name: format
         type: string
         required: false
-        default: "datetime"
-        description: "Format type: date, time, datetime, custom strftime"
+        default: datetime
+        description: Format type
       - name: timezone
         type: string
         required: false
-        default: "UTC"
-        description: "Timezone name"
-    returns:
-      type: string
-      description: "Formatted date/time string"
-    examples:
-      - "{{GetDatetime(format=\"date\", timezone=\"America/New_York\")}}"
-      - "{% set now = GetDatetime(format=\"%Y-%m-%d %H:%M\") %}"
-
-  - name: GetValueJSON
-    category: data
-    description: "Extract a value from JSON object by key"
-    syntax:
-      jinja: "{{GetValueJSON(obj, key)}}"
+        default: UTC
+        description: Timezone (e.g., America/New_York)
+      - name: weekday
+        type: string
+        required: false
+        default: 'false'
+        description: Include weekday name
+    returns: {}
+  - name: GetDateInterval
+    category: datetime
+    description: Calculate date/time intervals with offset operations
     parameters:
-      - name: obj
+      - name: start
+        type: string
+        required: true
+        description: Starting date/time
+      - name: offset
+        type: string
+        required: true
+        description: 'Offset: -24h, +7d, -30m, etc.'
+    returns: {}
+  - name: GetDatetime
+    category: datetime
+    description: Get current date/time (alias for GetDateTime)
+    parameters:
+      - name: format
+        type: string
+        required: false
+        default: datetime
+        description: Format type
+      - name: timezone
+        type: string
+        required: false
+        default: UTC
+        description: Timezone (e.g., America/New_York)
+      - name: weekday
+        type: string
+        required: false
+        default: 'false'
+        description: Include weekday name
+    returns: {}
+  - name: DeleteCustomerAttribute
+    category: attributes
+    description: Delete a customer/project attribute. Commonly used to remove obsolete or temporary attributes
+    parameters:
+      - name: field
+        type: string
+        required: true
+        description: Attribute field name to delete
+    returns: {}
+  - name: DeletePersonaAttribute
+    category: attributes
+    description: Delete a persona (agent) attribute. Used to remove agent-level metadata fields
+    parameters:
+      - name: id
+        type: string
+        required: true
+        description: Persona ID whose attribute to delete
+      - name: field
+        type: string
+        required: true
+        description: Attribute field name to delete
+    returns: {}
+  - name: SearchFuzzyAkb
+    category: knowledge
+    description: Fuzzy search the Agent Knowledge Base (AKB) for matching topics
+    parameters:
+      - name: query
+        type: string
+        required: true
+        description: Search query text
+      - name: searchFields
+        type: array
+        required: false
+        default: '["name"]'
+        description: Fields to search in
+      - name: fromPerson
+        type: string
+        required: false
+        default: Agent
+        description: Source filter
+      - name: numberTopics
+        type: int
+        required: false
+        default: '5'
+        description: Max results to return
+    returns: {}
+  - name: DeleteAkb
+    category: knowledge
+    description: Delete topics from the Agent Knowledge Base by IDs
+    parameters:
+      - name: ids
+        type: array
+        required: true
+        description: Array of topic IDs to delete
+    returns: {}
+  - name: UpdateAkb
+    category: knowledge
+    description: Update an existing topic in the Agent Knowledge Base
+    parameters:
+      - name: id
+        type: string
+        required: true
+        description: Topic ID to update
+      - name: summary
+        type: string
+        required: false
+        description: Topic summary text
+      - name: facts
+        type: string
+        required: false
+        description: Facts or comments
+      - name: name
+        type: string
+        required: false
+        description: Topic name
+      - name: source
+        type: string
+        required: false
+        description: Topic source identifier
+      - name: labels
+        type: array
+        required: false
+        description: Topic labels/tags
+    returns: {}
+  - name: SetManualAkb
+    category: knowledge
+    description: Set manual content in the Agent Knowledge Base for a persona
+    parameters:
+      - name: personaId
+        type: string
+        required: true
+        description: Target persona ID
+      - name: summary
+        type: string
+        required: false
+        description: Topic summary content
+      - name: facts
+        type: array
+        required: false
+        description: Array of facts/comments
+      - name: name
+        type: string
+        required: false
+        description: Topic name/identifier
+      - name: source
+        type: string
+        required: false
+        description: Source identifier
+      - name: labels
+        type: array
+        required: false
+        description: Topic labels/tags
+    returns: {}
+  - name: GetAgent
+    category: agents
+    description: Get agent information including persona ID and configuration
+    parameters:
+      - name: idn
+        type: string
+        required: false
+        description: Agent identifier (e.g., 'ConvoAgent', 'GeneralManagerAgent')
+      - name: field
+        type: string
+        required: false
+        description: Specific field to retrieve (e.g., 'personaId')
+    returns: {}
+  - name: GetCustomerInfo
+    category: customer
+    description: Get customer information from the current session
+    parameters:
+      - name: field
+        type: string
+        required: false
+        description: Specific customer field to retrieve
+    returns: {}
+  - name: GetCustomer
+    category: customer
+    description: Get customer data field from current customer context
+    parameters:
+      - name: field
+        type: string
+        required: false
+        description: Specific field to retrieve (e.g., 'idn', 'email')
+    returns: {}
+  - name: GetWebhook
+    category: webhooks
+    description: Get webhook configuration by identifier and type
+    parameters:
+      - name: webhookIdn
+        type: string
+        required: true
+        description: Webhook identifier (e.g., 'sa_session_started')
+      - name: webhookType
+        type: string
+        required: true
+        description: Webhook type
+    returns: {}
+  - name: CreateWebhook
+    category: webhooks
+    description: Create a new webhook configuration
+    parameters:
+      - name: webhookIdn
+        type: string
+        required: true
+        description: Unique webhook identifier
+      - name: webhookType
+        type: string
+        required: true
+        description: Webhook type
+      - name: url
+        type: string
+        required: false
+        description: Webhook URL
+      - name: headers
         type: object
-        required: true
-        description: "JSON object to extract from"
-      - name: key
+        required: false
+        description: Request headers
+      - name: body
+        type: object
+        required: false
+        description: Request body template
+    returns: {}
+  - name: DeleteWebhook
+    category: webhooks
+    description: Delete an existing webhook configuration
+    parameters:
+      - name: webhookIdn
         type: string
         required: true
-        description: "Key to extract"
-    returns:
-      type: any
-      description: "Value at the specified key"
-    examples:
-      - "{% set name = GetValueJSON(user_data, \"name\") %}"
-
-  - name: GetItemsArrayByIndexesJSON
-    category: data
-    description: "Extract array items by indexes"
-    syntax:
-      jinja: "{{GetItemsArrayByIndexesJSON(array, indexes)}}"
-    parameters:
-      - name: array
-        type: array
-        required: true
-        description: "Source array"
-      - name: indexes
-        type: array
-        required: true
-        description: "Array of indexes to extract"
-    returns:
-      type: array
-      description: "Selected items"
-
-  - name: Stringify
-    category: data
-    description: "Convert value to string"
-    syntax:
-      jinja: "{{Stringify(value)}}"
-    parameters:
-      - name: value
-        type: any
-        required: true
-        description: "Value to stringify"
-    returns:
-      type: string
-
-  - name: Concat
-    category: data
-    description: "Concatenate strings"
-    syntax:
-      jinja: "{{Concat(a, b, ...)}}"
-    parameters:
-      - name: "..."
+        description: Webhook identifier to delete
+      - name: webhookType
         type: string
         required: true
-        description: "Strings to concatenate"
-    returns:
-      type: string
-    examples:
-      - "{{Concat(\"Hello \", name, \"!\")}}"
-
-  # ============================================
-  # UTILITIES
-  # ============================================
-
-  - name: IsEmpty
-    category: utilities
-    description: "Check if a value is empty"
-    syntax:
-      jinja: "{{IsEmpty(text=\"value\")}}"
+        description: Webhook type
+    returns: {}
+  - name: GetAct
+    category: acts
+    description: Get action/act information by ID with optional field selection
+    parameters:
+      - name: id
+        type: string
+        required: true
+        description: Act/action ID to retrieve
+      - name: fields
+        type: array
+        required: false
+        description: Specific fields to return (e.g., ['targetAction'])
+    returns: {}
+  - name: CreateMessageAct
+    category: acts
+    description: Create a message action in the conversation history
     parameters:
       - name: text
         type: string
         required: true
-        description: "Value to check"
-    returns:
-      type: boolean
-      description: "True if empty, false otherwise"
-    examples:
-      - "{% if IsEmpty(text=user_input) %}"
-
-  - name: StartNotInterruptibleBlock
-    category: utilities
-    description: "Start a block that cannot be interrupted"
-    syntax:
-      jinja: "{{StartNotInterruptibleBlock()}}"
-    parameters: []
-    returns:
-      type: void
-
-  - name: StopNotInterruptibleBlock
-    category: utilities
-    description: "End a non-interruptible block"
-    syntax:
-      jinja: "{{StopNotInterruptibleBlock()}}"
-    parameters: []
-    returns:
-      type: void
-
-  # ============================================
-  # LOGGING
-  # ============================================
-
-  - name: DUMMY
-    category: logging
-    description: "No-op function for logging/debugging (output ignored)"
-    syntax:
-      jinja: "{{DUMMY(value)}}"
+        description: Message text content
+      - name: from
+        type: string
+        required: false
+        description: Message source
+      - name: userPersonaId
+        type: string
+        required: false
+        description: User persona ID
+      - name: userActorId
+        type: string
+        required: false
+        description: User actor ID
+    returns: {}
+  - name: GetIndexesOfItemsArrayJSON
+    category: json
+    description: Find array indexes matching a JSONPath filter expression
     parameters:
+      - name: array
+        type: array
+        required: true
+        description: JSON array to search
+      - name: filterPath
+        type: string
+        required: true
+        description: JSONPath filter expression
+    returns: {}
+  - name: AppendItemsArrayJSON
+    category: json
+    description: Append items to a JSON array
+    parameters:
+      - name: array
+        type: array
+        required: true
+        description: Source array to append to
+      - name: items
+        type: any
+        required: true
+        description: Items to append (string or array)
+    returns: {}
+  - name: AsStringJSON
+    category: json
+    description: Convert a value to a JSON string representation
+    parameters:
+      - name: val
+        type: any
+        required: true
+        description: Value to convert to JSON string
+    returns: {}
+  - name: GetItemsArrayByIndexesJSON
+    category: json
+    description: Get array items by their indexes
+    parameters:
+      - name: array
+        type: array
+        required: true
+        description: Source array
+      - name: indexes
+        type: array
+        required: true
+        description: Array of indexes to retrieve
+    returns: {}
+  - name: GetRandomChoice
+    category: utility
+    description: Select a random element from an array
+    parameters:
+      - name: array
+        type: array
+        required: true
+        description: Array to select from
+    returns: {}
+  - name: Sleep
+    category: flow
+    description: Pause execution for a specified duration
+    parameters:
+      - name: duration
+        type: string
+        required: true
+        description: Duration in seconds (as string)
+      - name: interruptible
+        type: string
+        required: false
+        default: 'False'
+        description: Allow interruption
+    returns: {}
+  - name: StartNotInterruptibleBlock
+    category: flow
+    description: Begin a block of code that cannot be interrupted by user input
+    parameters: []
+    returns: {}
+  - name: StopNotInterruptibleBlock
+    category: flow
+    description: End the non-interruptible block, allowing user input again
+    parameters: []
+    returns: {}
+  - name: SendTypingStart
+    category: messaging
+    description: Show typing indicator to the user
+    parameters:
+      - name: actorIds
+        type: array
+        required: false
+        description: Target actor IDs
+    returns: {}
+  - name: SendTypingStop
+    category: messaging
+    description: Hide typing indicator
+    parameters:
+      - name: actorIds
+        type: array
+        required: false
+        description: Target actor IDs
+    returns: {}
+  - name: GenStream
+    category: ai
+    description: Generate AI responses with streaming output for real-time delivery
+    parameters:
+      - name: temperature
+        type: float
+        required: false
+        default: '0.75'
+        description: Controls randomness (0.0-2.0)
+      - name: topP
+        type: float
+        required: false
+        default: '1.0'
+        description: Nucleus sampling (0.0-1.0)
+      - name: maxTokens
+        type: int
+        required: false
+        description: Maximum response length
+      - name: skipFilter
+        type: boolean
+        required: false
+        default: 'false'
+        description: Bypass content moderation
+      - name: sendTo
+        type: string
+        required: false
+        description: Target for streaming ('actors')
+      - name: actorIds
+        type: array
+        required: false
+        description: Target actor IDs for streaming
+      - name: interruptMode
+        type: string
+        required: false
+        description: Interrupt handling mode
+      - name: interruptWindow
+        type: float
+        required: false
+        description: Window for interruption (0.0-1.0)
+      - name: thinkingBudget
+        type: int
+        required: false
+        description: Token budget for reasoning
+    returns: {}
+  - name: SetConnectorInfo
+    category: connectors
+    description: Update connector configuration settings
+    parameters:
+      - name: integrationIdn
+        type: string
+        required: true
+        description: Integration type identifier
+      - name: connectorIdn
+        type: string
+        required: true
+        description: Connector instance identifier
+      - name: field
+        type: string
+        required: true
+        description: Field to update
       - name: value
         type: any
         required: true
-        description: "Value to log (not output)"
-    returns:
-      type: void
-    examples:
-      - "{{DUMMY(\"Debug: \" ~ json.dumps(data))}}"
-      - "{{DUMMY(\"Error: \" ~ error_message)}}"
-
-# Standard library modules available
-modules:
-  - name: json
-    description: "JSON manipulation module"
-    functions:
-      - name: loads
-        description: "Parse JSON string to object"
-        syntax: "json.loads(string)"
-        parameters:
-          - name: string
-            type: string
-            required: true
-        returns:
-          type: object
-      - name: dumps
-        description: "Serialize object to JSON string"
-        syntax: "json.dumps(object)"
-        parameters:
-          - name: object
-            type: any
-            required: true
-        returns:
-          type: string
-
-# Guidance-specific constructs
-guidance_blocks:
-  - name: system
-    description: "Define system prompt content for LLM"
-    syntax: "{{#system~}} ... {{~/system}}"
-    usage: "Wrap system-level instructions for the LLM"
-
-  - name: user
-    description: "Define user message content"
-    syntax: "{{#user~}} ... {{~/user}}"
-    usage: "Wrap user-provided content"
-
-  - name: assistant
-    description: "Define assistant response content"
-    syntax: "{{#assistant~}} ... {{~/assistant}}"
-    usage: "Wrap expected assistant responses"
-
-  - name: if
-    description: "Conditional block"
-    syntax: "{{#if condition}} ... {{else}} ... {{/if}}"
-    usage: "Conditional content rendering"
+        description: New value
+    returns: {}
+  - name: GetSessionInfo
+    category: context
+    description: Get information about the current conversation session including session ID
+    parameters: []
+    returns: {}
+  - name: DisableFollowUp
+    category: flow
+    description: Disable the follow-up timer for the current conversation, preventing automatic follow-up messages
+    parameters: []
+    returns: {}
+  - name: EnableFollowUp
+    category: flow
+    description: Re-enable the follow-up timer for the current conversation after it was disabled
+    parameters: []
+    returns: {}
+  - name: SetCustomerInfo
+    category: customer
+    description: Update customer organization information and settings
+    parameters:
+      - name: organizationName
+        type: string
+        required: false
+        description: Organization/business name to set
+    returns: {}
+  - name: FastPrompt
+    category: generation
+    description: >-
+      Quick LLM generation shortcut with simplified parameters. Produces a fast response without the full Gen()
+      configuration overhead
+    parameters:
+      - name: prompt
+        type: string
+        required: false
+        description: Prompt text for quick generation
+      - name: temperature
+        type: number
+        required: false
+        description: Generation temperature (0-2)
+      - name: maxTokens
+        type: number
+        required: false
+        description: Maximum tokens to generate
+    returns: {}
+  - name: Error
+    category: flow
+    description: Report an execution error. Signals that the current skill encountered an error condition
+    parameters:
+      - name: message
+        type: string
+        required: true
+        description: Error message describing what went wrong
+    returns: {}
+  - name: ResultError
+    category: flow
+    description: >-
+      Return an error result in result flows. Used in connector result handlers to signal failure back to the calling
+      flow
+    parameters:
+      - name: message
+        type: string
+        required: false
+        description: Error message to return
+      - name: code
+        type: string
+        required: false
+        description: Error code identifier
+    returns: {}
+  - name: ConnectorResultError
+    category: flow
+    description: Report a connector-level error. Used when an integration connector encounters a failure during execution
+    parameters:
+      - name: message
+        type: string
+        required: false
+        description: Error message describing the connector failure
+      - name: connectorIdn
+        type: string
+        required: false
+        description: Connector identifier that failed
+      - name: integrationIdn
+        type: string
+        required: false
+        description: Integration identifier for the failed connector
+    returns: {}

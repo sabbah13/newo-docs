@@ -10,6 +10,7 @@ import * as path from 'path';
 import * as yaml from 'js-yaml';
 
 import { JinjaParser } from './parsers/jinja-parser';
+import { levenshteinDistance, findSimilar } from '@newo-dsl/data';
 import {
   Diagnostic,
   ParseResult,
@@ -25,6 +26,8 @@ import {
 
 export * from './types';
 export { JinjaParser } from './parsers/jinja-parser';
+export { adaptForLint } from './adapters/template-lint-adapter';
+export type { LintParseResult } from './adapters/template-lint-adapter';
 
 /**
  * Main analyzer class that provides all analysis capabilities
@@ -171,7 +174,7 @@ export class NewoDslAnalyzer {
     const skillInfo = this.schemas.skills.get(call.name);
 
     if (!skillInfo) {
-      const suggestions = this.findSimilar(call.name, Array.from(this.schemas.skills.keys()));
+      const suggestions = findSimilar(call.name, Array.from(this.schemas.skills.keys()));
       let message = `Unknown skill: ${call.name}`;
       if (suggestions.length > 0) {
         message += `. Did you mean: ${suggestions.slice(0, 3).join(', ')}?`;
@@ -230,8 +233,8 @@ export class NewoDslAnalyzer {
 
     if (!isLikelyValid && call.name.length > 2) {
       const allSuggestions = [
-        ...this.findSimilar(call.name, Array.from(this.schemas.builtins.keys())),
-        ...this.findSimilar(call.name, Array.from(this.schemas.skills.keys()))
+        ...findSimilar(call.name, Array.from(this.schemas.builtins.keys())),
+        ...findSimilar(call.name, Array.from(this.schemas.skills.keys()))
       ];
 
       let message = `Unknown function: ${call.name}`;
@@ -267,7 +270,7 @@ export class NewoDslAnalyzer {
     for (const provided of call.parameters) {
       if (provided.type === 'keyword' && provided.name) {
         if (!expectedMap.has(provided.name)) {
-          const similar = this.findSimilar(provided.name, Array.from(expectedMap.keys()));
+          const similar = findSimilar(provided.name, Array.from(expectedMap.keys()));
           let message = `Unknown parameter '${provided.name}' for ${call.name}`;
           if (similar.length > 0) {
             message += `. Did you mean: ${similar.join(', ')}?`;
@@ -457,53 +460,6 @@ export class NewoDslAnalyzer {
     return null;
   }
 
-  /**
-   * Find similar strings using Levenshtein distance
-   */
-  private findSimilar(target: string, candidates: string[], maxDistance: number = 3): string[] {
-    const results: Array<{ name: string; distance: number }> = [];
-    const targetLower = target.toLowerCase();
-
-    for (const candidate of candidates) {
-      const distance = this.levenshteinDistance(targetLower, candidate.toLowerCase());
-      if (distance <= maxDistance) {
-        results.push({ name: candidate, distance });
-      }
-    }
-
-    return results.sort((a, b) => a.distance - b.distance).map(r => r.name);
-  }
-
-  /**
-   * Calculate Levenshtein distance
-   */
-  private levenshteinDistance(a: string, b: string): number {
-    const matrix: number[][] = [];
-
-    for (let i = 0; i <= b.length; i++) {
-      matrix[i] = [i];
-    }
-
-    for (let j = 0; j <= a.length; j++) {
-      matrix[0][j] = j;
-    }
-
-    for (let i = 1; i <= b.length; i++) {
-      for (let j = 1; j <= a.length; j++) {
-        if (b.charAt(i - 1) === a.charAt(j - 1)) {
-          matrix[i][j] = matrix[i - 1][j - 1];
-        } else {
-          matrix[i][j] = Math.min(
-            matrix[i - 1][j - 1] + 1,
-            matrix[i][j - 1] + 1,
-            matrix[i - 1][j] + 1
-          );
-        }
-      }
-    }
-
-    return matrix[b.length][a.length];
-  }
 }
 
 export default NewoDslAnalyzer;

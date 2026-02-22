@@ -14,24 +14,22 @@ import {
   Position
 } from '../types';
 
+import { ACTIONS } from '@newo-dsl/data';
+
 interface Token {
-  type: 'expression' | 'statement' | 'comment' | 'text';
+  type: 'expression' | 'statement' | 'comment' | 'text' | 'guidance_open' | 'guidance_close';
   content: string;
   range: Range;
 }
 
-// Built-in function names
-const BUILTINS = new Set([
-  'Return', 'Set', 'GetTriggeredAct', 'GetCurrentPrompt',
-  'GetCustomerAttribute', 'SetCustomerAttribute',
-  'GetPersonaAttribute', 'SetPersonaAttribute',
-  'SendSystemEvent', 'SendCommand', 'SendMessage',
-  'CreateConnector', 'SetConnectorInfo',
-  'GetDatetime', 'GetValueJSON', 'GetItemsArrayByIndexesJSON',
-  'Stringify', 'Concat', 'IsEmpty',
-  'StartNotInterruptibleBlock', 'StopNotInterruptibleBlock',
-  'DUMMY', 'GetActors', 'GetMemory', 'SendTypingStart', 'SendTypingStop'
+// Guidance block names (used in {{#block}} / {{/block}} syntax)
+const GUIDANCE_BLOCKS = new Set([
+  'system', 'user', 'assistant', 'each', 'if', 'unless',
+  'select', 'gen', 'geneach', 'block', 'role'
 ]);
+
+// Built-in function names - derived from @newo-dsl/data to stay in sync
+const BUILTINS = new Set(Object.keys(ACTIONS));
 
 // Jinja keywords
 const KEYWORDS = new Set([
@@ -85,12 +83,69 @@ export class JinjaParser {
     const tokens = this.tokenize();
 
     // Process tokens
+    const blockStack: Array<{ name: string; range: Range }> = [];
+
     for (const token of tokens) {
       if (token.type === 'expression') {
         this.processExpression(token, result, definedVars);
       } else if (token.type === 'statement') {
         this.processStatement(token, result, definedVars);
+      } else if (token.type === 'guidance_open') {
+        const blockMatch = token.content.match(/^#(\w+)(.*)/);
+        if (blockMatch) {
+          const blockName = blockMatch[1];
+          const args = blockMatch[2]?.trim() || undefined;
+          result.blocks.push({
+            name: blockName,
+            args,
+            type: 'open',
+            range: token.range
+          });
+          blockStack.push({ name: blockName, range: token.range });
+        }
+      } else if (token.type === 'guidance_close') {
+        const blockMatch = token.content.match(/^\/(\w+)/);
+        if (blockMatch) {
+          const blockName = blockMatch[1];
+          result.blocks.push({
+            name: blockName,
+            type: 'close',
+            range: token.range
+          });
+          if (blockStack.length === 0) {
+            result.diagnostics.push({
+              severity: 'error',
+              code: 'E011',
+              message: `Unexpected closing block '{{/${blockName}}}' - no matching opening block`,
+              range: token.range,
+              source: 'newo-lint'
+            });
+          } else {
+            const top = blockStack[blockStack.length - 1];
+            if (top.name !== blockName) {
+              result.diagnostics.push({
+                severity: 'error',
+                code: 'E012',
+                message: `Mismatched block: expected '{{/${top.name}}}' but found '{{/${blockName}}}'`,
+                range: token.range,
+                source: 'newo-lint'
+              });
+            }
+            blockStack.pop();
+          }
+        }
       }
+    }
+
+    // Check for unclosed guidance blocks
+    for (const unclosed of blockStack) {
+      result.diagnostics.push({
+        severity: 'error',
+        code: 'E010',
+        message: `Unclosed guidance block '{{#${unclosed.name}}}' - missing '{{/${unclosed.name}}}'`,
+        range: unclosed.range,
+        source: 'newo-lint'
+      });
     }
 
     // Check for unclosed braces (document-level)
@@ -107,8 +162,41 @@ export class JinjaParser {
     let pos = 0;
 
     while (pos < this.content.length) {
-      // Check for expression {{ ... }}
+      // Check for guidance block open {{#blockName ...}} or close {{/blockName}}
       if (this.content.slice(pos, pos + 2) === '{{') {
+        const afterBrace = this.content.slice(pos + 2).replace(/^~?\s*/, '');
+        const guidanceOpenMatch = afterBrace.match(/^#(\w+)/);
+        const guidanceCloseMatch = afterBrace.match(/^\/(\w+)/);
+
+        if (guidanceOpenMatch && GUIDANCE_BLOCKS.has(guidanceOpenMatch[1])) {
+          const closeIdx = this.findClosingBrace(pos + 2, '}}');
+          if (closeIdx !== -1) {
+            const content = this.content.slice(pos + 2, closeIdx).trim().replace(/^~?\s*/, '');
+            tokens.push({
+              type: 'guidance_open',
+              content,
+              range: this.getRange(pos, closeIdx + 2)
+            });
+            pos = closeIdx + 2;
+            continue;
+          }
+        }
+
+        if (guidanceCloseMatch && GUIDANCE_BLOCKS.has(guidanceCloseMatch[1])) {
+          const closeIdx = this.findClosingBrace(pos + 2, '}}');
+          if (closeIdx !== -1) {
+            const content = this.content.slice(pos + 2, closeIdx).trim().replace(/^~?\s*/, '');
+            tokens.push({
+              type: 'guidance_close',
+              content,
+              range: this.getRange(pos, closeIdx + 2)
+            });
+            pos = closeIdx + 2;
+            continue;
+          }
+        }
+
+        // Regular expression {{ ... }}
         const closeIdx = this.findClosingBrace(pos + 2, '}}');
         if (closeIdx !== -1) {
           const content = this.content.slice(pos + 2, closeIdx);
@@ -262,16 +350,19 @@ export class JinjaParser {
   private processExpression(token: Token, result: ParseResult, definedVars: Set<string>): void {
     const expr = token.content;
 
-    // Extract function calls
+    // Extract function calls (also detects Set(name="x") as variable definitions)
     this.extractFunctionCalls(expr, token.range, result);
+
+    // Extract variable references from expressions
+    this.extractVariableReferences(expr, token.range, result, definedVars);
   }
 
   /**
    * Process statement token {% ... %}
    */
   private processStatement(token: Token, result: ParseResult, definedVars: Set<string>): void {
-    const stmt = token.content;
-    const lower = stmt.toLowerCase();
+    // Strip whitespace-control operators (-) from statement content
+    const stmt = token.content.replace(/^-\s*/, '').replace(/\s*-$/, '');
 
     // Extract variable definitions from set statements
     const setMatch = /^set\s+([A-Za-z_][A-Za-z0-9_]*)\s*=/i.exec(stmt);
@@ -288,6 +379,18 @@ export class JinjaParser {
       const valueStart = stmt.indexOf('=') + 1;
       const value = stmt.slice(valueStart);
       this.extractFunctionCalls(value, token.range, result);
+
+      // Extract variable references from the value part
+      this.extractVariableReferences(value, token.range, result, definedVars);
+    } else {
+      // For non-set statements (if, for, etc.), extract function calls from the whole statement
+      // Skip the keyword at the start
+      const keywordMatch = /^(if|elif|for)\s+/i.exec(stmt);
+      if (keywordMatch) {
+        const afterKeyword = stmt.slice(keywordMatch[0].length);
+        this.extractFunctionCalls(afterKeyword, token.range, result);
+        this.extractVariableReferences(afterKeyword, token.range, result, definedVars);
+      }
     }
 
     // Extract loop variables
@@ -295,11 +398,22 @@ export class JinjaParser {
     if (forMatch) {
       definedVars.add(forMatch[1]);
       definedVars.add('loop');  // Jinja loop variable
+      result.variables.defined.push({
+        name: forMatch[1],
+        range: token.range,
+        defined: true
+      });
+      result.variables.defined.push({
+        name: 'loop',
+        range: token.range,
+        defined: true
+      });
     }
   }
 
   /**
-   * Extract function calls from an expression
+   * Extract function calls from an expression.
+   * Also detects Set(name="x") calls as variable definitions.
    */
   private extractFunctionCalls(expr: string, exprRange: Range, result: ParseResult): void {
     // Pattern to match function calls: FunctionName(...)
@@ -309,9 +423,12 @@ export class JinjaParser {
     while ((match = funcPattern.exec(expr)) !== null) {
       const funcName = match[1];
 
-      // Skip keywords, filters
-      if (KEYWORDS.has(funcName.toLowerCase()) || FILTERS.has(funcName.toLowerCase())) {
-        continue;
+      // Skip keywords and filters, but NOT if the name matches a known builtin action
+      // (e.g., 'Set' is both a keyword and a builtin action - the capital S form is the action)
+      if (!BUILTINS.has(funcName)) {
+        if (KEYWORDS.has(funcName.toLowerCase()) || FILTERS.has(funcName.toLowerCase())) {
+          continue;
+        }
       }
 
       // Parse parameters
@@ -339,7 +456,100 @@ export class JinjaParser {
       } else if (type === 'builtin') {
         result.builtinCalls.push(funcCall);
       }
+
+      // Detect Set(name="x") as a variable definition
+      if (funcName === 'Set') {
+        const nameParam = params.find(p => p.name === 'name');
+        if (nameParam) {
+          // Strip quotes from the value
+          const varName = nameParam.value.replace(/^["']|["']$/g, '');
+          if (varName && /^[A-Za-z_][A-Za-z0-9_]*$/.test(varName)) {
+            result.variables.defined.push({
+              name: varName,
+              range: exprRange,
+              defined: true
+            });
+          }
+        }
+      }
     }
+  }
+
+  /**
+   * Extract variable references from an expression.
+   * Identifies bare identifiers that are not function calls, keywords, or filters.
+   */
+  private extractVariableReferences(expr: string, exprRange: Range, result: ParseResult, definedVars: Set<string>): void {
+    // Match identifiers that are NOT followed by ( (those are function calls)
+    // Also handle dot-access (e.g., user.name - only capture the root "user")
+    const identPattern = /\b([A-Za-z_][A-Za-z0-9_]*)\b/g;
+    let match;
+    const seen = new Set<string>();
+
+    while ((match = identPattern.exec(expr)) !== null) {
+      const name = match[1];
+
+      // Skip if already seen in this expression
+      if (seen.has(name)) continue;
+      seen.add(name);
+
+      // Skip keywords, filters, builtins, and well-known constants
+      if (KEYWORDS.has(name.toLowerCase()) || FILTERS.has(name.toLowerCase()) || BUILTINS.has(name)) {
+        continue;
+      }
+
+      // Skip if followed by ( - it's a function call, not a variable reference
+      const afterIdx = match.index + name.length;
+      const afterChar = expr.slice(afterIdx).match(/^\s*(.)/);
+      if (afterChar && afterChar[1] === '(') {
+        continue;
+      }
+
+      // Skip string literals - check if this match is inside quotes
+      if (this.isInsideString(expr, match.index)) {
+        continue;
+      }
+
+      // Skip if preceded by . (it's a property access, not a root variable)
+      if (match.index > 0 && expr[match.index - 1] === '.') {
+        continue;
+      }
+
+      // Skip if followed by = (it's a keyword argument name, e.g. eventIdn="...")
+      // but not if followed by == (comparison)
+      const afterIdentIdx = match.index + name.length;
+      if (afterIdentIdx < expr.length) {
+        if (/^\s*=(?!=)/.test(expr.slice(afterIdentIdx))) {
+          continue;
+        }
+      }
+
+      result.variables.referenced.push({
+        name,
+        range: exprRange,
+        defined: false
+      });
+    }
+  }
+
+  /**
+   * Check if a position in a string is inside a quoted string literal.
+   */
+  private isInsideString(text: string, pos: number): boolean {
+    let inString = false;
+    let stringChar = '';
+    for (let i = 0; i < pos && i < text.length; i++) {
+      const char = text[i];
+      if ((char === '"' || char === "'") && (i === 0 || text[i - 1] !== '\\')) {
+        if (!inString) {
+          inString = true;
+          stringChar = char;
+        } else if (char === stringChar) {
+          inString = false;
+        }
+      }
+    }
+    return inString;
   }
 
   /**
@@ -425,8 +635,9 @@ export class JinjaParser {
     const closeExpr = (this.content.match(/\}\}/g) || []).length;
     const openStmt = (this.content.match(/\{%/g) || []).length;
     const closeStmt = (this.content.match(/%\}/g) || []).length;
-    const openComment = (this.content.match(/\{#/g) || []).length;
-    const closeComment = (this.content.match(/#\}/g) || []).length;
+    // Count comment braces, but exclude {# inside {{ (e.g., {{#system}})
+    const openComment = (this.content.match(/(?<!\{)\{#/g) || []).length;
+    const closeComment = (this.content.match(/#\}(?!\})/g) || []).length;
 
     if (openExpr !== closeExpr) {
       result.diagnostics.push({

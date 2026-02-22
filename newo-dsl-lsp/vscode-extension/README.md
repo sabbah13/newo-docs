@@ -1,165 +1,96 @@
-# Newo DSL Extension
+<h1 align="center">Newo DSL Extension</h1>
 
-Language support for Newo DSL templates used in the Newo SuperAgent platform.
+<p align="center">
+  <strong>Full IDE support for Newo Skill Language templates in VS Code and Cursor</strong>
+</p>
+
+---
 
 ## Features
 
-- **Syntax Highlighting** for `.jinja` and `.guidance` files with embedded JSON support
-- **Custom File Icons** - Distinctive icons for Newo template files
-- **Code Snippets** for common patterns
-- **IntelliSense** - Completions for 42 built-in functions, 80+ Jinja built-ins, and project skills
-- **Hover Information** - Documentation with parameter details on hover
-- **Diagnostics** - Real-time error detection for unknown actions and skills
+| Feature | Description |
+|---------|-------------|
+| **Syntax Highlighting** | Color-coded templates with embedded JSON support |
+| **Custom File Icons** | Distinctive green `{%}` icon for Jinja/NSL, purple `{{}}` icon for Guidance/NSLG |
+| **IntelliSense** | Completions for 76 built-in actions, 81 Jinja built-ins, project skills, and variables |
+| **Variable Intelligence** | Variable completions, hover info, go-to-definition, undefined/unused diagnostics |
+| **Object Property Completions** | Dot-access completions for typed variables (e.g., `user.name` after `GetUser()`) |
+| **Type Inference** | Automatic type inference from action return values (12 object shapes) |
+| **Attribute Discovery** | Autocomplete for attribute field names discovered from your project templates |
+| **Hover Documentation** | Parameter details, variable info, and property descriptions on hover |
+| **Real-time Diagnostics** | Error detection for unknown actions, missing parameters, undefined variables, and syntax issues |
+| **Go-to-Definition** | Navigate to skill files, action definitions, variable assignments, and metadata files |
+| **Quick-Fixes** | "Did you mean?" suggestions for typos with one-click replacement |
+| **Code Snippets** | Quick templates for common Jinja and Guidance patterns |
+| **V1 + V2 Format Support** | Auto-detects and works with both CLI2 and module-based project formats |
 
 ## Supported File Types
 
-| Extension | Language | Icon |
-|-----------|----------|------|
-| `.jinja` | Newo Jinja templates | Green `{%}` |
-| `.guidance` | Newo Guidance templates | Purple `{{}}` |
+| Extension | Language | Format | Icon |
+|-----------|----------|--------|------|
+| `.jinja` | Newo Jinja | V1 | Green `{%}` |
+| `.guidance` | Newo Guidance | V1 | Purple `{{}}` |
+| `.nsl` | Newo NSL | V2 | Green `{%}` |
+| `.nslg` | Newo NSLG | V2 | Purple `{{}}` |
 
-## Built-in Actions (42)
-
-### Core Flow Control
-- `Return` - Exit skill and return value
-- `Set` - Assign variable
-- `Gen` - Generate LLM response
-- `Do` - Execute action
-
-### Customer & User Management
-- `GetCustomerAttribute` - Get customer attribute
-- `SetCustomerAttribute` - Set customer attribute
-- `SetCustomerMetadataAttribute` - Set customer metadata field
-- `GetCustomerMetadataAttribute` - Get customer metadata field
-- `GetUser` - Retrieve user information
-- `UpdateUser` - Update user properties
-
-### Project & Persona
-- `GetProjectAttribute` - Get project attribute
-- `SetProjectAttribute` - Set project attribute
-- `SetProjectMetadataAttribute` - Set project metadata field
-- `GetPersonaAttribute` - Get persona attribute
-- `SetPersonaAttribute` - Set persona attribute
-- `GetAgentPersona` - Retrieve agent persona
-- `CreatePersona` - Create new persona
-- `CreateActor` - Create new actor
-
-### Messaging & Communication
-- `SendMessage` - Send message to user
-- `SendCommand` - Send system command
-- `SendSystemEvent` - Trigger system event
-- `SendTypingStart` - Show typing indicator
-- `SendTypingStop` - Hide typing indicator
-
-### Connectors
-- `CreateConnector` - Create external connector
-- `GetConnectorInfo` - Get connector details
-- `SetConnectorInfo` - Update connector info
-- `DeleteConnector` - Remove connector
-
-### Data & State
-- `GetState` - Retrieve state value
-- `SetState` - Store state value
-- `GetMemory` - Access memory storage
-- `GetActors` - List available actors
-- `GetActor` - Get specific actor
-- `CreateArray` - Initialize array
-
-### Utilities
-- `GetCurrentPrompt` - Get active prompt
-- `GetTriggeredAct` - Get triggering action
-- `GetDatetime` / `GetDateTime` - Current timestamp
-- `GetDateInterval` - Calculate date difference
-- `GetValueJSON` - Extract JSON value
-- `UpdateValueJSON` - Modify JSON structure
-- `GetItemsArrayByIndexesJSON` - Array access by index
-- `Stringify` - Convert to string
-- `Concat` - Join strings
-- `IsEmpty` - Check empty value
-- `IsSimilar` - Compare values
-- `IsGlobal` - Check global scope
-- `DUMMY` - Placeholder action
-
-### Flow Control
-- `StartNotInterruptibleBlock` - Begin protected section
-- `StopNotInterruptibleBlock` - End protected section
-
-## Jinja Built-ins (80+)
-
-Full support for Python/Jinja2 built-in functions and filters including:
-
-**Functions**: `abs`, `all`, `any`, `bool`, `dict`, `float`, `int`, `len`, `list`, `max`, `min`, `range`, `round`, `sorted`, `str`, `sum`, `zip`, `json.loads`, `json.dumps`, and more.
-
-**Filters**: `capitalize`, `center`, `default`, `escape`, `first`, `format`, `groupby`, `indent`, `join`, `last`, `length`, `lower`, `map`, `replace`, `reverse`, `safe`, `select`, `slice`, `sort`, `split`, `string`, `striptags`, `title`, `trim`, `truncate`, `unique`, `upper`, `urlencode`, `wordwrap`, and more.
+> **Note:** V2 files (`.nsl`/`.nslg`) use the same template syntax as V1 (`.jinja`/`.guidance`). The extension auto-detects the project format and provides full features for both.
 
 ## Installation
 
 ### From VSIX File
 
-1. Download the latest `.vsix` file
+1. Build the extension (see [Development](#development)) or obtain the latest `.vsix` file
 2. Open VS Code or Cursor
 3. Press `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux)
-4. Type "Install from VSIX" and select it
-5. Navigate to and select the downloaded `.vsix` file
+4. Type **"Install from VSIX"** and select it
+5. Navigate to and select the `.vsix` file
 6. Reload the editor when prompted
 
 ### Verify Installation
 
-1. Open a `.jinja` or `.guidance` file
-2. Check for syntax highlighting (colored text)
+1. Open any `.jinja`, `.guidance`, `.nsl`, or `.nslg` file
+2. Confirm syntax highlighting is active (colored text)
 3. Hover over a built-in function to see documentation
-4. Type `{{` in a guidance file to trigger completions
+4. Type `{{` to trigger completions
 
 ## Usage
 
-### Error Indicators
+### Completions
 
-The extension provides real-time error detection:
+- **Jinja files** - Type inside `{{ }}` or `{% %}` blocks for action and skill suggestions
+- **Guidance files** - Type inside `{{ }}` expressions for completions
+- **Skills** - Type any letter to see matching skills discovered from your project
+
+### Diagnostics
 
 | Indicator | Meaning |
 |-----------|---------|
-| 🔴 Red underline | Unknown action or skill |
-| ⚠️ Yellow underline | Warning (deprecated usage) |
+| Red underline | Unknown action or skill |
+| Yellow underline | Warning (missing parameters, undefined variable) |
+| Grey underline | Hint (unused variable) |
 
-### Completions
+### Snippets
 
-- **In Jinja files**: Type inside `{{ }}` or `{% %}` blocks
-- **In Guidance files**: Type inside `{{ }}` expressions
-- **Skill suggestions**: Type any letter to see matching skills from your project
-
-### Hover Documentation
-
-Hover over any function to see:
-- Function name and description
-- Parameter names (if applicable)
-
-### File Associations
-
-If files don't automatically use Newo DSL syntax, add to your workspace settings (`.vscode/settings.json`):
-
-```json
-{
-  "files.associations": {
-    "*.jinja": "newo-jinja",
-    "*.guidance": "newo-guidance"
-  }
-}
-```
-
-## Snippets
-
-### Jinja Snippets
+#### Jinja Snippets
 
 | Trigger | Description |
 |---------|-------------|
 | `if` | If statement block |
+| `ifelse` | If-else block |
 | `for` | For loop block |
 | `set` | Set variable |
 | `return` | Return from skill |
-| `getattr` | GetCustomerAttribute call |
+| `getattr` | `GetCustomerAttribute` call |
+| `setattr` | `SetCustomerAttribute` call |
+| `getpersona` | `GetAgentPersona` call |
+| `sendmsg` | `SendMessage` call |
+| `sendevent` | `SendSystemEvent` call |
+| `gettrigger` | `GetTriggeredAct` call |
 | `skill` | Generic skill call |
+| `validate` | Validation pattern |
+| `debug` | Debug logging pattern |
 
-### Guidance Snippets
+#### Guidance Snippets
 
 | Trigger | Description |
 |---------|-------------|
@@ -167,55 +98,123 @@ If files don't automatically use Newo DSL syntax, add to your workspace settings
 | `user` | User message block |
 | `assistant` | Assistant message block |
 | `if` | Conditional block |
+| `ifelse` | If-else block |
 | `each` | Loop block |
-| `gen` | Generation block |
+| `set` | Set variable |
+| `return` | Return from skill |
+| `convometa` | Conversation metadata |
+| `skill` | Generic skill call |
+| `var` | Variable reference |
+
+### Configuration
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `newo-dsl.schemasPath` | string | `""` | Path to DSL schemas directory |
+| `newo-dsl.enableDiagnostics` | boolean | `true` | Enable diagnostic reporting |
+| `newo-dsl.enableCompletions` | boolean | `true` | Enable code completions |
+| `newo-dsl.enableHover` | boolean | `true` | Enable hover information |
+
+## Built-in Actions Reference
+
+### Core Flow Control
+`Return`, `Set`, `Gen`, `GenStream`, `Do`
+
+### Customer and User
+`GetCustomerAttribute`, `SetCustomerAttribute`, `SetCustomerMetadataAttribute`, `GetCustomerMetadataAttribute`, `GetUser`, `UpdateUser`
+
+### Project and Persona
+`GetProjectAttribute`, `SetProjectAttribute`, `SetProjectMetadataAttribute`, `GetPersonaAttribute`, `SetPersonaAttribute`, `GetAgentPersona`, `CreatePersona`, `CreateActor`
+
+### Messaging
+`SendMessage`, `SendCommand`, `SendSystemEvent`, `SendTypingStart`, `SendTypingStop`
+
+### Connectors
+`CreateConnector`, `GetConnectorInfo`, `SetConnectorInfo`, `DeleteConnector`
+
+### Data and State
+`GetState`, `SetState`, `GetMemory`, `GetActors`, `GetActor`, `CreateArray`
+
+### Utilities
+`GetCurrentPrompt`, `GetTriggeredAct`, `GetDatetime`, `GetDateTime`, `GetDateInterval`, `GetValueJSON`, `UpdateValueJSON`, `GetItemsArrayByIndexesJSON`, `Stringify`, `Concat`, `IsEmpty`, `IsSimilar`, `IsGlobal`, `DUMMY`, `StartNotInterruptibleBlock`, `StopNotInterruptibleBlock`
 
 ## Troubleshooting
 
-### Extension Not Working
+### Extension Not Activating
 
-1. **Reload Window**: Press `Cmd+Shift+P` → "Reload Window"
-2. **Check Language Mode**: Bottom-right should show "Newo Jinja" or "Newo Guidance"
-3. **Manual Association**: Click language mode → "Configure File Association" → select correct type
+1. **Reload Window** - `Cmd+Shift+P` -> "Reload Window"
+2. **Check Language Mode** - Bottom-right status bar should show "Newo Jinja" or "Newo Guidance"
+3. **Manual Association** - Click language mode -> "Configure File Association" -> select the correct type
 
-### No Completions
+### No Completions Appearing
 
 1. Ensure cursor is inside `{{ }}` or `{% %}` blocks
-2. Check that LSP server is running (no error in Output panel)
+2. Check the Output panel for LSP server errors
 3. Try reloading the window
 
 ### Skill Not Recognized
 
-1. Ensure your project has `metadata.yaml` files with skill definitions
-2. The skill must be defined in a `.guidance` or `.jinja` file in the project
-3. Check spelling - skill names are case-sensitive
-
-### After Extension Update
-
-If issues persist after updating:
-1. Uninstall the extension
-2. Close all VS Code windows
-3. Reinstall from the new VSIX file
-4. Reload the window
+1. **V1 projects**: Ensure your project has `metadata.yaml` files with skill definitions
+2. **V2 projects**: Ensure flow YAML files contain skill definitions with `idn` fields
+3. Skills must be defined in `.jinja`, `.guidance`, `.nsl`, or `.nslg` files within the project
+4. Skill names are case-sensitive
 
 ## Development
-
-### Building from Source
 
 ```bash
 cd vscode-extension
 npm install
-npm run build
-npm run package
+npm run build          # Development build
+npm run build:prod     # Production build (minified)
+npm run watch          # Watch mode for development
+npm run package        # Create .vsix package
 ```
 
-This creates `newo-dsl-X.X.X.vsix` in the extension directory.
+Press `F5` in VS Code to launch the Extension Development Host for testing.
+
+## Cursor Support
+
+This extension is fully compatible with [Cursor](https://cursor.sh), the AI-first code editor built on VS Code.
+
+### Installation in Cursor
+
+1. Build the `.vsix` file (see [Development](#development))
+2. Open Cursor
+3. Press `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux)
+4. Type **"Install from VSIX"** and select it
+5. Navigate to the `.vsix` file and install
+6. Reload Cursor when prompted
+
+### Compatibility
+
+| Feature | VS Code | Cursor |
+|---------|---------|--------|
+| Syntax Highlighting | Yes | Yes |
+| Custom File Icons | Yes | Yes |
+| IntelliSense / Completions | Yes | Yes |
+| Hover Documentation | Yes | Yes |
+| Diagnostics | Yes | Yes |
+| Go-to-Definition | Yes | Yes |
+| Snippets | Yes | Yes |
+| Quick-Fixes | Yes | Yes |
+
+### AI Integration Notes
+
+- Cursor's AI features work alongside this extension - you get both AI suggestions and DSL-specific completions
+- The LSP diagnostics appear in Cursor's problems panel just like in VS Code
+- Cursor's "AI Fix" feature can use the diagnostic messages from this extension to suggest corrections
+
+### Troubleshooting (Cursor-specific)
+
+- **Extension not loading**: Ensure the extension is enabled in Cursor's Extensions panel (some VS Code extensions need manual enabling)
+- **LSP not starting**: Check the Output panel (`View > Output > Newo DSL`) for server startup logs
+- **Conflicting AI suggestions**: If Cursor's AI completions conflict with DSL completions, you can configure completion priority in Cursor's settings
 
 ## Requirements
 
-- VS Code 1.74.0 or higher (or compatible editor like Cursor)
-- Node.js 16+ (for development only)
+- VS Code 1.85.0+ or Cursor
+- Node.js 18+ (for development only)
 
 ## License
 
-MIT
+Proprietary - [Newo AI](https://newo.ai). All rights reserved.

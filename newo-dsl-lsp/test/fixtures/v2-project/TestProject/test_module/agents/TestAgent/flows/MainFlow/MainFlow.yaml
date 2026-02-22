@@ -1,0 +1,47 @@
+title: Main Flow
+idn: MainFlow
+description: null
+agent_id: null
+skills:
+  - title: GreetingSkill
+    idn: GreetingSkill
+    prompt_script: flows/MainFlow/skills/GreetingSkill.nsl
+    runner_type: nsl
+    model:
+      model_idn: gemini25_flash
+      provider_idn: google
+    parameters:
+      - name: user_name
+        default_value: ""
+      - name: language
+        default_value: "en"
+  - title: FarewellSkill
+    idn: FarewellSkill
+    prompt_script: flows/MainFlow/skills/FarewellSkill.nslg
+    runner_type: nslg
+    model:
+      model_idn: gemini25_flash
+      provider_idn: google
+    parameters: []
+  - title: _helperSkill
+    idn: _helperSkill
+    prompt_script: flows/MainFlow/skills/_helperSkill.nsl
+    runner_type: nsl
+    model:
+      model_idn: gemini25_flash
+      provider_idn: google
+    parameters:
+      - name: input
+        default_value: null
+events:
+  - idn: greeting_event
+    skill_selector: skill_idn
+    skill_idn: GreetingSkill
+    state_idn: null
+    integration_idn: system
+    connector_idn: system
+    interrupt_mode: queue
+state_fields: []
+default_runner_type: nsl
+default_provider_idn: google
+default_model_idn: gemini25_flash

@@ -1,0 +1,15 @@
+{{Set(name="context", value=GetCurrentPrompt())}}
+{{#system~}}
+You are a helpful assistant for {{GetAgentPersona(field="name")}}.
+Your role is to assist customers with their inquiries.
+{{~/system}}
+
+{{#user~}}
+{{GetTriggeredAct().arguments}}
+{{~/user}}
+
+{{#assistant~}}
+{{Gen(temperature=0.7, maxTokens=1000)}}
+{{~/assistant}}
+
+{{Return(val=context)}}

@@ -1,32 +1,43 @@
-# Source files (compiled to dist/)
+# Source files (bundled by esbuild)
 src/**
-tsconfig.json
+*.ts
+!*.d.ts
 
-# Keep icons directory (don't ignore it)
-!icons/**
+# Build configuration
+tsconfig.json
+esbuild.js
 
 # Development files
 .vscode/**
 .gitignore
+.env
+.env.example
 
-# Node modules (vscode-languageclient will be bundled)
-node_modules/**
-
-# Parent directory files
+# Parent directory files (not needed in package)
 ../**
 
-# Build artifacts
-*.map
-*.ts
-!*.d.ts
+# Source maps (not needed in production)
+**/*.map
 
 # Test files
 test/**
 **/*.test.js
+**/*.test.ts
 
-# Documentation
+# Documentation (keep README.md, exclude others)
 CHANGELOG.md
 CONTRIBUTING.md
+PUBLISHING.md
 
 # Git
 .git/**
+
+# macOS
+.DS_Store
+
+# npm
+node_modules/**
+package-lock.json
+
+# Old vsix files
+*.vsix

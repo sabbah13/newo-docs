@@ -1,6 +1,6 @@
 {
   "name": "@newo-dsl/lsp-server",
-  "version": "0.1.0",
+  "version": "0.5.3",
   "description": "Language Server Protocol server for Newo DSL",
   "main": "dist/server.js",
   "bin": {
@@ -12,7 +12,8 @@
     "start": "node dist/server.js --stdio"
   },
   "dependencies": {
-    "@newo-dsl/analyzer": "^0.1.0",
+    "@newo-dsl/analyzer": "^0.5.3",
+    "@newo-dsl/data": "^0.5.3",
     "vscode-languageserver": "^9.0.1",
     "vscode-languageserver-textdocument": "^1.0.11"
   },

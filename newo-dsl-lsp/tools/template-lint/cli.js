@@ -2,7 +2,7 @@
 /**
  * Newo DSL Template Linter CLI
  *
- * Static analyzer for Newo DSL templates (.jinja, .guidance)
+ * Static analyzer for Newo DSL templates (.jinja, .guidance, .nsl, .nslg)
  *
  * Usage:
  *   newo-lint [options] [files...]
@@ -44,9 +44,9 @@ class NewoLinter {
       ...options
     };
 
-    this.jinjaParser = new JinjaParser();
-    this.guidanceParser = new GuidanceParser();
     this.schemaValidator = new SchemaValidator(this.options.schemasDir);
+    this.jinjaParser = null;
+    this.guidanceParser = null;
 
     this.results = {
       files: 0,
@@ -58,10 +58,13 @@ class NewoLinter {
   }
 
   /**
-   * Initialize the linter (load schemas)
+   * Initialize the linter (load schemas, create parsers with builtin names)
    */
   async init() {
     this.schemaValidator.loadSchemas();
+    const builtinNames = [...this.schemaValidator.builtinIndex.keys()];
+    this.jinjaParser = new JinjaParser(builtinNames.length > 0 ? builtinNames : null);
+    this.guidanceParser = new GuidanceParser(builtinNames.length > 0 ? builtinNames : null);
     const stats = this.schemaValidator.getStats();
 
     if (!this.options.quiet) {
@@ -82,9 +85,10 @@ class NewoLinter {
       files.push(...matches);
     }
 
-    // Filter to only .jinja and .guidance files
+    // Filter to template files (V1: .jinja/.guidance, V2: .nsl/.nslg)
     const templateFiles = files.filter(f =>
-      f.endsWith('.jinja') || f.endsWith('.guidance')
+      f.endsWith('.jinja') || f.endsWith('.guidance') ||
+      f.endsWith('.nsl') || f.endsWith('.nslg')
     );
 
     if (templateFiles.length === 0) {
@@ -92,11 +96,41 @@ class NewoLinter {
       return this.results;
     }
 
+    // Pre-scan: build skill index from filenames so cross-skill references resolve
+    this.buildProjectSkillIndex(templateFiles);
+
     for (const file of templateFiles) {
       await this.lintFile(file);
     }
 
     return this.results;
+  }
+
+  /**
+   * Build a skill index from the scanned template filenames.
+   * Extracts skill names from file basenames (e.g., MySkill.nsl -> MySkill)
+   * so cross-skill Do() references and direct skill calls resolve correctly.
+   * @param {string[]} files - Template file paths
+   */
+  buildProjectSkillIndex(files) {
+    let count = 0;
+    for (const filePath of files) {
+      const ext = path.extname(filePath);
+      const basename = path.basename(filePath, ext);
+      // Skip if already in the index (schema-defined skills take priority)
+      if (!this.schemaValidator.skillIndex.has(basename)) {
+        this.schemaValidator.skillIndex.set(basename, {
+          name: basename,
+          parameters: [],
+          path: filePath,
+          runner_type: ext === '.nslg' || ext === '.guidance' ? 'guidance' : 'jinja'
+        });
+        count++;
+      }
+    }
+    if (!this.options.quiet && count > 0) {
+      console.log(`Discovered ${count} skills from project files\n`);
+    }
   }
 
   /**
@@ -112,9 +146,9 @@ class NewoLinter {
 
       // Parse based on extension
       let parseResult;
-      if (ext === '.jinja') {
+      if (ext === '.jinja' || ext === '.nsl') {
         parseResult = this.jinjaParser.parse(content, filePath);
-      } else if (ext === '.guidance') {
+      } else if (ext === '.guidance' || ext === '.nslg') {
         parseResult = this.guidanceParser.parse(content, filePath);
       } else {
         return;
@@ -236,8 +270,8 @@ class NewoLinter {
         tool: {
           driver: {
             name: 'newo-lint',
-            version: '0.1.0',
-            informationUri: 'https://github.com/newo/newo-dsl-lsp',
+            version: '0.5.0',
+            informationUri: 'https://github.com/newo-ai/newo-nsl-lsp',
             rules: this.getSarifRules()
           }
         },
@@ -248,7 +282,7 @@ class NewoLinter {
             message: { text: diag.message },
             locations: [{
               physicalLocation: {
-                artifactLocation: { uri: fileResult.file },
+                artifactLocation: { uri: path.relative(process.cwd(), fileResult.file) },
                 region: {
                   startLine: diag.line,
                   startColumn: diag.column
@@ -340,9 +374,10 @@ Options:
   --help, -h         Show this help
 
 Examples:
-  newo-lint "**/*.jinja"
+  newo-lint "**/*.nsl"
   newo-lint --format json src/templates/
-  newo-lint --severity error "*.guidance"
+  newo-lint --severity error "**/*.nslg"
+  newo-lint "**/*.jinja" "**/*.guidance"
 `);
 }
 
@@ -360,7 +395,7 @@ async function main() {
 
   // Default pattern if none specified
   if (options.patterns.length === 0) {
-    options.patterns = ['**/*.jinja', '**/*.guidance'];
+    options.patterns = ['**/*.jinja', '**/*.guidance', '**/*.nsl', '**/*.nslg'];
   }
 
   const linter = new NewoLinter(options);

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "lint": "node cli.js",
-    "test": "node test.js"
+    "test": "echo \"Tests run from root via vitest\""
   },
   "dependencies": {
     "chalk": "^4.1.2",

@@ -1,0 +1,20 @@
+{# Valid Newo DSL Jinja template for testing #}
+{% set user_name = GetCustomerAttribute(field="project_business_name") %}
+{% set timezone = GetCustomerAttribute(field="project_business_time_zone") %}
+{% set current_time = GetDateTime(format="datetime", timezone=timezone) %}
+
+{% if user_name %}
+  {{SendMessage(message="Hello " ~ user_name ~ "! The time is " ~ current_time)}}
+{% else %}
+  {{SendMessage(message="Hello! How can I help you?")}}
+{% endif %}
+
+{% set memory = GetMemory(count="10", maxLen="3000") %}
+{% set triggered = GetTriggeredAct() %}
+
+{% if not IsEmpty(text=triggered.arguments) %}
+  {{Set(name="user_input", value=triggered.arguments)}}
+  {{DUMMY("Processing user input")}}
+{% endif %}
+
+{{Return()}}

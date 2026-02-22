@@ -1,13 +1,17 @@
 {
   "name": "newo-dsl",
   "displayName": "Newo DSL",
-  "description": "Language support for Newo DSL templates (.jinja, .guidance)",
-  "version": "0.1.0",
+  "description": "Language support for Newo DSL templates (.jinja, .guidance, .nsl, .nslg)",
+  "version": "0.5.3",
   "publisher": "newo",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
-    "url": "https://github.com/newo/newo-dsl-lsp"
+    "url": "https://github.com/newo-ai/newo-nsl-lsp"
+  },
+  "homepage": "https://github.com/newo-ai/newo-nsl-lsp#readme",
+  "bugs": {
+    "url": "https://github.com/newo-ai/newo-nsl-lsp/issues"
   },
   "icon": "icon.png",
   "engines": {
@@ -21,8 +25,12 @@
   "activationEvents": [
     "onLanguage:newo-jinja",
     "onLanguage:newo-guidance",
+    "onLanguage:newo-nsl",
+    "onLanguage:newo-nslg",
     "workspaceContains:**/*.jinja",
-    "workspaceContains:**/*.guidance"
+    "workspaceContains:**/*.guidance",
+    "workspaceContains:**/*.nsl",
+    "workspaceContains:**/*.nslg"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -56,6 +64,36 @@
           "light": "./icons/guidance-icon.svg",
           "dark": "./icons/guidance-icon.svg"
         }
+      },
+      {
+        "id": "newo-nsl",
+        "aliases": [
+          "Newo NSL",
+          "newo-nsl"
+        ],
+        "extensions": [
+          ".nsl"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/jinja-icon.svg",
+          "dark": "./icons/jinja-icon.svg"
+        }
+      },
+      {
+        "id": "newo-nslg",
+        "aliases": [
+          "Newo NSLG",
+          "newo-nslg"
+        ],
+        "extensions": [
+          ".nslg"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icons/guidance-icon.svg",
+          "dark": "./icons/guidance-icon.svg"
+        }
       }
     ],
     "grammars": [
@@ -66,6 +104,16 @@
       },
       {
         "language": "newo-guidance",
+        "scopeName": "source.newo-guidance",
+        "path": "./syntaxes/newo-guidance.tmLanguage.json"
+      },
+      {
+        "language": "newo-nsl",
+        "scopeName": "source.newo-jinja",
+        "path": "./syntaxes/newo-jinja.tmLanguage.json"
+      },
+      {
+        "language": "newo-nslg",
         "scopeName": "source.newo-guidance",
         "path": "./syntaxes/newo-guidance.tmLanguage.json"
       }
@@ -104,17 +152,27 @@
       {
         "language": "newo-guidance",
         "path": "./snippets/newo-guidance.json"
+      },
+      {
+        "language": "newo-nsl",
+        "path": "./snippets/newo-jinja.json"
+      },
+      {
+        "language": "newo-nslg",
+        "path": "./snippets/newo-guidance.json"
       }
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run build",
-    "build": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "package": "vsce package",
-    "publish:vsce": "vsce publish",
-    "publish:ovsx": "ovsx publish",
-    "publish:all": "npm run package && vsce publish && ovsx publish"
+    "vscode:prepublish": "npm run build:prod",
+    "build": "node esbuild.js",
+    "build:prod": "node esbuild.js --production",
+    "watch": "node esbuild.js --watch",
+    "compile": "tsc -p ./",
+    "package": "npx vsce package --no-dependencies",
+    "publish:vsce": "npx vsce publish --no-dependencies",
+    "publish:ovsx": "npx ovsx publish",
+    "publish:all": "npm run package && npm run publish:vsce && npm run publish:ovsx"
   },
   "dependencies": {
     "vscode-languageclient": "^9.0.1"
@@ -122,6 +180,9 @@
   "devDependencies": {
     "@types/node": "^20.10.0",
     "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.7.1",
+    "esbuild": "^0.25.0",
+    "ovsx": "^0.10.7",
     "typescript": "^5.3.0"
   }
 }

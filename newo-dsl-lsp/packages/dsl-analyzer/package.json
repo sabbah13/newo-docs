@@ -1,15 +1,16 @@
 {
   "name": "@newo-dsl/analyzer",
-  "version": "0.1.0",
+  "version": "0.5.3",
   "description": "Core analysis library for Newo DSL",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "node test/run.js"
+    "test": "echo \"Tests run from root via vitest\""
   },
   "dependencies": {
+    "@newo-dsl/data": "^0.5.3",
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
